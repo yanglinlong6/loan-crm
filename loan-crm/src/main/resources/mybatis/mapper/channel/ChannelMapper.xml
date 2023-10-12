@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.channel.dao.ChannelMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.channel.model.ChannelPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, org_id, `nickname`, `company`, `key`, create_by, create_date, update_by, update_date
+  </sql>
+
+  <select id="selectChannelPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from channel
+    <where>
+      <if test="paramObject.orgId != null"> and org_id = #{paramObject.orgId}</if>
+      <if test="paramObject.nickname != null"> and `nickname` like concat('%',#{paramObject.nickname},'%')</if>
+      <if test="paramObject.company != null"> and `company` like concat('%',#{paramObject.company},'%')</if>
+    </where>
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectChannelPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from channel
+    <where>
+      <if test="paramObject.orgId != null"> and org_id = #{paramObject.orgId}</if>
+      <if test="paramObject.nickname != null"> and `nickname` like concat('%',#{paramObject.nickname},'%')</if>
+      <if test="paramObject.company != null"> and `company` like concat('%',#{paramObject.company},'%')</if>
+    </where>
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from channel
+    where org_id = #{orgId}
+      <if test="channelId != null"> id = #{channelId}</if>
+  </select>
+
+  <insert id="insertChannel" parameterType="com.crm.service.channel.model.ChannelPO" useGeneratedKeys="true" keyProperty="id">
+    insert into channel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="company != null">
+        company,
+      </if>
+      <if test="key != null">
+        `key`,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null">
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+
+  <select id="selectChannelById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from channel
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectChannelByNicknameOrCompany"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from channel
+    where org_id = #{orgId} and (`nickname` = #{nickname} or `company` = #{company})
+    limit 1
+  </select>
+
+
+  <delete id="delChannel" parameterType="java.lang.Long">
+    delete from channel
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+
+  <update id="updateBChannel" parameterType="com.crm.service.channel.model.ChannelPO">
+    update channel
+    <set>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null">
+        `key` = #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+
+</mapper>

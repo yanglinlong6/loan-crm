@@ -1,0 +1,126 @@
+package com.help.loan.distribute.service.session;
+
+import com.alibaba.fastjson.JSON;
+import com.help.loan.distribute.common.utils.MongoDbUtils;
+import com.help.loan.distribute.service.api.process.NodeManager;
+import com.loan.cps.entity.Session;
+import com.mongodb.BasicDBObject;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.bson.Document;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+@Component
+public class SessionServiceImpl implements SessionService {
+
+    @Resource(name = "redisTemplate")
+    private RedisTemplate<String, Object> redisTemplate;
+
+    private static final String REDIS_SESSION_PREFIX = "ai_session_cps_";
+
+    private static final String SESSION_COLLECTION_NAME = "ai_session_cps";
+
+    private static Log logger = LogFactory.getLog(SessionServiceImpl.class);
+
+    @Override
+    public Session getSession(String userId) {
+        Session decode = (Session) redisTemplate.opsForValue().get(REDIS_SESSION_PREFIX + userId);
+        ;
+        if(decode == null) {
+            Document findOne = MongoDbUtils.findOne("userId", userId, SESSION_COLLECTION_NAME);
+            if(findOne != null) {
+                decode = JSON.parseObject(findOne.getString("data"), Session.class);
+                redisTemplate.opsForValue().set(REDIS_SESSION_PREFIX + userId, decode, 1800, TimeUnit.SECONDS);
+            }
+        }
+        return decode;
+    }
+
+    @Override
+    public Session initSession(String userId, String domain2) {
+        Session session = new Session();
+        session.setAiCount(0);
+        session.setNodeId(NodeManager.WELCOME);
+        session.setSessionId(UUID.randomUUID().toString().replace("-", ""));
+        session.setUpstream_time(System.currentTimeMillis());
+        session.setUserId(userId);
+        session.setDomain2(domain2);
+        return session;
+    }
+
+    @Override
+    public Session setUpstreamTime(Session session) {
+        session.setUpstream_time(System.currentTimeMillis());
+        logger.info("user session = " + JSON.toJSONString(session));
+        return session;
+    }
+
+    @Override
+    public Session getSessionForProcess(String userId, String domain2) {
+        Session session = getSession(userId);
+        if(session == null) {
+            session = initSession(userId, domain2);
+        }
+        return setUpstreamTime(session);
+    }
+
+    @Override
+    public void saveSession(Session session) {
+        redisTemplate.opsForValue().set(REDIS_SESSION_PREFIX + session.getUserId(), session.toString(), 1800, TimeUnit.SECONDS);
+        Document findOne = MongoDbUtils.findOne("userId", session.getUserId(), SESSION_COLLECTION_NAME);
+        if(findOne != null) {
+            MongoDbUtils.del("userId", session.getUserId(), SESSION_COLLECTION_NAME);
+        } else {
+            findOne = new Document();
+            findOne.put("createdDate", System.currentTimeMillis());
+        }
+        findOne.put("userId", session.getUserId());
+        findOne.put("data", JSON.toJSONString(session));
+        findOne.put("updatedDate", System.currentTimeMillis());
+        MongoDbUtils.insert(findOne, SESSION_COLLECTION_NAME);
+    }
+
+    @Override
+    public void delSession(String userId) {
+        redisTemplate.delete(REDIS_SESSION_PREFIX + userId);
+        MongoDbUtils.del("userId", userId, SESSION_COLLECTION_NAME);
+    }
+
+    @Override
+    public List<Session> getSessionByDate(Integer dateNum) {
+        Calendar instance = Calendar.getInstance();
+        instance.add(Calendar.DATE, dateNum);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+        String format2 = simpleDateFormat.format(instance.getTime());
+        SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long time = 0;
+        try {
+            time = simpleDateFormat3.parse(format2).getTime();
+        } catch(ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        BasicDBObject query = new BasicDBObject();
+        Map<String, Object> queryMap = new HashMap<>();
+        queryMap.put("$gt", time);
+        queryMap.put("$lt", time + 24 * 60 * 60 * 1000);
+        query.append("createdDate", new BasicDBObject(queryMap));
+        List<Document> find = MongoDbUtils.find(query, SESSION_COLLECTION_NAME);
+        List<Session> list = new ArrayList<Session>();
+        if(find == null) {
+            return list;
+        }
+        for(Document d : find) {
+            list.add(JSON.parseObject(d.getString("data"), Session.class));
+        }
+        return list;
+    }
+
+}

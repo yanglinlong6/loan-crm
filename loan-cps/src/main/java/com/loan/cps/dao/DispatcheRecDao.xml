@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.loan.cps.dao.DispatcheRecDao">
+ 	
+ 	<insert id="add" parameterType="com.loan.cps.entity.DispatcheRecPO">
+ 		insert into loan_cps.org_dispatche_rec
+ 		(org_id,customer_id,dispatch_status,dispatch_result,create_date,update_date)
+ 		values
+ 		(#{orgId},#{customerId},#{dispatchStatus},#{dispatchResult},#{createDate},#{updateDate})
+ 	</insert>
+	
+</mapper>

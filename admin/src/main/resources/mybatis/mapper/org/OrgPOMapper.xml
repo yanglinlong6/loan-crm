@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.admin.service.org.dao.OrgDao">
+    <resultMap id="Org_BaseResultMap" type="com.daofen.admin.service.org.model.OrgPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="org_id" jdbcType="BIGINT" property="orgId"/>
+        <result column="org_name" jdbcType="VARCHAR" property="orgName"/>
+        <result column="org_nickname" jdbcType="VARCHAR" property="orgNickname"/>
+        <result column="linkman" jdbcType="VARCHAR" property="linkman"/>
+        <result column="linkman_mobile" jdbcType="VARCHAR" property="linkmanMobile"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="state" property="state"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+    </resultMap>
+
+    <sql id="Org_Base_Column_List">
+        id, org_id, org_name, org_nickname, linkman, linkman_mobile, address,state, create_by,create_date, update_by
+    </sql>
+
+    <select id="selectOrgListByPage" parameterType="com.daofen.admin.basic.PageVO" resultMap="Org_BaseResultMap">
+        select
+        <include refid="Org_Base_Column_List"/>
+        from org
+        <where>
+            <if test="param != null">
+                <if test="param.orgName !=null and param.orgName!=''"> and org_name like concat('%', #{param.orgName},'%') </if>
+                <if test="param.state != null"> and `state`=#{param.state}</if>
+                <if test="param.orgId != null"> and org_id = #{param.orgId}</if>
+            </if>
+        </where>
+        limit #{startIndex},#{size}
+    </select>
+
+    <select id="selectOrgListCountByPage" parameterType="com.daofen.admin.basic.PageVO" resultType="java.lang.Integer">
+        select count(1)
+        from org
+        <where>
+            <if test="param != null">
+                <if test="param.orgName !=null and param.orgName!=''"> and org_name like concat('%', #{param.orgName},'%') </if>
+                <if test="param.state != null"> and `state`=#{param.state}</if>
+                <if test="param.orgId != null"> and org_id = #{param.orgId}</if>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectOrgByOrgId" parameterType="java.lang.Long" resultMap="Org_BaseResultMap">
+        select
+        <include refid="Org_Base_Column_List"/>
+        from org
+        where org_id = #{orgId,jdbcType=BIGINT}
+    </select>
+    
+    <select id="selectOrgByName" parameterType="com.daofen.admin.service.org.model.OrgPO" resultMap="Org_BaseResultMap">
+        select
+        <include refid="Org_Base_Column_List"/>
+        from org
+        where org_name = #{orgName} or org_nickname = #{orgNickname}
+        limit 1
+    </select>
+    
+    <select id="selectMaxOrg" resultType="java.lang.Long">
+        select org_id
+        from org
+        order by org_id desc
+        limit 1
+    </select>
+
+    <select id="selectAllOrg" parameterType="java.lang.String" resultMap="Org_BaseResultMap">
+        select org_id, org_name, org_nickname, linkman, linkman_mobile, address,state
+        from org
+        <if test="orgName != null">
+            where org_name like CONCAT('%',#{orgName},'%') or org_nickname like concat('%',#{orgName},'%')
+        </if>
+    </select>
+
+    <insert id="insertOrg" parameterType="com.daofen.admin.service.org.model.OrgPO">
+        insert into org
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgId != null">
+                org_id,
+            </if>
+            <if test="orgName != null">
+                org_name,
+            </if>
+            <if test="orgNickname != null">
+                org_nickname,
+            </if>
+            <if test="linkman != null">
+                linkman,
+            </if>
+            <if test="linkmanMobile != null">
+                linkman_mobile,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="state != null">
+                `state`,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgId != null">
+                #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="orgName != null">
+                #{orgName,jdbcType=VARCHAR},
+            </if>
+            <if test="orgNickname != null">
+                #{orgNickname,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null">
+                #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanMobile != null">
+                #{linkmanMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    
+    <select id="selectCityNeed" resultType="com.daofen.admin.service.org.model.CityNeedPO">
+        SELECT
+            CONCAT(orgApt.city,'-',
+                CASE
+                    WHEN orgApt.type = 0 THEN '信贷'
+                    WHEN orgApt.type = 2 THEN '车底'
+                    WHEN orgApt.type = 1 THEN '房抵'
+                END
+            ) city,
+            orgApt.limit_count limitCount,
+            (
+                SELECT count(1)
+                FROM org_dispatche_rec rec2
+                    JOIN user_aptitude aptitude ON rec2.customer_id = aptitude.id
+                    WHERE rec2.org_id = org.org_id and aptitude.city = orgApt.city and orgApt.type = aptitude.type  AND rec2.create_date BETWEEN #{startDate} and #{endDate} AND rec2.dispatch_status = 1
+            ) sendCount
+        FROM org org
+            LEFT JOIN org_aptitude orgApt ON org.org_id = orgApt.org_id
+        WHERE org.state = 1 AND orgApt.limit_count > 0
+        ORDER BY orgApt.type ASC
+    </select>
+
+    <update id="updateOrg" parameterType="com.daofen.admin.service.org.model.OrgPO">
+        update org
+        <set>
+            <if test="orgName != null">
+                org_name = #{orgName,jdbcType=VARCHAR},
+            </if>
+            <if test="orgNickname != null">
+                org_nickname = #{orgNickname,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null">
+                linkman = #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanMobile != null">
+                linkman_mobile = #{linkmanMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                `state` = #{state},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where org_id = #{orgId,jdbcType=BIGINT}
+    </update>
+
+    <resultMap id="OrgAptitudePO_BaseResultMap" type="com.daofen.admin.service.org.model.OrgAptitudePO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="org_id" jdbcType="BIGINT" property="orgId"/>
+        <result column="org_name" jdbcType="VARCHAR" property="orgName"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="week" jdbcType="VARCHAR" property="week"/>
+        <result column="limit_time" jdbcType="VARCHAR" property="limitTime"/>
+        <result column="limit_count" jdbcType="INTEGER" property="limitCount"/>
+        <result column="single_income" jdbcType="DECIMAL" property="singleIncome"/>
+        <result column="wechat" jdbcType="VARCHAR" property="wechat"/>
+        <result column="api" jdbcType="VARCHAR" property="api"/>
+        <result column="weight" property="weight"/>
+        <result column="channel" property="channel" />
+        <result column="amount_rate" property="amountRate"/>
+        <result column="loan_amount" property="loanAmount"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+    </resultMap>
+
+    <sql id="OrgAptitudePO_Base_Column_List">
+        id, org_id,org_name, province, city,week, limit_time, limit_count, single_income,wechat,channel,api,
+        weight,amount_rate,loan_amount,create_by, create_date,
+        update_by, update_date
+    </sql>
+    
+    <select id="selectOrgAptitudePage" parameterType="com.daofen.admin.basic.PageVO" resultMap="OrgAptitudePO_BaseResultMap">
+        select <include refid="OrgAptitudePO_Base_Column_List" />
+        from org_aptitude
+        <if test="param != null">
+            <where>
+                <if test="param.city != null"> and city like CONCAT('%',#{param.city},'%') </if>
+                <if test="param.orgName != null"> and org_name like CONCAT('%',#{param.orgName},'%') </if>
+                <if test="param.orgId != null"> and org_id=#{param.orgId} </if>
+            </where>
+        </if>
+        order by org_id asc
+        limit #{startIndex},#{size}
+    </select>
+
+    <select id="selectOrgAptitudePageCount" parameterType="com.daofen.admin.basic.PageVO" resultType="java.lang.Integer">
+        select count(1)
+        from org_aptitude
+        <if test="param != null">
+            <where>
+                <if test="param.city != null"> and city like CONCAT('%',#{param.city},'%') </if>
+                <if test="param.orgName != null"> and org_name like CONCAT('%',#{param.orgName},'%') </if>
+                <if test="param.orgId != null"> and org_id=#{param.orgId} </if>
+            </where>
+        </if>
+    </select>
+
+    <select id="selectOrgAptitudeByOrgId" parameterType="java.lang.Long" resultMap="OrgAptitudePO_BaseResultMap">
+        select
+        <include refid="OrgAptitudePO_Base_Column_List"/>
+        from org_aptitude
+        where org_id = #{orgId,jdbcType=BIGINT}
+    </select>
+
+
+    <insert id="insertOrgAptitude" parameterType="com.daofen.admin.service.org.model.OrgAptitudePO">
+        insert into org_aptitude
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgId != null">
+                org_id,
+            </if>
+            <if test="orgName !=null">
+                org_name,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="week != null">
+                week,
+            </if>
+            <if test="limitTime != null">
+                limit_time,
+            </if>
+            <if test="limitCount != null">
+                limit_count,
+            </if>
+            <if test="singleIncome != null">
+                single_income,
+            </if>
+            <if test="wechat != null">
+                wechat,
+            </if>
+            <if test="channel != null">
+                channel,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgId != null">
+                #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="orgName != null">
+                #{orgName},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="week != null">
+                #{week},
+            </if>
+            <if test="limitTime != null">
+                #{limitTime,jdbcType=VARCHAR},
+            </if>
+            <if test="limitCount != null">
+                #{limitCount,jdbcType=INTEGER},
+            </if>
+            <if test="singleIncome != null">
+                #{singleIncome,jdbcType=DECIMAL},
+            </if>
+            <if test="wechat != null">
+                #{wechat},
+            </if>
+            <if test="channel != null">
+                #{channel},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateOrgAptitude" parameterType="com.daofen.admin.service.org.model.OrgAptitudePO">
+        update org_aptitude
+        <set>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="orgName != null">
+                org_name=#{orgName},
+            </if>
+            <if test="city != null">
+                city = #{city},
+            </if>
+            <if test="week != null">
+                week=#{week},
+            </if>
+            <if test="limitTime != null">
+                limit_time = #{limitTime},
+            </if>
+            <if test="limitCount != null">
+                limit_count = #{limitCount},
+            </if>
+            <if test="singleIncome != null">
+                single_income = #{singleIncome},
+            </if>
+            <if test="wechat != null">
+                wechat=#{wechat},
+            </if>
+            <if test="weight != null">
+                weight=#{weight},
+            </if>
+            <if test="channel != null">
+                channel = #{channel},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getOrgCityList" resultType="java.lang.String">
+        select  oapt.city
+        from org org
+            left join org_aptitude oapt on org.org_id = oapt.org_id
+        where org.state=1 and oapt.org_id not in(${excludeOrgIds})
+                and  oapt.limit_count >0
+                and oapt.`week` like concat('%',#{week},'%')
+        GROUP BY oapt.city
+    </select>
+
+
+
+</mapper>

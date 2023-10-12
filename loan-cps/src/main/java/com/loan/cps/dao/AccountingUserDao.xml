@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loan.cps.dao.AccountingUserDao">
+  <resultMap id="BaseResultMap" type="com.loan.cps.service.accounting.AccountingUserPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="occupation" jdbcType="TINYINT" property="occupation" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, `name`, `mobile`, `age`, `area`, `occupation`, `status`, create_by, create_date, update_by,
+    update_date
+  </sql>
+  
+  <select id="getAccountingUserWithNotSend" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from accounting_user
+    where `status`=#{status}
+    limit 0,#{count}
+  </select>
+
+  <insert id="insertAccountUser" parameterType="com.loan.cps.service.accounting.AccountingUserPO" useGeneratedKeys="true" keyColumn="id">
+    insert into accounting_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="occupation != null">
+        occupation,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="occupation != null">
+        #{occupation,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateAccountingUserById" parameterType="com.loan.cps.service.accounting.AccountingUserPO">
+    update accounting_user
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        `mobile` = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        `age` = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="area != null">
+        `area` = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="occupation != null">
+        occupation = #{occupation,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

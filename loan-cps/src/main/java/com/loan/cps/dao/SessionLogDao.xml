@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.loan.cps.dao.SessionLogDao">
+	
+
+  <select id="get" parameterType="com.loan.cps.entity.Session" resultType="com.alibaba.fastjson.JSONObject">
+    select 
+    *
+    from loan_cps.session_log
+    where user_id = #{userId} and session_id = #{sessionId}
+  </select>
+ 	
+	<insert id="save" parameterType="com.loan.cps.entity.Session" >
+		insert into loan_cps.session_log
+		(user_id,session_id,node_id,upstream_time,domain2,create_by,create_date,update_by,update_date)
+		values
+		(#{userId},#{sessionId},#{nodeId},#{upstream_time},#{domain2},'ai',now(),'ai',now())
+	</insert>
+  	
+  	<select id="selLastTimeNodeId" parameterType="java.lang.String" resultType="java.lang.Integer">
+  		select node_id from loan_cps.session_log where user_id = #{userId} ORDER BY create_date DESC limit 1
+  	</select>
+  
+</mapper>

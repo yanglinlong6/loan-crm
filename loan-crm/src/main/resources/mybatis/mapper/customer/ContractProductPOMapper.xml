@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.customer.dao.ContractProductPOMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.customer.model.ContractProductPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="certificate" jdbcType="VARCHAR" property="certificate" />
+    <result column="process"  property="process" />
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    `id`, contract_id, org_id, customer_id, product_id, product_name, `certificate`,`process`,`remark`, create_by,
+    create_date, update_by, update_date
+  </sql>
+
+  <select id="selectContractProductById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_contract_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectContractProduct" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from customer_contract_product
+    where org_id = #{orgId,jdbcType=BIGINT} and contract_id = #{contractId}
+  </select>
+
+  <insert id="insertContractProduct" parameterType="com.crm.service.customer.model.ContractProductPO" useGeneratedKeys="true" keyColumn="id">
+    insert into customer_contract_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="contractId != null">
+        contract_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="certificate != null">
+        certificate,
+      </if>
+      <if test="process != null">
+        `process`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="contractId != null">
+        #{contractId,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="certificate != null">
+        #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="process != null">
+        #{process},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateContractProductById" parameterType="com.crm.service.customer.model.ContractProductPO">
+    update customer_contract_product
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="certificate != null">
+        certificate = #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="process != null">
+        `process` = #{process},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+</mapper>

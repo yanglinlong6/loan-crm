@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.employee.dao.OrgEmployeePOMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.employee.model.OrgEmployeePO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="team_id" jdbcType="BIGINT" property="teamId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="login" jdbcType="TINYINT" property="login" />
+    <result column="receive" jdbcType="TINYINT" property="receive" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="channel_id" jdbcType="VARCHAR" property="channelId" />
+    <result column="wechat" jdbcType="VARCHAR"  property="wechat" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <resultMap id="BOResultMap" type="com.crm.service.employee.model.OrgEmployeeBO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="team_id" jdbcType="BIGINT" property="teamId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="login" jdbcType="TINYINT" property="login" />
+    <result column="receive" jdbcType="TINYINT" property="receive" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="channel_id" jdbcType="VARCHAR" property="channelId" />
+    <result column="wechat" jdbcType="VARCHAR"  property="wechat" />
+    <result column="shopName" jdbcType="VARCHAR" property="shopName" />
+    <result column="teamName" jdbcType="VARCHAR" property="teamName" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="account_id" property="accountId"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, org_id, shop_id, team_id, name, phone, password, logo, status, count, login,
+    receive, role_id, role_name, channel_id,`wechat`,create_by, create_date, update_by, update_date,account_id
+  </sql>
+
+  
+  <select id="selectEmployeeByPage" parameterType="com.crm.common.PageBO" resultMap="BOResultMap">
+    select
+      employee.id,
+      employee.org_id,
+      employee.shop_id,
+      employee.team_id,
+      employee.name,
+      employee.phone,
+      employee.logo,
+      employee.status,
+      employee.count,
+      employee.login,
+      employee.receive,
+      employee.role_id roleId,
+      employee.channel_id,
+      employee.`wechat`,
+      CASE
+        WHEN shop.`name` is null THEN '管理员'
+        ELSE shop.`name`
+      END shopName,
+      CASE
+        WHEN team.`name` is null THEN '管理员'
+        ELSE team.`name`
+      END teamName,
+      role.`name` role_name
+    from org_employee employee
+    left join org_shop shop on employee.shop_id = shop.id
+    left join org_shop_team team on employee.team_id = team.id
+    left join `role` role on employee.role_id = role.id
+    <where>
+      employee.org_id = #{paramObject.orgId}
+      <if test="paramObject.shopId != null and paramObject.shopId >0"> and employee.shop_id in(#{paramObject.shopId})</if>
+      <if test="paramObject.teamId != null and paramObject.teamId >0"> and employee.team_id in(#{paramObject.teamId})</if>
+      <if test="paramObject.name != null and paramObject.name != ''"> and employee.`name` like concat('%' ,#{paramObject.name},'%')</if>
+      <if test="paramObject.phone != null and paramObject.phone != ''"> and employee.phone like concat( '%',#{paramObject.phone},'%')</if>
+    </where>
+    order by employee.create_date desc
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectEmployeeCountByPage" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select
+      count(1)
+    from org_employee employee
+    left join org_shop shop on employee.shop_id = shop.id
+    left join org_shop_team team on employee.team_id = team.id
+    left join `role` role on employee.role_id = role.id
+    <where>
+      employee.org_id = #{paramObject.orgId}
+      <if test="paramObject.shopId != null and paramObject.shopId >0"> and employee.shop_id in(#{paramObject.shopId})</if>
+      <if test="paramObject.teamId != null and paramObject.teamId >0"> and employee.team_id in(#{paramObject.teamId})</if>
+      <if test="paramObject.name != null and paramObject.name != ''"> and employee.`name` like concat('%' ,#{paramObject.name},'%')</if>
+      <if test="paramObject.phone != null and paramObject.phone != ''"> and employee.phone like concat( '%',#{paramObject.phone},'%')</if>
+    </where>
+  </select>
+
+  <select id="selectEmployeeById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from org_employee
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectOrgEmployeeList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org_employee
+    where org_id=#{orgId}
+      <if test="shopId != null"> and shop_id = #{shopId}</if>
+      <if test="teamId != null"> and team_id = #{teamId}</if>
+  </select>
+
+  <select id="selectEmployeeByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org_employee
+    where phone = #{phone}
+    limit 1
+  </select>
+  
+  <select id="selectEmployee"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org_employee
+    where org_id=#{orgId} and `name` = #{name}
+    limit 1
+  </select>
+
+  <select id="selectAdminEmployee"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org_employee
+    where org_id=#{orgId} and role_id=0
+    limit 1
+  </select>
+
+  <delete id="deleteEmployeeById" parameterType="java.lang.Long">
+    delete from org_employee
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertEmployee" parameterType="com.crm.service.employee.model.OrgEmployeePO" useGeneratedKeys="true" keyProperty="id">
+    insert into org_employee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="teamId != null">
+        team_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="logo != null">
+        logo,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="count != null">
+        count,
+      </if>
+      <if test="login != null">
+        login,
+      </if>
+      <if test="receive != null">
+        receive,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="roleName != null">
+        role_name,
+      </if>
+      <if test="channelId !=null">
+        channel_id,
+      </if>
+      <if test="wechat !=null">
+        `wechat`,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="teamId != null">
+        #{teamId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="login != null">
+        #{login,jdbcType=TINYINT},
+      </if>
+      <if test="receive != null">
+        #{receive,jdbcType=TINYINT},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId !=null">
+        #{channelId},
+      </if>
+      <if test="wechat !=null">
+        `wechat` = #{wechat},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountId != null">
+        #{accountId},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateEmployee" parameterType="com.crm.service.employee.model.OrgEmployeePO">
+    update org_employee
+    <set>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="teamId != null">
+        team_id = #{teamId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        logo = #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="count != null">
+        count = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="login != null">
+        login = #{login,jdbcType=TINYINT},
+      </if>
+      <if test="receive != null">
+        receive = #{receive,jdbcType=TINYINT},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="roleName != null">
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="wechat !=null">
+        `wechat` = #{wechat},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

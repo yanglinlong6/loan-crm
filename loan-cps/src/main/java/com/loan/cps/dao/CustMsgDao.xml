@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.loan.cps.dao.CustMsgDao">
+ 	
+ 	<select id="getNodeMsgList" resultType="com.alibaba.fastjson.JSONObject"  parameterType="java.lang.Integer" >
+ 		SELECT * FROM wecaht_msg WHERE node_id = #{nodeId}
+ 	</select>
+ 	
+ 	<select id="getCustMsgMenuList" resultType="com.alibaba.fastjson.JSONObject"  parameterType="java.lang.String" >
+ 		SELECT * FROM wecaht_msg_menu_list WHERE msg_id = #{msgId} order by sort
+ 	</select>
+	
+</mapper>

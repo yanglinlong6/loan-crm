@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.org.dao.OrgPOMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.org.model.OrgPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="domain2" jdbcType="VARCHAR" property="domain2" />
+    <result column="adress" jdbcType="VARCHAR" property="adress" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="automatic" jdbcType="TINYINT" property="automatic" />
+    <result column="dial" jdbcType="TINYINT" property="dial" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="account_id" property="accountId" />
+    <result column="qrcode" property="qrcode" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    `id`, `name`, nickname, domain2, adress, logo, `status`, automatic,`dial`,qrcode,create_by, create_date, update_by, update_date,`account_id`
+  </sql>
+
+  <select id="selectOrgByDomain2" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org
+    where domain2 = #{domain2}
+  </select>
+
+  <select id="selectOrgById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org
+    where id = #{id}
+  </select>
+
+  <insert id="insertOrg" parameterType="com.crm.service.org.model.OrgPO"
+          useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    insert into org
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="domain2 != null">
+        domain2,
+      </if>
+      <if test="adress != null">
+        adress,
+      </if>
+      <if test="logo != null">
+        logo,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="automatic != null">
+        automatic,
+      </if>
+      <if test="dial != null">
+        dial,
+      </if>
+      <if test="qrcode != null ">
+        qrcode,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="accountId != null">
+        `account_id`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="domain2 != null">
+        #{domain2,jdbcType=VARCHAR},
+      </if>
+      <if test="adress != null">
+        #{adress,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="automatic != null">
+        #{automatic,jdbcType=TINYINT},
+      </if>
+      <if test="dial != null">
+        #{dial,jdbcType=TINYINT},
+      </if>
+      <if test="qrcode != null">
+        #{qrcode},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        #{accountId},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateOrg" parameterType="com.crm.service.org.model.OrgPO">
+    update `org`
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="domain2 != null">
+        domain2 = #{domain2,jdbcType=VARCHAR},
+      </if>
+      <if test="adress != null">
+        adress = #{adress,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null">
+        logo = #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="automatic != null">
+        automatic = #{automatic,jdbcType=TINYINT},
+      </if>
+      <if test="dial != null">
+        dial = #{dial,jdbcType=TINYINT},
+      </if>
+      <if test="qrcode != null">
+        qrcode =#{qrcode},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+
+
+
+
+</mapper>

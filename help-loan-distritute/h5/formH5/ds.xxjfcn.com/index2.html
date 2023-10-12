@@ -1,0 +1,1655 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta content="telephone=no" name="format-detection" />
+    <meta content="email=no" name="format-detection" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=6">
+    <meta http-equiv="X-UA-Compatible" content="IE=7">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta name="HandheldFriendly" content="true">
+    <link href="view/mobile/page/public/public1.css?v=1.0.4" rel="stylesheet">
+    <script src="view/index/js/jquery-1.8.2.min.js"></script>
+    <script src="view/index/js/ProvinceAndCities.js"></script>
+
+    <script type="text/javascript" src="view/index/layer/layer.js"></script>
+    <title>极速贷款</title>
+    <script type="text/javascript" src="../codeConvert.js?v=1.5.5"></script>
+    <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+    <!-- Bytedance Tracking -->
+    <script>
+        (function (r, d, s) {
+            r._tt_config = true;
+            var _baq = (r._baq = r._baq || []);
+            _baq.methods = ["track", "off", "on"];
+            _baq.factory = function (method) {
+                return function () {
+                    var args = Array.prototype.slice.call(arguments);
+                    args.unshift(method);
+                    _baq.push(args);
+                    return _baq
+                }
+            };
+            for (var i = 0; i < _baq.methods.length; i++) {
+                var key = _baq.methods[i];
+                _baq[key] = _baq.factory(key)
+            }
+            _baq.load = function () {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                js = d.createElement(s);
+                js.src = "https://analytics.oceanengine.com/api/v2/js/sdk";
+                fjs.parentNode.insertBefore(js, fjs)
+            };
+            _baq.load();
+            if (_baq.invoked) {
+                return
+            }
+            _baq.invoked = true;
+            _baq.track("pageview")
+        })(window, document, "script");
+    </script>
+    <!-- End Bytedance Tracking -->
+    <script>
+        var phone_location, ip_location, select_city = '';
+        var form_data;
+        var user_ip = returnCitySN.cip;
+    </script>
+</head>
+<style>
+    input {
+        border: none;
+        outline: none;
+    }
+
+    .calculate {
+        margin: 10px 30px 10px 30px;
+        border-radius: 6px;
+        padding: 0 23px;
+        font-size: .42rem;
+        background-color: #f1f3f6;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .unit {
+        font-size: 28px;
+    }
+
+    .calculate .title {
+        padding: 20px 0 0;
+        color: #8d8d8d;
+    }
+
+    .calculate .borrow-amount {
+        font-size: .8rem;
+        position: relative;
+    }
+
+    .calculate .borrow-amount .b-money {
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 70px;
+        padding: 1px 20px 1px 38px;
+        line-height: 60px;
+    }
+
+    .calculate .borrow-amount .init-input {
+        position: absolute;
+        width: 80%;
+        height: 100%;
+        line-height: 66px;
+        top: 0;
+        left: 50px;
+        box-sizing: border-box;
+        font-size: 40px;
+        color: #999999;
+        background-color: #ffffff;
+    }
+
+    .calculate .borrow-amount span {
+        width: .8rem;
+        position: absolute;
+    }
+
+    .calculate .borrow-amount span:first-child {
+        left: 0;
+        bottom: .1rem;
+        font-size: 40px;
+    }
+
+    .calculate .borrow-amount .i-icon {
+        width: 55px;
+        height: 80px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+
+    .calculate .borrow-amount .i-icon span {
+        width: 70%;
+        height: 70%;
+        position: absolute;
+        top: 9px;
+        right: 15px;
+    }
+
+    .calculate .borrow-amount .i-icon span:first-child {
+        display: none;
+        background: url('view/mobile/images/input.png') no-repeat center center;
+        background-size: contain;
+    }
+
+    .calculate .borrow-amount .i-icon span:last-child {
+        background: url('view/mobile/images/input.png') no-repeat center center;
+        background-size: contain;
+    }
+
+    .calculate .range-box {
+        margin: .6rem 0;
+        position: relative;
+        height: .2rem
+    }
+
+    .calculate .range-box .range-track {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: block;
+        width: 0;
+        max-width: 100%;
+        height: .2rem;
+        border-radius: .15rem;
+        background: -webkit-gradient(left, #8338c1, #6c09bf);
+        background: -webkit-linear-gradient(left, #8338c1, #6c09bf);
+        background: -moz-linear-gradient(left, #8338c1, #6c09bf);
+        background: -o-linear-gradient(left, #8338c1, #6c09bf);
+        background: linear-gradient(to right, #8338c1, #6c09bf);
+        z-index: 1;
+        border: 0;
+    }
+
+    .calculate .range-box .range-input {
+        width: 100%;
+        height: .2rem;
+        margin: 0 auto;
+        cursor: pointer;
+        background-color: #bababa;
+        border-radius: .2rem;
+        position: absolute;
+        left: 0;
+        top: 0;
+        border: 0;
+        -webkit-appearance: none !important;
+    }
+
+    .calculate .range-box .range-input::-webkit-slider-thumb {
+        position: relative;
+        cursor: default;
+        outline: 0;
+        /*padding: .3rem 0 .5rem;*/
+        box-sizing: content-box;
+        height: .8rem;
+        width: .8rem;
+        border-radius: 50%;
+        overflow: hidden;
+        z-index: 9;
+        border: 0;
+        background-color: #ffffff;
+        -webkit-appearance: none;
+    }
+
+    .calculate .range-box .range-input-a::-webkit-slider-thumb {
+        background: url("../images/gold.png") no-repeat center center;
+        background-size: 1.1rem 1.1rem;
+    }
+
+    .calculate .range-box .range-input-b::-webkit-slider-thumb {
+        background: url("../images/gold.png") no-repeat center center;
+        background-size: 1.1rem 1.1rem;
+    }
+
+    .calculate .range-box .bak {
+        position: absolute;
+        width: 100%;
+        height: 500%;
+        top: -200%;
+        left: 0;
+        z-index: 1;
+    }
+
+    .calculate .range-line {
+        position: relative;
+        height: .6rem;
+        margin: 6px 0;
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+    }
+
+    .calculate .range-line .circle {
+        width: .6rem;
+        height: .6rem;
+        border-radius: .3rem;
+        background-color: #ffffff;
+        position: absolute;
+        top: 0;
+    }
+
+    .calculate .range-line .c-a {
+        left: -.72rem;
+    }
+
+    .calculate .range-line .c-b {
+        right: -.72rem;
+    }
+
+    .calculate .range-line .line {
+        width: 100%;
+        height: 1px;
+        border-top: 1px dashed #dedede;
+    }
+
+    .calculate .range-tip {
+        display: flex;
+        display: -webkit-flex;
+        justify-content: space-between;
+        color: #8d8d8d;
+        font-size: .45rem;
+    }
+
+    .calculate .range-items {
+        padding: 0 0 28px;
+    }
+
+    .calculate .range-items .item {
+        display: flex;
+        display: -webkit-flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px
+    }
+
+    .calculate .range-items .item .i-title {
+        color: #6078af;
+        font-size: 22px;
+    }
+
+    .calculate .range-items .item ul {
+        display: flex;
+        display: -webkit-flex;
+    }
+
+    .calculate .range-items .item ul li {
+        padding: 8px 12px;
+        margin-left: 8px;
+        border-radius: 2px;
+        box-sizing: border-box;
+        color: #979797;
+        font-size: 20px;
+        border: 1px solid #979797;
+    }
+
+    .calculate .range-items .item ul li.check {
+        border-color: #0e6ce1;
+        color: #ffffff;
+        background-color: #0e6ce1;
+        /*background: -webkit-gradient(to right, #0e65f4, #0b3fb4);
+	background: -webkit-linear-gradient(to right, #0e65f4, #0b3fb4);
+	background: -moz-linear-gradient(to right, #0e65f4, #0b3fb4);
+	background: -o-linear-gradient(to right, #0e65f4, #0b3fb4);
+	background: linear-gradient(to right, #0e65f4, #0b3fb4);*/
+    }
+
+    .calculate .range-items .item .i-refund {
+        font-size: 34px;
+    }
+
+    .calculate .range-items .item-d {
+        justify-content: center;
+        color: #999999;
+        font-size: .4rem;
+    }
+
+    .calculate .range-items .item-d span {
+        color: #f00
+    }
+
+    .tip-box {
+        width: 100%;
+        height: 50px;
+        padding: 0 30px;
+        text-align: center;
+    }
+
+    .tip-box span {
+        font-size: 28px;
+        color: #8d8d8d;
+        line-height: 46px;
+        font-weight: 600;
+    }
+
+    .select-amount {
+        background-image: url(../ds.xxjfcn.com/images/bottomicon-08-4.jpg);
+        background-position: 0%;
+        background-repeat: no-repeat;
+        height: 86% !important;
+        border: 0;
+        color: transparent;
+        background-color: transparent;
+    }
+
+    .money-text {
+        position: absolute;
+        right: -15px;
+        top: 40px;
+        font-size: 32px;
+    }
+
+    .select-amount option {
+        color: black;
+    }
+
+    .layui-layer-msg {
+        left: 18% !important;
+        width: auto !important;
+    }
+
+    .prompt .shade {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .7);
+    }
+
+    .prompt .prompt_con {
+        position: fixed;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        overflow: hidden;
+        font-size: 28px;
+        background-color: #fff;
+        border-radius: 16px;
+        z-index: 2;
+        padding: 20px;
+    }
+
+    .prompt .prompt_con .title {
+        padding: 26px;
+        font-weight: 500;
+        line-height: 24px;
+        text-align: center;
+        font-size: 28px;
+    }
+
+    .prompt .prompt_con .ques {
+        line-height: 24px;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .prompt .prompt_con .city-sort {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .prompt .prompt_con .city-sort li {
+        width: 100px;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        font-size: 20px;
+        border: 1px solid #000;
+        margin-right: 10px;
+    }
+
+    .prompt .prompt_con .city-sort .active {
+        background: #1989fa;
+        color: white;
+    }
+</style>
+<script>
+    var phoneWidth = parseInt(window.screen.width)
+
+    var phoneScale = phoneWidth / 640
+
+    var ua = navigator.userAgent
+
+    if (/Android (\d+\.\d+)/.test(ua)) {
+
+        var version = parseFloat(RegExp.$1)
+
+        if (version > 2.3) {
+
+            document.write('<meta name="viewport" content="width=640, minimum-scale = ' + phoneScale +
+                ', maximum-scale = ' + phoneScale + ', target-densitydpi=device-dpi">')
+
+        } else {
+
+            document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">')
+
+        }
+
+    } else {
+
+        document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">')
+
+    }
+</script>
+<script>
+    var urlLink = GetUrlLink() || '';
+    var basic_request = baseApiUrl;
+    var wx_official_account = getQueryString('wechatId') || ''
+    var toutiaoname = getQueryString('toutiaoName') || ''
+    var tenxunName = getQueryString('tenxunName') || ''
+    var wx_official_account_name = ''
+    var phone = ''
+
+    function setCitys(id, arr) {
+        $("#" + id).html("")
+        var citySets = new Set([])
+        var _html = ''
+        if (arr.length) _html = '<li class="sort-by">热门城市</li>'
+        for (var i = 0; i < arr.length; i++) {
+            if (!citySets.has(arr[i].name)) _html += "<li class='provs' value='" + arr[i].name + "'>" + arr[i].name +
+                "</li>";
+            citySets.add(arr[i].name)
+        }
+        $("#" + id).append(_html)
+    }
+
+    function setRealCitys(id, arr) {
+        $("#" + id).html("")
+        var citySets = new Set([])
+        var _html = ''
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].name && !citySets.has(arr[i].name)) _html += "<label class='checkbox-1 ml0'>" + arr[i].name +
+                "</label>";
+            citySets.add(arr[i].name)
+        }
+        $("#" + id).append(_html)
+    }
+
+    function setBeianhao(state) {
+        if (state) {
+            $("#beianhao").show();
+        } else {
+            $("#beianhao").hide();
+        }
+    }
+
+    function set_hide(v) {
+        if (v != "") {
+            $(".hide").show();
+        } else {
+            $(".hide").hide();
+        }
+    }
+
+
+    function check() {
+        var realname = $("#realname").val();
+        var money = $("#amount").val();
+        var mobile = $("#mobile").val();
+        var code = $("#code").val();
+        var cityname = $("#city").val();
+        var age = $("#age").val();
+        var salary = $("#salary").val();
+        var error = '';
+        var myreg = /(^1[3|4|5|6|7|8|9][0-9]{9}$)/;
+
+        //鼎一通
+        if (tenxunName == 'JUU5JUJDJThFJUU0JUI4JTgwJUU5JTgwJTlB') {
+            $("#code").val('efs2')
+            code = 'efs2'
+        }
+
+        if (realname == '') {
+            error += '姓名不能为空<br/>';
+        }
+        if (mobile == '') {
+            error += '手机号码不能为空<br/>';
+        }
+        if (mobile != "" && !myreg.test(mobile)) {
+            error += '手机号码格式不正确<br/>';
+        }
+        if (code == '') {
+            error += '请输入验证码<br/>';
+        }
+        if (money == '') {
+            error += '请选择借款金额<br/>';
+        } else {
+            if (salary == '') {
+                error += '请选择月收入<br/>';
+            }
+            if (age == '') {
+                error += '请输入年龄<br/>';
+            } else {
+                if (age < 20 || age > 60) { //年龄小于22 或者大于60
+                    error += '年龄应在20-60之间<br/>';
+                }
+            }
+            if (cityname == "") {
+                error += '请选择工作城市<br/>';
+            }
+        }
+        var flag = true; //只选了以上均无标志
+        var hc_flag = true; //回传标志
+        if ($('#check1').prop('checked')) { //选了房
+            flag = false;
+        }
+        if ($('#check2').prop('checked')) { //选了车
+            flag = false;
+        }
+        if ($('#check3').prop('checked')) { //选了社保
+            flag = false;
+        }
+        if ($('#check4').prop('checked')) { //选了公积金
+            flag = false;
+        }
+        if ($('#check5').prop('checked')) { //选了信用卡
+            flag = false;
+        }
+        if ($('#check6').prop('checked')) { //选了寿险保单
+            flag = false;
+        }
+        if ($('#check7').prop('checked')) { //选了微粒贷
+            flag = false;
+        }
+        if ($('#check8').prop('checked')) { //选了打卡工资
+            flag = false;
+        }
+        if ($('#check9').prop('checked')) { //选了营业执照
+            flag = false;
+        }
+        if ($('#check10').prop('checked')) { //选了房
+            flag = false;
+        }
+        if ($('#check11').prop('checked')) { //选了房
+            flag = false;
+        }
+        if (error) {
+            layer.msg('<span style="font-size:40px;">' + error + '</span>', {
+                icon: 2
+            });
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    //发送验证码
+
+    function sms() {
+        var mobile;
+        mobile = !mobile ? $('#mobile').val() : mobile;
+        var myreg = /(^1[3|4|5|6|7|8|9][0-9]{9}$)/;
+        if (mobile != "") {
+            if (!myreg.test(mobile)) {
+                layer.msg('<span style="font-size:40px;">手机号码格式不正确！请重新填写</span>', {
+                    icon: 2
+                });
+                $('#mobile').focus();
+            } else {
+                //Ajax获取信息并返回
+                $.ajax({
+                    type: "post",
+                    url: basic_request + "/home/customerFromH5/v2sendCodev2",
+                    data: {
+                        phone: mobile
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code && data.code == 1000) {
+                            layer.msg('<span style="font-size:40px;">验证码发送成功</span>', {
+                                icon: 1
+                            });
+                        } else {
+                            // layer.msg('<span style="font-size:40px;">' + data.message + '</span>', { icon: 2 });
+                            layer.msg('<span style="font-size:20px;">验证码发送次数过多</span>', {
+                                icon: 2
+                            });
+                        }
+                    }
+                });
+                pp();
+            }
+
+        } else {
+            layer.msg('<span style="font-size:40px;">请输入手机号！</span>', {
+                icon: 2
+            });
+            $('#mobile').focus();
+        }
+    }
+
+
+
+    //倒计时按钮
+    function pp() {
+        document.all.p.disabled = true;
+        speed = 1000; //速度
+        wait = 60; //停留时间
+        updateinfo();
+    }
+
+
+
+    function updateinfo() {
+        if (wait == 0) {
+            document.all.p.value = "获取验证码";
+            document.all.p.disabled = false;
+        } else {
+            document.all.p.value = wait + "s";
+            wait--;
+            window.setTimeout("updateinfo()", speed);
+        }
+    }
+
+    function GetUrlLink() {
+        var url = window.location.href;
+        return url.split('?')[0]
+    }
+
+    function submit1() {
+        if (!check()) {
+            return false;
+        }
+        var data = $("#form1").serializeArray();
+        var labelMaps = new Map([
+            ['has_house', ['有商品房']],
+            ['has_car', '有车'],
+            ['has_accumulation_fund', '有公积金'],
+            ['has_warranty', '有寿险保单'],
+            ['has_webank_amount', '有2万微粒贷'],
+            ['salary_method', '有打卡工资'],
+            ['run_company', '有营业执照'],
+            ['no', '以上均无'],
+        ])
+        var salaryMaps = new Map([
+            ['3000', '3000以下'],
+            ['5000', '3000-5000'],
+            ['7000', '5000-8000'],
+            ['10000', '8000-12000'],
+            ['15000', '12000-20000'],
+            ['20000', '20000以上'],
+        ])
+        var amountMaps = new Map([
+            ['50', '50万'],
+            ['30', '30万'],
+            ['20', '20万'],
+            ['10', '10万'],
+            ['5', '3-5万'],
+        ])
+        var label_tpl = {
+            result: 0,
+            content: ""
+        }
+        ''
+        var location_url = window.location.href;
+        var planId = getQueryString('planId') || ''
+        var src_flag = decodeURI(getQueryString('flag') || '') || ''
+        var toutiaoName = getQueryString('toutiaoName') || ''
+        var tenxunName = getQueryString('tenxunName') || ''
+        var tenxunNameStr = tenxunName ? '?tenxunName=' + tenxunName : ''
+        var toutiaoNameStr = toutiaoName ? '?toutiaoName=' + toutiaoName : ''
+        console.log('location_url', location_url.split('?')[0] + tenxunNameStr + toutiaoNameStr);
+        var bs64 = encode(location_url.split('?')[0] + tenxunNameStr + toutiaoNameStr);
+        var loan_periods = $('.month-list .check').data('value')
+        form_data = {
+            name: '', //姓名
+            sex: 0, //性别
+            phone: null, //手机号
+            messageCode: null, //验证码
+            city: '', //城市        深圳,上海,北京
+            amount: 0, //借款金额    50-50万 30-30万 20-20万 10-10万 5-3-5万
+            // salary: { ...label_tpl },                      //月收入      3000-3000以下 5000-3000~5000 7000-5000~8000 10000-8000~12000 15000-12000~20000 20000-20000以上
+            birthday: 0, //年龄
+            has_house: {
+                ...label_tpl
+            }, //有房        0-无 1-有自建房 2-有商品房
+            has_car: {
+                ...label_tpl
+            }, //有车        0-无 1-有
+            // has_social_insurance: { ...label_tpl },        //有社保      0-无 1-有
+            has_accumulation_fund: {
+                ...label_tpl
+            }, //有公积金    0-无 2-有
+            // has_creditcard: { ...label_tpl },              //有信用卡    0-无 1-有
+            has_warranty: {
+                ...label_tpl
+            }, //有寿险保单  0-无 1-有
+            has_webank_amount: {
+                ...label_tpl
+            }, //有微粒贷    0-无 1-有
+            salary_method: {
+                ...label_tpl
+            }, //有打卡工资  0-无 1-有
+            run_company: {
+                ...label_tpl
+            }, //有营业执照  0-无 1-有
+            // enterprise_tax_payment: { ...label_tpl },      //有企业纳税  0-无 1-有
+            source: '', //来源        0-无 1-有
+            channel: '',
+            wx_official_account: wx_official_account,
+            wx_official_account_name: wx_official_account_name,
+            tenxunName: tenxunName,
+            toutiaoName: toutiaoName,
+            plan_id: planId,
+            src_flag: src_flag,
+            loan_periods: loan_periods,
+            urlBase64: bs64,
+            user_ip: user_ip
+        };
+        var isNo_arr = data.filter(v => v.name === 'no')
+
+        haveValFlag = 0
+        amountFlag = 0
+        amountMinFlag = 0
+        for (x in data) {
+            var value = Number(data[x].value)
+            if (value && labelMaps.has(data[x].name)) haveValFlag++
+            if (!labelMaps.has(data[x].name)) {
+                if (data[x].name === 'salary') {
+                    form_data['salary'] = {
+                        result: value,
+                        content: salaryMaps.get(data[x].value)
+                    }
+                } else if (data[x].name === 'amount') {
+                    let amount = Math.ceil(value)
+                    if (value < 5) {
+                        amountMinFlag = 1
+                    } else if (value > 999) {
+                        amountFlag = 1
+                    } else {
+                        form_data[data[x].name] = amount
+                        $('input[name="amount"]').val(amount)
+                    }
+                } else {
+                    form_data[data[x].name] = data[x].value
+                }
+            }
+            if (labelMaps.has(data[x].name)) {
+                if (isNo_arr.length) continue
+                if (data[x].name === 'has_house') {
+                    if (form_data[data[x].name].result !== 1) form_data[data[x].name] = {
+                        result: value,
+                        content: (labelMaps.get(data[x].name))[0]
+                    }
+                } else {
+                    form_data[data[x].name] = {
+                        result: value,
+                        content: labelMaps.get(data[x].name)
+                    }
+                }
+            }
+        }
+        phone = form_data.phone || ''
+
+        if (amountMinFlag) {
+            layer.msg('<span style="font-size:40px;">不能低于5万(元)</span>', {
+                icon: 2
+            });
+            return false;
+        }
+
+        if (amountFlag) {
+            layer.msg('<span style="font-size:40px;">最高可借999万(元)</span>', {
+                icon: 2
+            });
+            return false;
+        }
+
+        if (!haveValFlag) {
+            layer.msg('<span style="font-size:40px;">请完善您的贷款信息（可多选)</span>', {
+                icon: 2
+            });
+            return false;
+        }
+
+        //Ajax获取信息并返回
+        var is_exist = true
+        $.ajax({
+            type: "get",
+            url: basic_request + "/customerFormH5/checkMobile",
+            data: {
+                mobile: phone
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data && data.error == 0 && data.is_exist == false) {
+                    is_exist = false
+                }
+                submiting(form_data, is_exist)
+            }
+        }).fail(function (data) {
+            submiting(form_data, is_exist)
+        })
+        return false;
+    }
+
+    function submiting(form_data, is_exist) {
+        if (is_exist) {
+            layer.msg('<span style="font-size:26px;">您已提交过，请勿重复提交</span>', {
+                icon: 2
+            });
+            return
+        }
+        $.ajax({
+            type: "post",
+            async: false,
+            url: "https://backend.zdt360.com/zdt/api/admin/user/QueryMobileCity",
+            data: JSON.stringify({
+                mobile: phone
+            }),
+            dataType: "json",
+            success: function (data) {
+                if (data.code && data.code == 1000) {
+                    phone_location = data.city;
+                }
+            }
+        });
+        if (phone_location !== form_data.city) {
+            $.ajax({
+                type: "post",
+                async: false,
+                url: "https://backend.zdt360.com/zdt/api/admin/user/QueryIPCity",
+                data: JSON.stringify({
+                    ip: user_ip
+                }),
+                dataType: "json",
+                success: function (data) {
+                    if (data.code && data.code == 1000) {
+                        ip_location = data.city;
+                    }
+                }
+            });
+        }
+        if (!phone_location && !ip_location) {
+            form_data.city = '未知';
+            $.ajax({
+                type: "post",
+                url: basic_request + "/customerFormH5/submit",
+                data: form_data,
+                dataType: "json",
+                success: function (data) {
+                    if (data.code && data.code == 1000) {
+                        marketing(false, true)
+                    } else {
+                        layer.msg('<span style="font-size:40px;">' + data.message +
+                            '<span style="font-size:40px;">', {
+                                icon: 2
+                            });
+                    }
+                }
+            });
+        }
+        if (ip_location && ip_location !== form_data.city) {
+            setRealCitys('real_city', [{
+                name: form_data.city
+            }, {
+                name: phone_location
+            }, {
+                name: ip_location
+            }]);
+            $('#prompt_ask').show();
+            return
+        }
+        $.ajax({
+            type: "post",
+            url: basic_request + "/customerFormH5/submit",
+            data: form_data,
+            dataType: "json",
+            success: function (data) {
+                if (data.code && data.code == 1000) {
+                    marketing(false)
+                } else {
+                    layer.msg('<span style="font-size:40px;">' + data.message +
+                        '<span style="font-size:40px;">', {
+                            icon: 2
+                        });
+                }
+            }
+        });
+    }
+
+    function marketing(is_exist, is_advertising) {
+        var location_url = window.location.href;
+        var gdt_vid = getQueryString("gdt_vid");
+        var bs64 = encode(location_url);
+        var wechatId = getQueryString('wechatId') || ''
+        var wechatStr = wechatId ? '&wechatId=' + wechatId : ''
+        var qrWechatId = getQueryString('qrWechatId') || ''
+        var qrWechatStr = qrWechatId ? '&qrWechatId=' + qrWechatId : ''
+        var tenxunId = getQueryString('tenxunId') || ''
+        var tenxunStr = tenxunId ? '&account_id=' + tenxunId : ''
+        var phoneStr = phone ? '&phone=' + phone : ''
+        var preUrl = tenxunStr ? 'Tx' : ''
+        var action_url = basic_request + '/center/wechat/marketing' + preUrl + '/add?urlBase64=' + bs64 + '&clickId=' +
+            gdt_vid + wechatStr + tenxunStr + phoneStr;
+        if (is_exist) {
+            location.href = baseUrl + "/h5/qrcode/index_success.html?v=1.4.9&wx_official_account=" + wechatId +
+                '&gdt_vid=' + gdt_vid + phoneStr + qrWechatStr
+            return
+        }
+        if (!is_advertising) {
+            $.get(action_url, function (result) {
+                if (result.code = 1000) {
+                    const ob = [{
+                        name: 'VHd1amky',
+                        id: "1708321060766731"
+                    }, {
+                        name: 'VGx1b2x1bw==',
+                        id: "1708321175660555"
+                    }, {
+                        name: 'VHhpdXd1',
+                        id: "1708321251080203"
+                    }, {
+                        name: 'VHd1amk=',
+                        id: "1708321311676424"
+                    }, {
+                        name: 'VHhpYW9jaHVu',
+                        id: "1708321355270219"
+                    }, {
+                        name: 'VHlhb3lhbw==',
+                        id: "1708321398392845"
+                    }, {
+                        name: 'VHhpYW9xaWFu',
+                        id: "1708318326452235"
+                    }];
+                    var assets_id = ob.find(o => {
+                        return o.name === toutiaoname
+                    })
+                    if (assets_id.id) {
+                        _baq.track("form", {
+                            assets_id: assets_id.id,
+                        })
+                    }
+
+                    setTimeout(() => {
+                        location.href = baseUrl +
+                            "/h5/qrcode/index_success.html?v=1.4.9&wx_official_account=" +
+                            wechatId + '&gdt_vid=' + gdt_vid + phoneStr + qrWechatStr
+                    }, 500)
+
+                }
+            });
+        } else {
+            location.href = baseUrl + "/h5/qrcode/index_success.html?v=1.4.9&wx_official_account=" + wechatId +
+                '&gdt_vid=' + gdt_vid + phoneStr + qrWechatStr
+        }
+    }
+
+    //字符串转base64
+    function encode(str) {
+        // 对字符串进行编码
+        var encode = encodeURI(str);
+        // 对编码的字符串转化base64
+        var base64 = btoa(encode);
+        return base64;
+    }
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        var q = window.location.pathname.substr(1).match(reg_rewrite);
+        if (r != null) {
+            return unescape(r[2]);
+        } else if (q != null) {
+            return unescape(q[2]);
+        } else {
+            return null;
+        }
+    }
+</script>
+
+<body>
+    <div style='background-color: white;height: 100%;' class="w640 main" id="form_main">
+        <form style='background-color: white' action="" method="post" id="form1" onsubmit=" return submit1();">
+            <div style='padding:0;' class="i-wrap">
+                <img class='header-img1' src="view/mobile/page/img/header_57.jpg?v=1.5.1">
+            </div>
+            <div class="calculate">
+                <div style='font-size:19px' class="title">借款金额</div>
+                <div class="borrow-amount">
+                    <span>￥</span>
+                    <!-- <select id="select-amount" class="i-icon select-amount">
+                        <option value="20">10-20万</option>
+                        <option selected="selected" value="10">5-10万</option>
+                        <option value="5">3-5万</option>
+                    </select> -->
+                    <!-- <div class="init-input">输入金额</div> -->
+                    <input name="amount" type="number" class="b-money" value="10" id="amount">
+                    <span class='money-text'>万</span>
+                </div>
+                <span style='font-size:19px;color: #8d8d8d;'>例：借20万元，输入20即可</span>
+                <div class="range-box" style="display: none;">
+                    <span class="range-track" id="range-track"
+                        style="background: linear-gradient(90deg, deepskyblue, deepskyblue); width: 0%;"></span>
+                    <!-- <input class="range-input range-input-a" type="range" name="range-money" id="range-money"
+                        min="50000" value="50000" defaultvalue="100000" step="10000" max="500000"> -->
+                    <div class="bak"></div>
+                </div>
+                <!--      <div class="range-tip">-->
+                <!--        <span>5</span>-->
+                <!--        <span id="maxMoney">50万</span>-->
+                <!--      </div>-->
+                <div class="range-line">
+                    <div class="circle c-a"></div>
+                    <div class="line"></div>
+                    <div class="circle c-b"></div>
+                </div>
+                <div class="range-items">
+                    <div class="item item-a" style="display: true;">
+                        <span class="i-title">借款期限</span>
+                        <ul class="month-list">
+                            <li class="check" data-value="12">12个月</li>
+                            <li data-value="24">24个月</li>
+                            <li data-value="48">48个月</li>
+                            <li data-value="96">96个月</li>
+                        </ul>
+                    </div>
+                    <div class="item item-b" style="display: true;">
+                        <span class="i-title">每期应还</span>
+                        <div>
+                            <span class='unit'>￥</span>
+                            <span class="month-refund i-refund">0.00</span>
+                        </div>
+                    </div>
+                    <div class="item item-c" style="display: true;">
+                        <span class="i-title">到期总还</span>
+                        <div>
+                            <span class='unit'>￥</span>
+                            <span class="all-refund i-refund">0.00</span>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px;text-align: center;color: slategrey;"><span
+                            style='font-size:19px'>*年化费率按照最低<span style="color: dodgerblue">6%</span>试算，具体以审批结果为准</span>
+                    </div>
+                </div>
+            </div>
+            <div class='tip-box'>
+                <span>填写真实信息,有助于贷款成功!</span>
+            </div>
+            <div style='padding-top:10px;' class="i-wrap">
+                <li class="l1">
+                    <input type="text" class="text" name="name" id="realname" placeholder="您的姓名(已加密)">
+                    <input type="radio" id="man" class="radio" name="sex" value="1" checked><label class="label-1"
+                        for="man">男</label>
+                    <input type="radio" id="woman" class="radio" name="sex" value="2"><label class="label-1"
+                        for="woman">女</label>
+                </li>
+                <li><input type="text" class="text" name="phone" id="mobile" placeholder="您的手机号(已加密)"></li>
+                <li class='cls-verificationCode'>
+                    <input type="text" class="text" id="code" name="messageCode" placeholder="请输入验证码">
+                    <input style="background: #0e6ce1" id="i-code" type="button" name="p" value="获取验证码"
+                        onClick="sms();">
+                </li>
+                <li class="l2">
+                    <!-- <select class='loc' id="city" name="city">
+                        <option value="">请选择工作城市</option>
+                        <option value="深圳">深圳</option>
+                        <option value="上海">上海</option>
+                        <option value="北京">北京</option>
+                    </select> -->
+                    <div style='background-image: url(../ds.xxjfcn.com/images/bottomicon-08-4.jpg);'
+                        class="supplement-item loc">
+                        <input type="hidden" name="city" id="city" value>
+                        <span class="select_loc"><a href="javascript:void(0);" style='color:#999'
+                                id="form_city">请选择工作城市</a></span>
+                    </div>
+                </li>
+                <!-- <li class="l2">
+                    <select id="amount" name="amount" onchange="set_hide(this.value);">
+                        <option value="">请选择借款金额</option>
+                        <option value="50">50万</option>
+                        <option value="30">30万</option>
+                        <option value="20">20万</option>
+                        <option value="10">10万</option>
+                        <option value="5">3-5万</option>
+                    </select></li> -->
+                <!-- <li class="l2">
+                    <select id="salary" name="salary" onchange="set_hide(this.value);">
+                        <option value="">请选择月收入</option>
+                        <option value="3000">3000以下</option>
+                        <option value="5000">3000-5000</option>
+                        <option value="7000">5000-8000</option>
+                        <option value="10000">8000-12000</option>
+                        <option value="15000">12000-20000</option>
+                        <option value="20000">20000以上</option>
+                    </select></li> -->
+                <!-- <li class="hide"><input type="text" class="text" id="age" name="birthday" placeholder="输入您的年龄"
+                        maxlength="2"></li> -->
+                <!-- <input type="hidden" name="city" id="cityname" value="深圳"> -->
+                <p class="hide">完善以下信息可提升您的放款率(可多选)</p>
+            </div>
+            <div class="i-wrap-1 hide">
+                <div class='hasHouse-ctrl'>
+                    <input class='checkbox' type="checkbox" id="check1" name="has_house" value="2"><label
+                        class="checkbox-1 ml0 hasHouse-ctrl-label" for="check1">有商品房</label>
+                </div>
+                <div class='hasCar-ctrl'>
+                    <input class='checkbox' type="checkbox" id="check2" name="has_car" value="1"><label
+                        class="checkbox-1" for="check2">我有车</label>
+                </div>
+                <div class='hasAccumulationFund-ctrl'>
+                    <input class='checkbox' type="checkbox" id="check4" name="has_accumulation_fund" value="2"><label
+                        class="checkbox-1" for="check4">有公积金</label>
+                </div>
+                <div style='display: none;' class='bjlocalMan-ctrl'>
+                    <input class='checkbox' type="checkbox" id="check10" name="has_house" value="2"><label
+                        class="checkbox-1 bjlocalMan-ctrl-label" for="check10">北京本地人</label>
+                </div>
+                <div class='hasWarranty-ctrl'>
+                    <input class='checkbox' type="checkbox" id="check6" name="has_warranty" value="1"><label
+                        class="checkbox-1 ml0" for="check6">有寿险保单</label>
+                </div>
+                <div class='salaryMethod-ctrl'>
+                    <input class='checkbox' type="checkbox" id="check8" name="salary_method" value="1"><label
+                        class="checkbox-1" for="check8">有打卡工资</label>
+                </div>
+                <div class='runCompany-ctrl'>
+                    <input class='checkbox' type="checkbox" id="check9" name="run_company" value="1"><label
+                        class="checkbox-1 runCompany-ctrl-label" for="check9">有营业执照</label>
+                </div>
+                <div style='display: none;' class='runCompany2-ctrl'>
+                    <input class='checkbox' type="checkbox" id="check11" name="run_company" value="1"><label
+                        class="checkbox-1 ml0 runCompany-ctrl-label" for="check11">做生意有执照</label>
+                </div>
+            </div>
+            <div class="i-wrap"><input style="background: #0e6ce1" type="submit" id="submit" value="点这-免费申请"></div>
+            <p style="text-align: center; color: white;padding: 0 10px 10px 10px;color: #999;font-size:19px">
+                <a href="../../index.html?v=1.0.1" id="agreedmentBt"
+                    style="color: #0e6ce1;font-size:19px">金融机构不接受跨城市放款</a>
+            </p>
+            <p style="text-align: center; color: white;padding: 10px;color: #999;font-size:19px">金融服务根据个人情况由适合的正规金融机构提供
+            </p>
+            <p style="text-align: center; color: white;padding: 10px;color: #999;font-size:19px">
+                点击“点这-免费申请”表示阅读并同意<br>
+                <a href="../../index.html?v=1.0.1" id="agreedmentBt"
+                    style="color: #0e6ce1;font-size:19px">《用户服务及隐私协议》</a>
+            </p>
+            <input name="source" type="hidden" value="zdt">
+            <input name="channel" type="hidden" value="ygyx">
+        </form>
+        <p style="text-align: center; color: white;padding: 10px;color: #999;font-size:19px">
+            <a id='fundingAgencies' style="color: #999;font-size:19px">资金来源机构: 重庆小康小额贷款有限公司</a><br>
+            <a id='helpAgencies' style="color: #999;font-size:19px"
+                style="display: none;">金融服务将根据您的个人情况由适合的正规金融机构提供</a><br>
+            贷款有风险，借款需谨慎，请根据个人能力合理贷款<br>
+            理性消费，避免逾期，贷款额度、放款时间以实际审批结果为准<br>
+        </p>
+    </div>
+    <div id='newadd-text1' style='padding:0 12px 10px 12px'>
+        <div id='beianhao2'>
+            <p id='beianhao2' style="text-align:center;color:#999;font-size:19px;">
+                渝ICP备18000384号-1
+            </p>
+            <p style="text-align:center;color:#999;font-size:19px;">商务合作：15220096704</p>
+        </div>
+        <p style="text-align:center;color:#999;font-size:19px;margin-bottom:10px">
+            如凭公积金贷款：公积金相关资料仅作为贷款服务验资证明，放贷路径与公积金账户无关
+        </p>
+    </div>
+    <p style="text-align:center;color:#999;font-size:19px;margin-bottom:20px">
+        综合年化利率最低6%-最高24%，具体以审批为准
+    </p>
+    <link rel="stylesheet" href="view/mobile/css/prov.css">
+    <link rel="stylesheet" href="view/mobile/css/city.css">
+
+    <div class="main1 prov-main" id="prov_main" style="display: none">
+
+
+        <header>
+            <p class="header-title" style='line-height: 40px;font-size:28px'><span style='margin-top:-20px'
+                    class="close" id="prov_cancel"><img src="images/close.png"></span>金融机构不接受跨城市申请<br>请选择您工作所在地的城市</p>
+
+        </header>
+        <main id="ProvinceList">
+
+            <ul id='remeng' class="prov-sort remeng">
+                <!-- <p class="sort-by">热门城市</p> -->
+                <!-- <li class="provs" value="上海">上海</li>
+                <li class="provs" value="深圳">深圳</li>
+                <li class="provs" value="北京">北京</li>
+                <li class="provs" value="杭州">杭州</li>
+                <li class="provs" value="南京">南京</li>
+                <li class="provs" value="武汉">武汉</li>
+                <li class="provs" value="合肥">合肥</li> -->
+            </ul>
+        </main>
+    </div>
+
+    <!-- 城市列表 -->
+    <div class="main1 city-main" id="city_main" style="display: none;">
+        <header>
+            <p class="header-title"><span class="return"><img src="images/lgt.png" alt></span>选择其它城市</p>
+        </header>
+        <main>
+            <ul class="cities">
+            </ul>
+        </main>
+    </div>
+    <div class="prompt" id="prompt_ask" style="display: none;">
+        <div class="shade"></div>
+        <div class="prompt_con">
+            <p class="title">温馨提示</p>
+            <p class="ques">为了更准确地服务到您，请确认您的常驻地城市是？</p>
+            <ul id='real_city' class="city-sort">
+                <label class="checkbox-1 ml0">北京</label>
+                <label class="checkbox-1 ml0">西安</label>
+                <label class="checkbox-1 ml0">南京</label>
+            </ul>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="view/mobile/js/city.js"></script>
+    <script type="text/javascript">
+        var tenxunName = getQueryString('tenxunName') || ''
+        var tenxunId = getQueryString('tenxunId') || ''
+        var wechatId = getQueryString('wechatId') || ''
+        var qrWechatId = getQueryString('qrWechatId') || ''
+        setCitys('remeng', [{
+            name: '北京'
+        }, {
+            name: '上海'
+        }, {
+            name: '杭州'
+        }, {
+            name: '成都'
+        }, {
+            name: '武汉'
+        }, {
+            name: '南京'
+        }]);
+
+        var letters2 = ["A"];
+        for (var i in letters2) {
+            var provinceGruop = ["<li class='sort-by'>更多</li>"];
+            if (provinceGruop.length > 1) {
+                var domGroup = '';
+                for (var k in provinceGruop)
+                    domGroup += provinceGruop[k];
+                var provSort = "<ul class='prov-sort'>" + domGroup + "</ul>"
+                console.log(provinceGruop);
+                console.log(domGroup);
+
+                $('#ProvinceList').append(provSort);
+            }
+        }
+
+        setTimeout(function () {
+            price($('.b-money').val() * 1, $(".check").data('value') * 1)
+        }, 300)
+
+        $('.month-list li').on('click', function () {
+            $(this).addClass('check').siblings().removeClass('check')
+
+            price($('.b-money').val() * 1, $(this).data('value') * 1)
+        })
+
+        $('.select-amount').on('click', function () {
+            // console.log(4444444);
+        })
+        $("#select-amount").change(function (data) {
+            var amount = $("#select-amount option:selected").attr("value");
+            console.log('amount', amount);
+            $('input[name="amount"]').val(amount)
+            price($('.b-money').val() * 1, $('.month-list .check').data('value') * 1)
+        });
+
+        function price(price, date) {
+            var pri = ((price + price * 0.05 * (date / 12)) * 10000).toFixed(2);
+            var ri = ((((price + price * 0.05 * (date / 12))) / date) * 10000).toFixed(2);
+            $('.month-refund').html(ri)
+            $('.all-refund').html(pri)
+        }
+
+        // 只能用 addEventListener 来做 input 监听结果时时变化
+        var money = document.querySelector('.b-money');
+        var range = document.querySelector('#range-money');
+        money.addEventListener('input', function () {
+            // document.querySelector('#range-track').style.width = (money.value / range.max) * 100 + '%'
+            price($('.b-money').val() * 1, $('.month-list .check').data('value') * 1)
+        })
+
+
+
+        /**
+         * 表单部分
+         */
+        $('.cities').delegate('li', 'click', function (e) {
+            $('#form_city').text(e.target.innerHTML);
+            $('#city').val(e.target.innerHTML);
+            $('#cityname').val(e.target.innerHTML);
+            $('#city_main').hide();
+            $('#form_main').show();
+        });
+
+        $('.remeng').delegate('li', 'click', function (e) {
+            if (e.target.className == 'sort-by') return
+            $('#form_city').text(e.target.innerHTML);
+            $('#city').val(e.target.innerHTML);
+            $('#cityname').val(e.target.innerHTML);
+            $('#prov_main').hide();
+            $('#city_main').hide();
+            $('#form_main').show();
+            if (e.target.innerHTML) set_hide(1)
+        });
+        // 询问弹窗 点击
+        $('#real_city').delegate('label', 'click', function (e) {
+            var index = $(this).index();
+            var flag = true;
+            $(this).addClass("active").siblings().removeClass("active");
+            select_city = e.target.innerText;
+            if (e.target.innerText === form_data.city) {
+                flag = false;
+            }
+            form_data.city = e.target.innerText;
+            $.ajax({
+                type: "post",
+                url: baseApiUrl + "/customerFormH5/submit",
+                data: form_data,
+                dataType: "json",
+                success: function (data) {
+                    if (data.code && data.code == 1000) {
+                        marketing(false, flag);
+                    } else {
+                        layer.msg('<span style="font-size:40px;">' + data.message +
+                            '<span style="font-size:40px;">', {
+                                icon: 2
+                            });
+                    }
+                }
+            });
+        });
+
+        $('.loc').bind('click', function () {
+            $('#form_main').hide();
+            $('#prov_main').show();
+            $('#newadd-text1').hide();
+            document.body.scrollTop = document.documentElement.scrollTop = 0
+        });
+        // 点击省市跳转
+        $('.provs').bind('click', function () {
+            var key = $(this).val();
+            $('#prov_main').hide();
+            $('#city_main').show();
+            var cityList = '';
+            if (key !== 10000) {
+                for (var i in city[key]) {
+                    cityList += "<li class='city'>" + city[key][i].f_name + "</li>"
+                }
+            }
+            // if (key === 10000) {
+            //     var city2 = ['佛山市', '广州市', '苏州市', '无锡市', '宁波市', '青岛市', '常州市', '天津市', '南通市', '合肥市', '重庆市', '成都市', '东莞市', '其它']
+            //     for (var i in city2) {
+            //         cityList += "<li class='city'>" + city2[i] + "</li>"
+            //     }
+            // }
+            $('.cities').html('');
+            $('.cities').append(cityList);
+            $('#newadd-text1').show();
+        })
+
+        // 省市返回
+        $('#prov_cancel').bind('click', function () {
+            $('#prov_main').hide();
+            $('#form_main').show();
+            $('#newadd-text1').show();
+        })
+
+
+        /**
+         * 城市列表部分
+         */
+
+        // 城市返回
+        $('#city_main .return').bind('click', function () {
+            $('#city_main').hide();
+            $('#prov_main').show();
+        });
+    </script>
+    <div id="dkAgreeamentContent" style="display: none">
+        <strong>导言</strong>
+        <p>
+            我们将依照本协议内容为您提供服务。本协议有助于您了解我们为您提供的服务内容及您的权利和义务，请您务必仔细阅读，您只有完全同意本协议的全部内容，才能使用相应服务。您在提交过程中点击"同意用户服务协议"按钮即表示您已仔细阅读并明确同意遵守本注册协议以及经参引而并入其中的所有条款、政策以及指南，并受该等规则的约束（合称"本服务协议"）。
+        </p>
+        <p>
+            我们可能根据法律法规的要求或业务运营的需要，对本协议不时进行修改。除非另有规定，否则任何变更或修改将在修订内容发布之时立即生效，您对本服务的使用、继续使用将表明您接受此等变更或修改。为了便于您了解适用于您使用我们服务的条款和条件，我们将在本网站上发布我们对本协议的修改，您应不时地审阅本协议以及经参引而并入其中的其他规则。
+        </p>
+        <strong>一、服务内容 </strong>
+        <p>
+            1.1本协议所指服务是金融贷款居间信息服务，即由我们根据您提交的贷款需求申请及个人信息，为您推荐匹配的贷款信息或将您提交的申请推荐给可能为您提供具体贷款服务的合作金融机构。具体服务内容由我们根据实际情况提供并不时更新，包括但不限于信息、图片、文章、评论、链接等，我们将定期或不定期根据用户的意愿以电子邮件、短信、电话等方式为用户提供活动信息，并向用户提供相应服务。我们对提供的服务拥有最终解释权。
+            <br>
+            1.1.1 “用户”是指使用本服务的使用人，在本协议中更多地称为“您”。
+            <br>
+            1.2本协议项下的服务是为您提供居间贷款信息服务。如您有贷款需求，您可使用我们的服务，按照页面提示填写相关信息，我们将通过您提供的信息与合作贷款机构进行匹初步配，从而促成您与贷款机构达成交易的相关居间服务。（以下简称“本服务”）。
+            <br>
+            1.3本服务仅供个人用户使用。除我们书面同意，您或其他用户均不得将本服务的任何信息用于商业目的。
+            <br>
+            为方便您使用本服务，您通过网络页面点击或以其他形式确认《用户服务协议》的，即视为您已充分理解其中所有条款以及经参引而并入其中的政策以及指南（合称"本协议"），并同意与我们订立本协议且接受本协议的约束。您使用本务即视为您已阅读并同意受本协议的约束。请您保证您拥有符合订立相关合同的完全民事权利能力及完全民事行为能力。如果您为非完全民事行为能力人，请在法定监护人的陪同下阅读本协议，我们原则上不建议非完全民事行为能力人使用本网站服务，如您需使用，请在监护人监督及授权下谨慎使用本网站服务。
+        </p>
+        <strong>二、信息验证</strong>
+        <p>
+            2.1您在使用本服务时可能需要收取一个验证码。我们特别提醒您应妥善保管您的手机号和验证码。切勿透露给其他人。
+            <br>
+            2.2 因您保管不善可能导致遭受盗号或密码失窃，责任由您自行承担。<br>
+        </p>
+        <strong>三、知识产权</strong>
+        <p>
+            3.1 本网页所载商标、徽号和服务标志及我们平台网站的结构、网页设计、文字、程序及代码、内容、图像等数据的所有版权、专利权、知识产权及其他权属均属我们所有。<br>
+            3.2 本网站所载资料受版权保护。除非经我们书面同意及许可，不得修改、复制、转载、传播或者以其它方式作为商业或公共用途。<br>
+        </p>
+        <strong>四、隐私保护和信息提供</strong>
+        <p>
+            4.1 隐私保护
+            <br>
+            4.1.1为确保您对我们处理个人信息资料工作有充分信心，您务必详细阅读及理解本条文。无论您将来是否与合作机构达成合作，您都要向我们表明您的接受、同意、承诺和确认：
+            <br>
+            （1）您是在自愿的情况下向我们披露个人资料；
+            <br>
+            （2）您会遵守本政策的全部条款和限制；
+            <br>
+            （3）您同意我们通过您点击本页面、在本页面上申请或使用我们提供的服务的方式收集您的信息；
+            <br>
+            （4）您同意我们随时对本条款所做的任何修改；
+            <br>
+            （5）您同意我们的分公司、附属公司、雇员、关联方、合作方就您可能适合的贷款产品产品、信息和服务等与您联络。
+            <br>
+            4.1.2您在访问、使用本服务时，必须提供本人真实的个人信息，且您应该根据实际变动情况及时更新个人信息。保护用户隐私是我们的重点原则，我们通过各种技术手段和强化内部管理等办法提供隐私保护服务功能，充分保护您的个人信息安全。
+            <br>
+            4.1.3我们不负责审核您提供的个人信息的真实性、准确性或完整性，因信息不真实、不准确或不完整而引起的任何问题及其后果，由您自行承担，且您应保证我们免受由此而产生的任何损害或责任。若我们发现您提供的个人信息是虚假、不准确或不完整的，我们有权自行决定终止向您提供服务。
+            <br>
+            4.1.4您已明确授权，为提供服务、履行协议、解决争议、保障交易安全等目的，我们对您提供的、我们自行收集的及通过第三方收集的您的个人信息、您申请服务时的相关信息、您在使用服务时储存在本网站的非公开内容以及您的其他个人资料（以下简称“个人资料”）享有留存、整理加工、使用和披露的权利，具体方式包括但不限于：
+            <br>
+            （1）出于为您提供服务的需要在本网站及关联公司公示您的个人资料；
+            <br>
+            （2）由人工或自动程序对您的个人资料进行获取、评估、整理、存储；
+            <br>
+            （3）使用您的个人资料以改进本网站的设计和推广；
+            <br>
+            （4）使用您提供的联系方式与您联络并向您传递有关服务和管理方面的信息；
+            <br>
+            （5）对您的个人资料进行分析整合并向为您提供服务的第三方提供为完成该项服务必要的信息。
+            <br>
+            （6）在您违反与我们或我们的其他用户签订的协议时，披露您的个人资料及违约事实，将您的违约信息写入黑名单并与必要的第三方共享数据，以供我们及第三方审核、追索之用。
+            <br>
+            （7）其他必要的使用及披露您个人资料的情形。
+            <br>
+            您已明确同意本条款不因您终止使用服务而失效。如因我们行使本条款项下权利使您遭受损失，我们对该等损失免责。
+            <br>
+            4.2信息提供
+            <br>
+            4.2.1您向我们提供的信息
+            <br>
+            您知悉，您向具体提供贷款产品的机构提供的银行账户、密码、私钥等信息内容并不存储或同步至本公司服务器。本公司不提供找回您的账户、密码、私钥等的服务。若您愿意使用本平台提供的服务，您需要填写和提供以下信息：
+            <br>
+            （1）身份信息
+            <br>
+            该信息可以帮助我们验证您是否具备资格使用本平台服务，包括但不限于您的名字、所在城市、出生年月、所属国家或政府签发的其他具有证明您身份信息的不同证书以及号码等所有可帮助我们验证您身份的信息（以下合称为“身份信息”）。
+            <br>
+            （2） 服务信息
+            <br>
+            该信息帮助我们与您联系并顺利为您提供服务，包括但不限于您的电话号码、传真号码、有效的电子邮件地址、邮寄地址等（以下合称为“服务信息”）。
+            <br>
+            4.2.2我们自动收集的信息
+            <br>
+            本网站提供服务时，可能会收集、储存和使用与您有关的信息。如果您不提供相关信息，可能无法享受我们提供的某些服务，或者无法达到相关服务拟达到的效果。
+            <br>
+            4.2.2.1 日志信息，指您使用我们的服务时，系统可能通过cookies、web beacon或其他方式自动采集的技术信息，包括：
+            <br>
+            ● 设备或软件信息，例如您的移动设备、网页浏览器或用于接入我们服务的其他程序所提供的配置信息、您的IP地址和移动设备所用的版本和设备识别码；
+            <br>
+            ● 设备或软件信息，例如您的移动设备、网页浏览器或用于接入我们服务的其他程序所提供的配置信息、您的IP地址和移动设备所用的版本和设备识别码；
+            <br>
+            ● 在使用我们服务时搜索或浏览的信息，例如您使用的网页搜索词语、访问的社交媒体页面url地址，以及您在使用我们服务时浏览或要求提供的其他信息和内容详情；
+            <br>
+            ● 有关您曾使用的移动应用（APP）和其他软件的信息，以及您曾经使用该等移动应用和软件的信息；
+            <br>
+            4.2.2.2 位置信息，指您开启设备定位功能并使用我们基于位置提供的相关服务时，收集的有关您位置的信息，包括：
+            <br>
+            ● 您通过具有定位功能的移动设备使用我们的服务时，通过GPS或WiFi等方式收集的您的地理位置信息；
+            <br>
+            ● 您或其他用户提供的包含您所处地理位置的实时信息，例如您提供的账户信息中包含的您所在地区信息；
+            <br>
+            ● 您可以通过关闭定位功能，停止对您的地理位置信息的收集。
+            <br>
+            4.3 信息使用范围：
+            <br>
+            4.3.1 根据您的申请信息及需求信息等，为您匹配合适的合作机构（合作机构列表请参见：<b><a href="">合作机构</a></b>
+            ，我们将不定期更新相关合作机构），并向合作机构反馈您的需求信息，以帮助您获得相关服务。为您提供免费增值服务，以增加您从指定合作机构获得贷款的机会。
+            <br>
+            4.3.2 在我们提供服务时，用于身份验证、客户服务、安全防范、诈骗监测、存档和备份用途，确保我们向您提供的产品和服务的安全性；
+            <br>
+            4.3.3 帮助我们设计新服务，改善我们现有服务；
+            <br>
+            4.3.4 使我们更加了解您如何接入和使用我们的服务，从而针对性地回应您的个性化需求，例如语言设定、位置设定、个性化的帮助服务和指示，或对您和其他用户作出其他方面的回应；
+            <br>
+            4.3.5 软件认证或管理软件升级；
+            <br>
+            4.3.6 让您参与有关我们产品和服务的调查。
+            <br>
+            4.3.7
+            为了让您有更好的体验、改善我们的服务或您同意的其他用途，在符合相关法律法规的前提下，我们可能将通过某一项服务所收集的信息，以汇集信息或者个性化的方式，用于我们的其他服务。例如，在您使用我们的一项服务时所收集的信息，可能在另一服务中用于向您提供特定内容，或向您展示与您相关的、非普遍推送的信息。如果我们在相关服务中提供了相应选项，您也可以授权我们将该服务所提供和储存的信息用于我们的其他服务。
+            <br>
+            4.4信息的共享
+            <br>
+            我们按以下方式或本政策中的其他说明共享有关您的信息：
+            <br>
+            4.4.1与需要获得此类信息以开展相关工作的供应商、顾问或其他服务提供商，例如第三方技术平台和帮助我们提供技术或分析的服务的供应商，以便帮助我们了解用户与服务之间的互动；
+            <br>
+            4.4.2我们认为所披露行为是符合任何适用的法律、法规、规章、条例或其他规定的；
+            <br>
+            4.4.3我们认为您在本平台的行为不符合我们服务协议或政策的规定，或我们认为要维护本公司的权利、财产和安全；
+            <br>
+            4.4.4我们与任何其他公司进行合并、出售公司资产、融资、并购等相关合作；
+            <br>
+            4.4.5经您允许或在您的指示下，包括我们将通过相关服务通知您，如您向我们提供此类信息，这些信息将以特定方式被共享。
+            <br>
+            4.5 信息的限制使用
+            <br>
+            4.5.1 如您不希望我们获取您的日志信息或位置信息，您可以通过关闭浏览器cookies功能或关闭设备定位功能的方式实现；
+            <br>
+            4.6个人资料的保护
+            <br>
+            4.6.1我们实施适当的措施来保护和保障您个人资料安全。我们尽力确保通过我们平台所搜集的任何个人资料免于收到与我们无关的任何第三者滋扰，保护与您相关的信息免遭丢失、盗窃、滥用或未经授权的访问、披露、更改和破坏。我们的员工、代表、代理可在必要时访问您的个人信息以满足本政策所述之目的。
+            <br>
+            4.6.2我们收集到的个人信息是储存在我们或服务提供商的服务器上。我们根据相关政策存储个人信息，并考虑和根据信息收集目的、本公司业务需求、信息最短存储期限的法规要求、与隐私相关的法律法规等内容制定信息存储周期和时间。
+            <br>
+            4.6.3尽管已实施上述技术和保安措施,但我们不能保证资料在互联网上的输送是绝对安全,因此我们不能绝对保证您通过本平台提供给我们的个人资料在所有时候都是安全的。对任何因未经授权而接触您个人资料所发生的事件我们一槪不承担责任,由此产生或导致的任何损失或损害,
+            我们不负责赔偿。
+        </p>
+        <strong>五、免责声明</strong>
+        <p>
+            5.1 在法律规定的情况下，如司法机关、监管机构及其他相关机构提出要求，我公司有可能提供您的相关信息。
+            <br>
+            5.2 由于您将用户密码告知他人或与他人共享申请服务的，由此导致的任何个人资料和客户信息的泄露。
+            <br>
+            5.3
+            本网站尽全力处理本网站各项服务的安全、无误及不中断。但您已充分了解并同意，本网站可能因：（1）黑客攻击、计算机病毒侵入或发作、因政府管制或不可抗力而造成的暂时性关闭等影响网络正常经营或其它不可抗力情形而造成的个人资料泄露、丢失、被盗用或被篡改等；（2）公司、其他合作方或相关电信部门的互联网软硬件设备故障、失灵或认为操作疏忽而全部或部分中断、延迟、遗漏、产生误导或造成资料传输或存储上的错误；（3）或由于与本网站链接的其它网站所造成您个人资料的泄露；（4）您因其他非我们原因造成的损失，或（5）地震、火灾、台风及其他各种不可抗力因素引起的停电、网络系统故障、电脑故障而造成您的损失。因此，我们对上述特殊情况造成的您的损失不承担任何明示或默示的保证责任。如您发现任何非法使用用户帐号或安全漏洞的情况，请立即与我们联系。
+            <br>
+            5.4我们发布的合作机构信息、交易信息系由第三方提供，您应自行判断信息真实性、自主参与交易并承担交易风险，由此产生的任何纠纷由您与第三方协商解决，我们对此不承担任何法律责任。
+            <br>
+            5.5 您在与我们推介的合作机构达成交易的过程中，您通过本服务提供的申请资料会一并提供给对应合作机构，我们将以合理的勤勉、审慎义务督促第三方妥善保管相关信息，但由于第三方单方行为导致您的资料外泄的，我们不承担责任。
+            <br>
+            5.6 您违反本协议、违反道德或法律的，侵犯他人权利（包括但不限于知识产权）的，我们不承担任何责任。同时，我们对任何第三方通过我们发送服务或包含在服务中的任何内容不承担责任。
+            <br>
+            5.7 对您、其他用户或任何第三方发布、存储或上传的任何内容或由该等内容导致的任何损失或损害，我们不承担责任。
+            <br>
+            5.8 对任何第三方通过我们可能对您造成的任何错误、中伤、诽谤、诬蔑、不作为、谬误、淫秽、色情或亵渎，我们不承担责任。
+            <br>
+            5.9 我们不保证服务一定能满足您的要求；不保证服务不会中断，也不保证服务的及时性、安全性、准确性。
+            <br>
+            5.10我们提供免费的贷款推荐服务，贷款过程中遇到的任何预先收费均为诈骗行为，请保持警惕避免损失。
+        </p>
+        <strong>六、自备设备</strong>
+        <p>
+            6.1 您应当理解，您使用我们的服务需自行准备与相关服务有关的终端设备（如电脑、调制解调器等装置），并承担所需的费用（如电话费、上网费等费用）。
+            <br>
+            6.2 您理解并同意，您使用本服务时会耗用您的终端设备和带宽等资源。
+        </p>
+        <strong>七、第三方提供的产品或服务</strong>
+        <p>
+            您在接受第三方提供的产品或服务时，除遵守本协议约定外，还应遵守第三方的用户协议。我们和第三方对可能出现的纠纷在法律规定和约定的范围内各自承担责任。
+        </p>
+        <strong>八、协议的生效与变更</strong>
+        <p>
+            8.1 您使用我们的服务即视为您已阅读本协议并接受本协议的约束。
+            <br>
+            8.2 我们有权在必要时修改本协议条款。您可以在相关服务页面查阅最新版本的协议条款。
+            <br>
+            8.3 本协议条款变更后，如果您继续使用我们提供的软件或服务，即视为您已接受修改后的协议。
+        </p>
+        <strong>九、服务的变更、中断、终止</strong>
+        <p>
+            9.1 我们可能会对服务内容进行变更，也可能会中断、中止或终止服务。
+            <br>
+            9.2 如因升级的需要而需暂停网络服务、或调整服务内容，我们将尽可能在网站上进行通告。由于用户未能及时浏览通告而造成的损失，我们不承担任何责任。
+            <br>
+            9.3 您明确同意，我们保留根据实际情况随时调整我们提供的服务内容、种类和形式，或自行决定授权第三方向您提供原本我们提供的服务。因业务调整给您或其他用户造成的损失，我们不承担任何责任。
+            <br>
+            9.4
+            您理解并同意，我们有权自主决定经营策略。在我们发生合并、分立、收购、资产转让时，我们可向第三方转让本服务下相关资产；我们也可在单方通知您后，将本协议下部分或全部服务转交由第三方运营或履行。具体受让主体以我们通知的为准。
+            <br>
+            9.5
+            如发生下列任何一种情形，我们有权不经通知而中断或终止向您提供的服务，且无需对您或第三方承担任何责任：（1）根据法律规定您应提交真实信息，而您提供的个人资料不真实、或与申请时信息不一致又未能提供合理证明；（2）您违反相关法律法规或本协议的约定；（3）按照法律规定或主管部门的要求；（4）出于安全的原因或其他必要的情形。
+            <br>
+            9.6 您有责任自行备份存储在本服务中的数据。如果您的服务被终止，我们可以从服务器上永久地删除您的数据,但法律法规另有规定的除外。服务终止后，我们没有义务向您返还数据。
+        </p>
+        <strong>十、管辖与法律适用</strong>
+        <p>
+            10.1 本协议的成立、生效、履行、解释及纠纷解决，适用中华人民共和国大陆地区法律（不包括冲突法）
+            <br>
+            10.2 若您和我们之间发生任何纠纷或争议，首先应友好协商解决；协商不成的，双方同意向被告所在地有管辖权的法院提起诉讼。
+            <br>
+            10.3 本协议所有条款的标题仅为阅读方便，本身并无实际涵义，不能作为本协议涵义解释的依据。
+            <br>
+            10.4 本协议条款无论因何种原因部分无效或不可执行，其余条款仍有效，对双方具有约束力。
+            <br>
+            11.特别约定
+            <br>
+            11.1 您使用本服务的行为若有任何违反国家法律法规或侵犯任何第三方的合法权益的情形时，我们有权直接删除该等违反规定之信息，并可以暂停或终止向您提供服务。
+            <br>
+            11.2 若您利用我们的服务从事任何违法或侵权行为，由您自行承担全部责任，因此给我们或任何第三方造成任何损失，您应负责全额赔偿，并使我们免受由此产生的任何损害。
+            <br>
+            11.3 您同意我们通过重要页面的公告、通告、电子邮件以及常规信件的形式向您传送与我们服务有关的任何通知和通告。
+            <br>
+            11.4 您在本协议项下对本我们的授权将视为对我们及我们关联公司的授权。我们及我们关联公司均可凭借您的授权及本协议约定执行相关操作。
+            <br>
+            11.5 本注服务议中的标题仅为方便而设，不影响对于条款本身的解释。本服务协议最终解释权归我们所有。
+        </p>
+    </div>
+</body>
+
+</html>

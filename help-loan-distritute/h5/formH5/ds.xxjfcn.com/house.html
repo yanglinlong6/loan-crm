@@ -1,0 +1,856 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta content="telephone=no" name="format-detection" />
+  <meta content="email=no" name="format-detection" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+  <meta http-equiv="X-UA-Compatible" content="IE=6">
+  <meta http-equiv="X-UA-Compatible" content="IE=7">
+  <meta http-equiv="X-UA-Compatible" content="IE=8">
+  <meta name="HandheldFriendly" content="true">
+  <link href="view/mobile/page/public/public1.css?v=1.0.4" rel="stylesheet">
+  <script src="view/index/js/jquery-1.8.2.min.js"></script>
+  <script src="view/index/js/ProvinceAndCities.js"></script>
+
+  <script type="text/javascript" src="view/index/layer/layer.js"></script>
+  <title>房抵贷</title>
+  <script type="text/javascript" src="../codeConvert.js?v=1.5.5"></script>
+  <!-- Bytedance Tracking -->
+  <script>
+    (function (r, d, s) {
+      r._tt_config = true;
+      var _baq = (r._baq = r._baq || []);
+      _baq.methods = ["track", "off", "on"];
+      _baq.factory = function (method) {
+        return function () {
+          var args = Array.prototype.slice.call(arguments);
+          args.unshift(method);
+          _baq.push(args);
+          return _baq
+        }
+      };
+      for (var i = 0; i < _baq.methods.length; i++) {
+        var key = _baq.methods[i];
+        _baq[key] = _baq.factory(key)
+      }
+      _baq.load = function () {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        js = d.createElement(s);
+        js.src = "https://analytics.oceanengine.com/api/v2/js/sdk";
+        fjs.parentNode.insertBefore(js, fjs)
+      };
+      _baq.load();
+      if (_baq.invoked) {
+        return
+      }
+      _baq.invoked = true;
+      _baq.track("pageview")
+    })(window, document, "script");
+  </script>
+  <!-- End Bytedance Tracking -->
+</head>
+<style>
+  input {
+    border: none;
+    outline: none;
+  }
+
+  .form_main {
+    background-color: white;
+    height: 100%;
+  }
+
+  .banner_box {
+    padding: 0;
+  }
+
+  /* 温馨提示 */
+  .basics_tips {
+    color: #F09918;
+    padding: 25px 10px 10px;
+    text-align: center;
+  }
+
+  .basics_tips p {
+    font-size: 24px;
+  }
+
+  .basics_tips .label {
+    font-size: 26px;
+    font-weight: bold;
+  }
+
+  /* 表单部分 */
+  .basics_info {
+    display: block;
+  }
+
+  .basics_info .basics_form {
+    padding: 20px 40px;
+  }
+
+  .flex-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .basics_form .tips {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #FF0000;
+  }
+
+  .basics_form .input_box {
+    margin-bottom: 24px;
+    padding: 0 30px;
+    height: 80px;
+    line-height: 80px;
+    background: #F6F5F9;
+    border: 1px solid #eeeeee;
+    border-radius: 8px;
+  }
+
+  .basics_form .input_box .img_box {
+    position: relative;
+    left: -40px;
+    flex: 0 0 80px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+  }
+
+  .basics_form .input_box .img_box::after {
+    display: block;
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 1px;
+    height: 40px;
+    background-color: #ABABAB;
+    transform: translateY(-50%);
+    border-radius: 3px;
+  }
+
+  .basics_form .input_box .img_box .tel {
+    width: 32px;
+  }
+
+  .basics_form .input_box .input {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #F6F5F9;
+    font-size: 26px;
+    border: none;
+    color: #333;
+  }
+
+  .basics_form .input_code {
+    align-items: flex-start;
+  }
+
+  .basics_form .input_code .code_box {
+    width: 200px;
+    text-align: center;
+    margin: 0 0 0 30px;
+    border: none;
+    padding: 0 20px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 10px;
+    font-size: 26px;
+    color: #FDAF3C;
+    background: url(view/mobile/page/car/icon/code_bg.png) no-repeat;
+    background-size: cover;
+  }
+
+  .basics_form .input_box .unit_box {
+    position: relative;
+    left: 30px;
+    flex: 0 0 120px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    font-size: 26px;
+    color: #FFB033;
+    font-weight: 500;
+  }
+
+  /* 申请按钮 */
+  .button {
+    padding: 18px 40px;
+  }
+
+  .button .submit_button {
+    border-radius: 10px;
+    color: #fff;
+    background: #ff842a;
+    width: 100%;
+    font-weight: 600;
+    height: 80px;
+    line-height: 80px;
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 32px;
+    -webkit-appearance: none;
+  }
+
+  .button #btn-submit {
+    color: #fff;
+  }
+
+  /* 用户隐私协议 */
+  .agreement {
+    color: #ABABAB;
+    min-height: 50px;
+    text-align: center;
+    position: relative;
+  }
+
+  .agreement input[type='checkbox'] {
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    margin-right: 4px;
+    vertical-align: top;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+
+  .agreement label {
+    height: 20px;
+    line-height: 26px;
+    font-size: 20px;
+    position: absolute;
+    left: 90px;
+    top: 0;
+  }
+
+  .agreement .agreement_tips {
+    height: 20px;
+    line-height: 26px;
+    font-size: 20px;
+    color: #9FB6CD;
+    text-align: center;
+  }
+
+
+  .agreement label .protocal,
+  .agreement label span {
+    font-size: 20px;
+    color: #f00;
+  }
+
+  .agreement input[type='checkbox']:checked+label:before {
+    background: #FFA43C;
+    border-color: #FFA43C;
+  }
+
+  .agreement label::before {
+    content: '';
+    position: absolute;
+    left: -40px;
+    top: 0;
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgb(170, 170, 170);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+  }
+
+  .agreement input[type='checkbox']:checked+label:after {
+    background: #FFA43C;
+  }
+
+  .agreement label::after {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 4px;
+    width: 8px;
+    height: 16px;
+    border: 0;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    background: #fff;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+  }
+
+  /* 底部文案 */
+  .basics_copyrights {
+    padding: 12px;
+    background-color: #fff;
+    color: #A98E4C;
+    text-align: center;
+    line-height: 36px;
+  }
+
+  .basics_copyrights p {
+    font-size: 22px;
+  }
+</style>
+<script>
+  var phoneWidth = parseInt(window.screen.width)
+  var phoneScale = phoneWidth / 640
+  var ua = navigator.userAgent
+  if (/Android (\d+\.\d+)/.test(ua)) {
+    var version = parseFloat(RegExp.$1)
+    if (version > 2.3) {
+      document.write('<meta name="viewport" content="width=640, minimum-scale = ' + phoneScale +
+        ', maximum-scale = ' + phoneScale + ', target-densitydpi=device-dpi">')
+    } else {
+      document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">')
+    }
+  } else {
+    document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">')
+  }
+</script>
+<script>
+  var urlLink = GetUrlLink() || '';
+  var basic_request = baseApiUrl;
+  var wx_official_account = getQueryString('wechatId') || ''
+  var toutiaoname = getQueryString('toutiaoName') || ''
+  var tenxunName = getQueryString('tenxunName') || ''
+  var wx_official_account_name = ''
+  var phone = ''
+  $(function () {
+    var officialForm = {
+      wx_official_account: wx_official_account
+    }
+    $.ajax({
+      type: "post",
+      url: basic_request + "/getHotCitysByofficial",
+      data: officialForm,
+      dataType: "json",
+      success: function (data) {
+        if (data.code && data.code == 1000 && data.data) {
+          wx_official_account_name = data.data.wx_name || ''
+          var hotCitys = data.data.hotCitys || []
+        } else {
+          // layer.msg('<span style="font-size:40px;">' + data.message + '<span style="font-size:40px;">', { icon: 2 });
+        }
+      }
+    });
+  });
+
+
+  function setCitys(id, arr) {
+    $("#" + id).html("")
+    var citySets = new Set([])
+    var _html = ''
+    if (arr.length) _html = '<li class="sort-by">热门城市</li>'
+    for (var i = 0; i < arr.length; i++) {
+      if (!citySets.has(arr[i].name)) _html += "<li class='provs' value='" + arr[i].name + "'>" + arr[i].name +
+        "</li>";
+      citySets.add(arr[i].name)
+    }
+    $("#" + id).append(_html)
+  }
+
+  function setBeianhao(state) {
+    if (state) {
+      $("#beianhao").show();
+    } else {
+      $("#beianhao").hide();
+    }
+  }
+
+  function set_hide(v) {
+    if (v != "") {
+      $(".hide").show();
+    } else {
+      $(".hide").hide();
+    }
+  }
+
+
+  function check() {
+    var name = $("#name").val();
+    var money = $("#amount").val();
+    var houseType = $("#houseType").val();
+    var price = $("#housePrice").val();
+    var house = $("#house").val();
+    var cityName = $("#city").val();
+    var error = '';
+    var myreg = /(^1[3|4|5|6|7|8|9][0-9]{9}$)/;
+
+    if (name == '') {
+      error += '姓名不能为空<br/>';
+    }
+    if (money == '') {
+      error += '请选择借款金额<br/>';
+    }
+    if (price == "") {
+      error += '请输入房产估值<br/>';
+    }
+    if (!house) {
+      error += '请选择房产情况<br/>';
+    }
+    if (!houseType) {
+      error += '请选择房屋类型<br/>';
+    }
+    if (cityName == "") {
+      error += '请选择本人所在城市<br/>';
+    }
+    if (error) {
+      layer.msg('<span style="font-size:40px;">' + error + '</span>', {
+        icon: 2
+      });
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+
+  //发送验证码
+
+  function sms() {
+    var mobile;
+    mobile = !mobile ? $('#mobile').val() : mobile;
+    var myreg = /(^1[3|4|5|6|7|8|9][0-9]{9}$)/;
+    if (mobile != "") {
+      if (!myreg.test(mobile)) {
+        layer.msg('<span style="font-size:40px;">手机号码格式不正确！请重新填写</span>', {
+          icon: 2
+        });
+        $('#mobile').focus();
+      } else {
+        //Ajax获取信息并返回
+        $.ajax({
+          type: "post",
+          url: "https://backend.zdt360.com/zdt/api/dispatcher/h5/user/getPhoneVerificationCode",
+          contentType: "json/application",
+          data: JSON.stringify({
+            mobile: mobile
+          }),
+          dataType: "json",
+          success: function (data) {
+            if (data.code && data.code == 1000) {
+              layer.msg('<span style="font-size:40px;">验证码发送成功</span>', {
+                icon: 1
+              });
+            } else {
+              layer.msg('<span style="font-size:20px;">验证码发送次数过多</span>', {
+                icon: 2
+              });
+            }
+          }
+        });
+        pp();
+      }
+    } else {
+      layer.msg('<span style="font-size:40px;">请输入手机号！</span>', {
+        icon: 2
+      });
+      $('#mobile').focus();
+    }
+  }
+
+
+  //倒计时按钮
+  function pp() {
+    $("#btn-sms").disabled = true;
+    speed = 1000; //速度
+    wait = 60; //停留时间
+    updateinfo();
+  }
+
+  function updateinfo() {
+    if (wait == 0) {
+      $("#btn-sms").text("点击发送");
+      $("#btn-sms").disabled = false;
+    } else {
+      $("#btn-sms").text(wait + "s后重发");
+      wait--;
+      window.setTimeout("updateinfo()", speed);
+    }
+  }
+
+  function GetUrlLink() {
+    var url = window.location.href;
+    return url.split('?')[0]
+  }
+
+  function submit() {
+    var mobile = $("#mobile").val();
+    var smscode = $("#smscode").val();
+    var myreg = /(^1[3|4|5|6|7|8|9][0-9]{9}$)/;
+    if (!$("#agree")[0].checked) {
+      layer.msg('<span style="font-size:36px;">您尚未同意隐私保护政策</span>', {
+        icon: 2
+      });
+      return
+    }
+    if (!mobile) {
+      layer.msg('<span style="font-size:36px;">手机号码不能为空</span>', {
+        icon: 2
+      });
+      return
+    }
+    if (mobile && !myreg.test(mobile)) {
+      layer.msg('<span style="font-size:36px;">手机号码格式不正确</span>', {
+        icon: 2
+      });
+      return
+    }
+    if (!smscode) {
+      layer.msg('<span style="font-size:36px;">请输入验证码</span>', {
+        icon: 2
+      });
+      return
+    }
+    $.ajax({
+      type: "post",
+      url: "https://backend.zdt360.com/zdt/api/dispatcher/h5/user/verifyPhoneCode",
+      contentType: "json/application",
+      data: JSON.stringify({
+        mobile: mobile,
+        phone_code: smscode,
+        type: 3
+      }),
+      dataType: "json",
+      success: function (data) {
+        if (data.code && data.code == 1000) {
+          $("#form1").hide();
+          $("#holder").show();
+        } else {
+          layer.msg('<span style="font-size:20px;">验证码输入错误</span>', {
+            icon: 2
+          });
+        }
+      }
+    });
+  }
+
+  function submit1() {
+    if (!check()) {
+      return false;
+    }
+    var location_url = window.location.href;
+    var planId = getQueryString('planId') || ''
+    var src_flag = decodeURI(getQueryString('flag') || '') || ''
+    var toutiaoName = getQueryString('toutiaoName') || ''
+    var tenxunName = getQueryString('tenxunName') || ''
+    var tenxunNameStr = tenxunName ? '?tenxunName=' + tenxunName : ''
+    var toutiaoNameStr = toutiaoName ? '?toutiaoName=' + toutiaoName : ''
+    var bs64 = encode(location_url.split('?')[0] + tenxunNameStr + toutiaoNameStr);
+    var form_data = {
+      name: $("#name").val(), //姓名
+      phone: $("#mobile").val(), //手机号
+      phone_code: $("#smscode").val(), //验证码
+      city: $("#city").val(), //城市        深圳,上海,北京
+      amount: Number($("#amount").val()), //借款金额    50-50万 30-30万 20-20万 10-10万 5-3-5万
+      car_type: 0,
+      price: 0,
+      total: Number($("#housePrice").val()),
+      house: Number($("#house").val()),
+      house_type: Number($("#houseType").val()),
+      type: 3,
+      wx_official_account: wx_official_account || tenxunName,
+      wx_official_account_name: wx_official_account_name || toutiaoName,
+      plan_id: planId,
+      src_flag: src_flag,
+      urlBase64: bs64,
+    };
+    //Ajax获取信息并返回
+    submiting(form_data)
+    return false;
+  }
+
+  // 提交
+  function submiting(form_data) {
+    $.ajax({
+      type: "post",
+      url: "https://backend.zdt360.com/zdt/api/dispatcher/h5/user/pushSpecialMsg",
+      contentType: "json/application",
+      data: JSON.stringify(form_data),
+      dataType: "json",
+      success: function (data) {
+        if (data && data.errcode == 0) {
+          marketing(true)
+        } else if (data && data.errcode == -5) {
+          layer.msg('<span style="font-size:40px;">' + data.errmsg +
+            '<span style="font-size:40px;">', {
+              icon: 2
+            });
+          marketing(false)
+        } else {
+          layer.msg('<span style="font-size:40px;">' + data.errmsg +
+            '<span style="font-size:40px;">', {
+              icon: 2
+            });
+        }
+      }
+    });
+  }
+
+  // 广告回传
+  function marketing(is_exist) {
+    var location_url = window.location.href;
+    var gdt_vid = getQueryString("gdt_vid");
+    var bs64 = encode(location_url);
+    var wechatId = getQueryString('wechatId') || ''
+    var wechatStr = wechatId ? '&wechatId=' + wechatId : ''
+    var qrWechatId = getQueryString('qrWechatId') || ''
+    var qrWechatStr = qrWechatId ? '&qrWechatId=' + qrWechatId : ''
+    var tenxunId = getQueryString('tenxunId') || ''
+    var tenxunStr = tenxunId ? '&account_id=' + tenxunId : ''
+    var phoneStr = phone ? '&phone=' + phone : ''
+    var preUrl = tenxunStr ? 'Tx' : ''
+    var action_url = basic_request + '/center/wechat/marketing' + preUrl + '/add?urlBase64=' + bs64 + '&clickId=' +
+      gdt_vid + wechatStr + tenxunStr + phoneStr;
+    if (is_exist) {
+      location.href = baseUrl + "/h5/qrcode/index_success.html?v=1.4.9&wx_official_account=" + wechatId +
+        '&gdt_vid=' + gdt_vid + phoneStr + qrWechatStr
+      return
+    }
+    $.get(action_url, function (result) {
+      if (result.code = 1000) {
+        const ob = [{
+          name: 'VGx1b2x1byVFNiU4OCVCRg==',
+          id: "1708321175660555"
+        }, {
+          name: 'VHd1amklRTYlODglQkY=',
+          id: "1708321311676424"
+        }];
+        var assets_id = ob.find(o => {
+          return o.name === toutiaoname
+        })
+        if (assets_id.id) {
+          _baq.track("form", {
+            assets_id: assets_id.id,
+          })
+        }
+        setTimeout(() => {
+          location.href = baseUrl + "/h5/qrcode/index_success.html?v=1.4.9&wx_official_account=" +
+            wechatId + '&gdt_vid=' + gdt_vid + phoneStr + qrWechatStr
+        }, 200)
+      }
+    });
+  }
+
+  //字符串转base64
+  function encode(str) {
+    // 对字符串进行编码
+    var encode = encodeURI(str);
+    // 对编码的字符串转化base64
+    var base64 = btoa(encode);
+    return base64;
+  }
+
+  function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    var q = window.location.pathname.substr(1).match(reg_rewrite);
+    if (r != null) {
+      return unescape(r[2]);
+    } else if (q != null) {
+      return unescape(q[2]);
+    } else {
+      return null;
+    }
+  }
+</script>
+
+<body>
+  <div class="w640 main form_main" id="form_main">
+    <div class="i-wrap banner_box">
+      <img class='header-img1' src="view/mobile/page/house/header_house.jpg?v=1.5.1">
+    </div>
+    <!-- 温馨提示 -->
+    <div class="basics_tips">
+      <p class="label">温馨提示</p>
+      <p>无房产证，不支持申请；自建房、安置房不支持申请</p>
+      <p>中介和同行请勿申请，如需合作请拨打下方客服热线</p>
+    </div>
+    <div class="basics_form" id="form1">
+      <form action="" method="post" class="basics_info">
+        <div class="basics_form">
+          <div class="input_box flex-center">
+            <p class="img_box"><img class="tel" src="view/mobile/page/car/icon/icon_tel1.png"></p>
+            <input class="input" autocomplete="off" id="mobile" type="tel" rel="positive" maxlength="11"
+              placeholder="请输入手机号">
+          </div>
+          <div class="flex-center input_code">
+            <div class="input_box flex-center flex-sub ">
+              <p class="img_box"><img class="tel" src="view/mobile/page/car/icon/icon_code1.png"></p>
+              <input class="input" autocomplete="off" id="smscode" type="tel" rel="positive" maxlength="4"
+                placeholder="请输入验证码">
+            </div>
+            <button type="button" class="code_box" id="btn-sms" onClick="sms();">点击发送</button>
+          </div>
+        </div>
+      </form>
+      <!-- 申请按钮 -->
+      <div class="button">
+        <input type="submit" id="btn-submit" value="立即咨询" class="submit_button" onClick="submit();" />
+      </div>
+      <!-- 用户协议 -->
+      <div class="agreement">
+        <input type="checkbox" name="agree" id="agree" value="1" class="agreement_checkbox">
+        <label for="agree">
+          我已阅读并同意<span><a href="
+              ../../index.html?v=1.0.1" class="protocal">用户服务协议 </a>、 <a href="
+              ../../index.html?v=1.0.1" class="protocal">用户隐私保护政策</a></span></label>
+      </div>
+    </div>
+    <!-- 表单部分 -->
+    <div id="holder" style="display: none;">
+      <form action="" method="post" class="basics_info" id="form2">
+        <div class="basics_form">
+          <div class="input_box flex-center">
+            <input class="input" id="name" data-required="1" autocomplete="off" name="username" value="" type="text"
+              placeholder="请输入您的姓名">
+          </div>
+          <div class="input_box flex-center">
+            <input class="input" id="amount" data-required="1" autocomplete="off" rel="positive" name="amount" value=""
+              type="text" placeholder="请输入贷款金额">
+            <p class="unit_box">万元</p>
+          </div>
+          <div class="input_box flex-center">
+            <input class="input" id="housePrice" data-required="1" autocomplete="off" rel="positive" name="price"
+              value="" type="text" placeholder="请输入房产估值">
+            <p class="unit_box">万元</p>
+          </div>
+          <div class="input_box flex-center">
+            <select class="input" id="house" data-required="1" name="houseprice" placeholder="请选择房产情况">
+              <option value="">请选择房产情况</option>
+              <option value="1">名下按揭有证</option>
+              <option value="2">名下全款有证</option>
+            </select>
+          </div>
+          <div class="input_box flex-center">
+            <select class="input" id="houseType" data-required="1" name="housetype" placeholder="请选择房屋类型">
+              <option value="">请选择房屋类型</option>
+              <option value="1">商品房</option>
+              <option value="2">别墅</option>
+              <option value="3">公寓</option>
+              <option value="4">商铺</option>
+            </select>
+          </div>
+          <div class="input_box flex-center" id="select_city">
+            <input id="city" data-required="1" autocomplete="off" name="code" value="" type="hidden"
+              placeholder="请选择本人所在城市" readonly="">
+            <div class="input citypicker" style="color: #ACABAE;" data-level="2" data-id="code">请选择本人所在城市</div>
+          </div>
+        </div>
+      </form>
+      <!-- 申请按钮 -->
+      <div class="button">
+        <input type="submit" id="btn-confirm" value="立即申请" class="submit_button" onClick="submit1();" />
+      </div>
+      <!-- 用户协议 -->
+      <div class="agreement">
+        <span class="agreement_tips">*我们郑重承诺，以上信息严格保密</span>
+      </div>
+    </div>
+    <!-- 底部图片 -->
+    <div class="basics_imgs">
+      <img class="img" src="view/mobile/page/house/houseBottom1.jpg">
+      <img class="img" src="view/mobile/page/house/houseBottom2.jpg">
+    </div>
+    <!-- 底部文案 -->
+    <div class="basics_copyrights">
+      <p style="color:#ababab">贷款有风险，借款需谨慎</p>
+      <p style="color:#ababab">请根据个人能力合理贷款，理性消费，避免逾期</p>
+      <p style="color:#ababab">贷款额度、放款时间以实际审批结果为准</p>
+      <p style="color:#ababab">本产品综合年化利率6%-24%（单利）</p>
+      <p style="color:#ababab">金融服务将根据您的个人情况由适合的正规金融机构提供</p>
+      <p style="color:#ababab">重庆小康小额贷款有限公司</p>
+      <p style="color:#ababab">渝ICP备18000384号-1</p>
+      <!--<div class="copy_box">-->
+      <!--	<p>淘前花版权所有</p>-->
+      <!--	<p>粤ICP19162532号-1</p>-->
+    </div>
+  </div>
+
+  <!-- 选择城市 -->
+  <div class="main1 prov-main" id="prov_main" style="display: none">
+    <header>
+      <p class="header-title" style='line-height: 40px;font-size:28px'><span style='margin-top:-20px' class="close"
+          id="prov_cancel"><img src="images/close.png"></span>金融机构不接受跨城市申请<br>请选择您工作所在地的城市</p>
+    </header>
+    <main id="ProvinceList">
+      <ul id='remeng' class="prov-sort remeng">
+      </ul>
+    </main>
+  </div>
+
+  <link rel="stylesheet" href="view/mobile/css/prov.css">
+  <link rel="stylesheet" href="view/mobile/css/city.css">
+
+  <script type="text/javascript" src="view/mobile/js/city.js"></script>
+  <script type="text/javascript">
+    var tenxunName = getQueryString('tenxunName') || ''
+    var tenxunId = getQueryString('tenxunId') || ''
+    var wechatId = getQueryString('wechatId') || ''
+    var qrWechatId = getQueryString('qrWechatId') || ''
+    setCitys('remeng', [{
+      name: '北京'
+    }, {
+      name: '上海'
+    }, {
+      name: '杭州'
+    }, {
+      name: '南京'
+    }, {
+      name: '武汉'
+    }, {
+      name: '成都'
+    }]);
+    var letters2 = ["A"];
+    for (var i in letters2) {
+      var provinceGruop = ["<li class='sort-by'>更多</li>"];
+      if (provinceGruop.length > 1) {
+        var domGroup = '';
+        for (var k in provinceGruop)
+          domGroup += provinceGruop[k];
+        var provSort = "<ul class='prov-sort'>" + domGroup + "</ul>"
+        $('#ProvinceList').append(provSort);
+      }
+    }
+
+    /**
+     * 表单部分
+     */
+    // 点击显示城市
+    $('#select_city').bind('click', function () {
+      console.log(333)
+      $('#form_main').hide();
+      $('#prov_main').show();
+      document.body.scrollTop = document.documentElement.scrollTop = 0
+    });
+    // 选择城市
+    $('.remeng').delegate('li', 'click', function (e) {
+      if (e.target.className == 'sort-by') return
+      $('#city').val(e.target.innerHTML);
+      $('.citypicker').text(e.target.innerHTML);
+      $('#prov_main').hide();
+      $('#form_main').show();
+      if (e.target.innerHTML) set_hide(1)
+    });
+
+    // 选择城市关闭
+    $('#prov_cancel').bind('click', function () {
+      $('#prov_main').hide();
+      $('#form_main').show();
+      $('#newadd-text1').show();
+    })
+  </script>
+</body>
+
+</html>

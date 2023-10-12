@@ -1,0 +1,515 @@
+<!--
+ * @Description: 
+ * @Version: 1.0
+ * @Autor: zcqia
+ * @LastEditors: zcqia
+-->
+<!DOCTYPE html>
+<html lang="en" style="font-size: 40px;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>专业贷款平台</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            font-family: "Microsoft YaHei";
+            height: 100%;
+            -webkit-touch-callout: none;
+            /*系统默认菜单被禁用*/
+            -webkit-user-select: none;
+            /*webkit浏览器*/
+            -khtml-user-select: none;
+            /*早起浏览器*/
+            -moz-user-select: none;
+            /*火狐浏览器*/
+            -ms-user-select: none;
+            /*IE浏览器*/
+            user-select: none;
+            /*用户是否能够选中文本*/
+        }
+
+        html {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        html,
+        button,
+        input,
+        select,
+        textarea {
+            font-family: "Microsoft YaHei", "lucida Grande", Verdana;
+        }
+
+        input,
+        select {
+            -webkit-appearance: none;
+            /*閸樺娅庣化鑽ょ埠姒涙ǹ顓婚惃鍕壉瀵拷*/
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            /* 閻愮懓鍤妯瑰瘨閻ㄥ嫰顤侀懝锟�*/
+        }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        img {
+            display: block;
+        }
+
+        .clearfix {
+            *zoom: 1;
+        }
+
+        .clearfix:before,
+        .clearfix:after {
+            display: table;
+            line-height: 0;
+            content: "";
+        }
+
+        .clearfix:after {
+            clear: both;
+        }
+
+        input::-webkit-input-placeholder {
+            color: #999;
+        }
+
+        input:-ms-input-placeholder {
+            color: #999;
+        }
+
+        input::-moz-placeholder {
+            color: #999;
+        }
+
+        input:-moz-placeholder {
+            color: #999;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        .flex {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .flex-v {
+            -webkit-box-orient: vertical;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+        }
+
+        .flex-1 {
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+        }
+
+        .flex-align-center {
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+        .flex-pack-center {
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+        }
+
+        .flex-pack-justify {
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        .qrBox,
+        .footer {
+
+            position: relative;
+        }
+
+        .btn,
+        .btn02 {
+            position: absolute;
+
+            left: 50%;
+            bottom: .8rem;
+            margin-left: -6.5rem;
+            width: 13rem;
+            height: 2.8rem;
+            background: url("../img/button01.png.html") no-repeat;
+            background-size: 100% 100%;
+
+        }
+
+        .btn02 {
+            height: 1.6rem;
+            background: url("../img/button02.png.html") no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #qr {
+            height: 100%;
+
+            /* width: 7rem; */
+            /* margin: auto; */
+            /* border: 1px solid #65a2f3; */
+            /* background: #f7f8fd; */
+        }
+
+        .finger {
+            width: 170px;
+            height: 145px;
+        }
+
+        .finger img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .qrBox-qr {
+            width: 100%;
+            height: 195px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        #qr {
+            width: 195px;
+            height: 195px;
+            /* background-image: url("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQHL8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyemlncnREWElkRkYxY05CM052Y2UAAgSxqvpeAwSAOgkA"); */
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .qrBox-qr-img {
+            width: 195px;
+            height: 195px;
+        }
+
+        .qrBox-footer {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qrBox-footer span {
+            font-size: 19px;
+            font-weight: 500;
+            color: rgba(230, 164, 26, 1);
+            line-height: 140px;
+        }
+
+        .qrBox {
+            padding: 0 2%;
+            background-color: white;
+        }
+
+        .header {
+            position: relative;
+            width: 100%;
+            height: 380px;
+        }
+
+        .header-titleBox {
+            height: 270px;
+            background-color: white;
+        }
+
+        .header-titleBox-img {
+            width: 90px;
+            height: 90px;
+            margin-bottom: 20px;
+        }
+
+        .header-tipBox {
+            height: 130px;
+            background-color: #6C99FF;
+            text-align: center;
+        }
+
+        .header-titleBox-text {
+            font-size: 14px;
+            color: rgba(77, 77, 77, 1);
+            line-height: 24px;
+            display: block;
+        }
+
+        .header-titleBox-text2 {
+            font-size: 16px;
+            color: red;
+            line-height: 24px;
+            display: block;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .ft-red {
+            color: red !important;
+        }
+
+        .header-tipBox-text {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 1);
+            line-height: 56px;
+            display: block;
+        }
+
+        .header-tipBox-text2 {
+            font-size: 20px;
+            /* font-weight: bold; */
+            color: rgba(244, 236, 100, 1);
+            line-height: 28px;
+            display: block;
+        }
+
+        .logo {
+            position: absolute;
+            width: 1rem;
+            top: 0.5rem;
+            left: 0.7rem;
+        }
+
+        .inpBox {
+            /* background: rgba(245,245,245) */
+        }
+
+        .inpBox span {
+            font-size: 16px;
+        }
+
+        .inpBox input {
+            /* background: rgba(245,245,245); */
+            border: none;
+            font-size: 16px;
+        }
+
+        .jieqian {
+            width: 40%;
+            margin: 0 auto;
+        }
+
+        .da {
+            display: flex;
+            align-items: center;
+            width: 90%;
+            margin: 8% auto;
+        }
+
+        .icon {
+            width: 24px;
+        }
+
+        #name {
+            position: absolute;
+            width: 2.4rem;
+            top: 1.8rem;
+            left: 0;
+            color: white;
+            font-size: 9px;
+            text-align: center;
+        }
+
+        .submit-btn {
+            background: pink;
+            padding: .3rem;
+        }
+
+        .qrBox-header {
+            width: 100%;
+            height: 60px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: -moz-box;
+            display: -moz-flex;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qrBox-header span {
+            font-size: 21px;
+            font-weight: 500;
+            color: rgba(52, 155, 248, 1);
+            line-height: 140px;
+        }
+
+        .footer {
+            width: 100%;
+            height: 80px;
+            background-color: #379BFB;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: -moz-box;
+            display: -moz-flex;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .footer span {
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(254, 254, 254, 1);
+            line-height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <!-- <img src="css/tjwc.jpg"> -->
+        <div class="flex flex-v flex-align-center flex-pack-center header-titleBox">
+            <img src="css/submit.png" alt="" class="header-titleBox-img">
+            <span class="header-titleBox-text">您的资料已<span class='ft-red'>提交成功</span>，我们会在<span
+                    class='ft-red'>12个小时</span>内电话联系您</span>
+            <span style='display: none;' class="header-titleBox-text2">*放款需本人确认 请留意接听*</span>
+        </div>
+        <div class="header-tipBox">
+            <span class='header-tipBox-text'>“温馨提示”</span>
+            <span class='header-tipBox-text2'>为了保障您的通过率，请避免</span>
+            <span class='header-tipBox-text2'>在网络上多次提交贷款申请和测试</span>
+        </div>
+    </div>
+    <div style='text-align:center' class="qrBox">
+        <!-- <div class='qrBox-header'>
+            <span>立即关注我们</span>
+        </div> -->
+        <div class='qrBox-qr'>
+            <div id="qr"></div>
+
+            <!-- <div class='finger'>
+                <img src="css/finger.gif" alt="" id="bg">
+            </div> -->
+        </div>
+        <span style='color:red;font-size:22px;line-height: 30px;'
+            class="header-titleBox-text is-show-qrcode"></span>
+        <!-- <div class='qrBox-footer'>
+            <span>长按识别&nbsp;&nbsp;&nbsp;立即借钱</span>
+        </div> -->
+        <!-- <img src="http://w1.iplayers.cn/upload/bdcecbab9608954f/667dccdf2deb5f6e.jpg" id="qr2" alt=""> -->
+    </div>
+    <!-- <img src="http://w1.iplayers.cn/upload/0d82c2c44b74117e/38a1453f42f30fff.jpg" alt=""> -->
+    <script src="https://backend.zdt360.com/h5/formH5/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="https://backend.zdt360.com/h5/formH5/codeConvert.js?v=1.2.1"></script>
+    <script type="text/javascript">
+        $(function () {
+            var url = ''
+            var wx_official_account = getQueryString('wx_official_account') || ''
+            var qrWechatId = getQueryString('qrWechatId') || ''
+            wx_official_account = qrWechatId ? qrWechatId : wx_official_account
+            url = wx_official_account && codeConverts.qrCode[wx_official_account] ? codeConverts.qrCode[wx_official_account] : ''
+
+            if (['gh_95f5f33a0731', 'gh_078d1b4a6531'].includes(getQueryString('wx_official_account') || '')) {
+                $('.header-titleBox-text2').show()
+            }
+
+            if (wx_official_account == 'gh_95f5f33a0731' || wx_official_account == 'gh_078d1b4a6531' || wx_official_account == 'gh_5b8f341c78cd') return
+
+            let filtes = ['gh_e290e1985eaa', 'gh_95f5f33a0731', 'gh_078d1b4a6531']
+            if ((wx_official_account !== 'gh_19c8027281c6' && qrWechatId !== 'gh_19c8027281c6') && filtes.includes(wx_official_account)) return
+
+            if (url) {
+                setList("qr", baseUrl + url)
+                $('.is-show-qrcode').html('请长按二维码识别关注本公众号<br>实时查看审核进度')
+            }
+
+            var gdt_vid = getQueryString("gdt_vid") || '';
+            var phone = getQueryString("phone") || '';
+            var url = 'https://backend.zdt360.com/server/apis/getWechat'
+            var data = { "wx_official_account": wx_official_account }
+            var access_token
+            var ticket
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    console.log('res', res);
+                    if (res.code === 1000 && res.data) {
+                        access_token = res.data.access_token
+                        var wx_code_url = `https://backend.zdt360.com/server/apis/getQrcode`
+                        var wx_code_data = { "access_token": access_token, "clickId": gdt_vid, "phone": phone }
+                        console.log('wx_code_data', wx_code_data);
+
+                        $.ajax({
+                            type: 'POST',
+                            url: wx_code_url,
+                            data: wx_code_data,
+                            dataType: 'json',
+                            success: function (res) {
+                                console.log('res', res);
+                                let prefix = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='
+                                let url = (prefix + res.ticket) || ''
+                                setList('qr', url)
+                            }
+                        })
+                    }
+                }
+            });
+        })
+        function setList(id, url) {
+            $("#" + id).html("")
+            var _html = "<img class='qrBox-qr-img' src=" + url + ">"
+            $("#" + id).append(_html)
+
+            var _html2 = "<img style='width:100%;height: 100vh;position: absolute;top: 0;left: 0;z-index: 100;opacity:0' src=" + url + ">"
+            $("body").append(_html2)
+        }
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            var q = window.location.pathname.substr(1).match(reg_rewrite);
+            if (r != null) {
+                return unescape(r[2]);
+            } else if (q != null) {
+                return unescape(q[2]);
+            } else {
+                return null;
+            }
+        }
+    </script>
+</body>
+
+
+</html>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.statistic.dao.StatisticMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.statistic.model.CustomerStatisticBO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" property="orgId" />
+    <result column="shop_id" property="shopId" />
+    <result column="team_id" property="teamId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    id, org_id, shop_id, name, state, create_by, create_date, update_by, update_date
+  </sql>
+  
+  <select id="selectPersonalStatisticPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap">
+    select id,org_id, shop_id,team_id,`name`
+    from org_employee
+    where org_id = #{paramObject.orgId} and `status`=1
+      <if test="paramObject.shopId != null and paramObject.shopId > 0 "> and shop_id = #{paramObject.shopId}</if>
+      <if test="paramObject.teamId != null and paramObject.teamId > 0 "> and team_id = #{paramObject.teamId}</if>
+      <if test="paramObject.name != null "> and `name` like concat('%',#{paramObject.name},'%')</if>
+    order by create_date desc
+    limit #{start},#{size}
+  </select>
+  
+  <select id="selectPersonalStatisticPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from org_employee
+    where org_id = #{paramObject.orgId} and `status`=1
+    <if test="paramObject.shopId != null and paramObject.shopId > 0 "> and shop_id = #{paramObject.shopId}</if>
+    <if test="paramObject.teamId != null and paramObject.teamId > 0 "> and team_id = #{paramObject.teamId}</if>
+    <if test="paramObject.name != null "> and `name` like concat('%',#{paramObject.name},'%')</if>
+  </select>
+
+  <select id="selectLevelCount" parameterType="com.crm.service.statistic.model.CustomerStatisticBO" resultType="java.util.Map">
+    select `level`,count(1) counts
+    from customer
+    where
+      org_id=#{orgId}
+      <if test="type == null || type == 0">
+        <if test="employeeId != null"> and ( (again_distribute=0 and employee_id=#{employeeId}) or (again_distribute=1 and again_employee_id=#{employeeId}) ) </if>
+      </if>
+      <if test="type == 1">
+        <if test="employeeId != null"> and first_employee=#{employeeId} </if>
+      </if>
+      <if test="type == 2">
+        <if test="employeeId != null"> and ( again_distribute=1 and again_employee_id=#{employeeId} ) </if>
+      </if>
+      <if test="type == 3">
+        and zijian = 1
+        <if test="employeeId != null"> and first_employee=#{employeeId} </if>
+      </if>
+      <if test="shopId != null and shopId > 0 "> and shop_id = #{shopId}</if>
+      <if test="teamId != null and teamId > 0 "> and team_id = #{teamId}</if>
+      <if test="startDate !=null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+      <if test="endDate !=null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+    group by `level`
+  </select>
+
+  <select id="selectCallCount" parameterType="com.crm.service.statistic.model.CustomerStatisticBO" resultType="java.util.Map">
+    select `call`,count(1) counts
+    from customer
+    where
+      org_id=#{orgId}
+      <if test="type == null || type == 0">
+        <if test="employeeId != null"> and ( (again_distribute=0 and employee_id=#{employeeId}) or (again_distribute=1 and again_employee_id=#{employeeId}) ) </if>
+      </if>
+      <if test="type == 1">
+        <if test="employeeId != null"> and first_employee=#{employeeId} </if>
+      </if>
+      <if test="type == 2">
+        <if test="employeeId != null"> and ( again_distribute=1 and again_employee_id=#{employeeId} ) </if>
+      </if>
+      <if test="type == 3">
+        and zijian = 1
+        <if test="employeeId != null"> and first_employee=#{employeeId} </if>
+      </if>
+      <if test="shopId != null and shopId > 0 "> and shop_id = #{shopId}</if>
+      <if test="teamId != null and teamId > 0 "> and team_id = #{teamId}</if>
+      <if test="startDate !=null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+      <if test="endDate !=null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+    group by `call`
+  </select>
+
+  <select id="selectFitCount" parameterType="com.crm.service.statistic.model.CustomerStatisticBO" resultType="java.util.Map">
+    select `fit`,count(1) counts
+    from customer
+    where
+      org_id=#{orgId}
+      <if test="type == null || type == 0">
+        <if test="employeeId != null"> and ( (again_distribute=0 and employee_id=#{employeeId}) or (again_distribute=1 and again_employee_id=#{employeeId}) ) </if>
+      </if>
+      <if test="type == 1">
+        <if test="employeeId != null"> and first_employee=#{employeeId} </if>
+      </if>
+      <if test="type == 2">
+        <if test="employeeId != null"> and ( again_distribute=1 and again_employee_id=#{employeeId} ) </if>
+      </if>
+      <if test="type == 3">
+        and zijian = 1
+        <if test="employeeId != null"> and first_employee=#{employeeId} </if>
+      </if>
+      <if test="shopId != null and shopId > 0 "> and shop_id = #{shopId}</if>
+      <if test="teamId != null and teamId > 0 "> and team_id = #{teamId}</if>
+      <if test="startDate !=null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+      <if test="endDate !=null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+    group by `fit`
+  </select>
+
+  <select id="selectTeamStatisticPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap">
+    select id,org_id, shop_id,id as team_id,`name`
+    from org_shop_team
+    where org_id = #{paramObject.orgId}
+      <if test="paramObject.shopId != null and paramObject.shopId >0 "> and shop_id = #{paramObject.shopId}</if>
+      <if test="paramObject.teamId != null and paramObject.teamId >0 "> and id = #{paramObject.teamId}</if>
+      <if test="paramObject.name != null and paramObject.name !='' "> and `name` like concat('%',#{paramObject.name},'%')</if>
+    order by create_date desc
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectTeamStatisticPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from org_shop_team
+    where org_id = #{paramObject.orgId}
+    <if test="paramObject.shopId != null and paramObject.shopId >0 "> and shop_id = #{paramObject.shopId}</if>
+    <if test="paramObject.teamId != null and paramObject.teamId >0 "> and id = #{paramObject.teamId}</if>
+    <if test="paramObject.name != null and paramObject.name !='' "> and `name` like concat('%',#{paramObject.name},'%')</if>
+    order by create_date desc
+  </select>
+
+  <select id="selectShopStatisticPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap">
+    select id,org_id,id as shop_id,`name`
+    from org_shop
+    where org_id = #{paramObject.orgId}
+    <if test="paramObject.shopId != null and paramObject.shopId >0 "> and id = #{paramObject.shopId}</if>
+    <if test="paramObject.name != null and paramObject.name !='' "> and `name` like concat('%',#{paramObject.name},'%')</if>
+    order by create_date desc
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectShopStatisticPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from org_shop
+    where org_id = #{paramObject.orgId}
+    <if test="paramObject.shopId != null and paramObject.shopId >0 "> and id = #{paramObject.shopId}</if>
+    <if test="paramObject.name != null and paramObject.name !='' "> and `name` like concat('%',#{paramObject.name},'%')</if>
+    order by create_date desc
+  </select>
+
+
+
+
+
+
+
+</mapper>

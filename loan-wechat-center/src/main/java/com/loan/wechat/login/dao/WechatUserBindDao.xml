@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.loan.wechat.login.dao.WechatUserBindDao">
+	
+	<resultMap id="user_map"  type="com.loan.wechat.login.entity.UserDTO" >
+		<result column="id"  property="id"/>
+		<result column="user_id" property="userId"/>
+		<result column="openid" property="openid"/>
+		<result column="unionId" property="unionId"/>
+		<result column="media" property="media"/>
+		<result column="wx_type" property="wxType"/>
+		<result column="state" property="state"/>
+		<result column="type" property="type"/>
+		<result column="follow_time" property="followTime"/>
+		<result column="unfollow_time" property="unfollowTime"/>
+		<result column="sub_count" property="subCount"/>
+		<result column="session_count" property="sessionCount"/>
+		<result column="job_state" property="jobState"/>
+		<result column="create_by" property="createBy"/>
+		<result column="create_date" property="createDate"/>
+		<result column="update_by" property="updateBy"/>
+		<result column="update_date" property="updateDate"/>
+	</resultMap>
+ 	
+	<insert id="insert" parameterType="com.loan.wechat.login.entity.UserDTO">
+		INSERT INTO  
+			bind_user
+			(user_id,openid,unionId ,media,wx_type,state,type,follow_time,unfollow_time,sub_count,session_count,job_state,create_by,create_date,update_by,update_date)
+		VALUES 
+			(#{userId},#{openid},#{unionId},#{media},#{wxType},#{state},#{type},#{followTime},#{unfollowTime},1,1,#{jobState},#{createBy},#{createDate},#{updateBy},#{updateDate})
+	</insert>
+	
+	<update id="update" parameterType="com.loan.wechat.login.entity.UserDTO" >
+		UPDATE 
+			bind_user
+		<set>
+			<if test="state != null">state=#{state},</if>
+			<if test="subCount != null">sub_count=#{subCount},</if>
+			<if test="jobState != null">job_state=#{jobState},</if>
+			<if test="followTime != null">follow_time=#{followTime},</if>
+			<if test="unfollowTime != null">unfollow_time=#{unfollowTime},</if>
+			<if test="updateBy != null">update_by=#{updateBy},</if>
+			<if test="updateDate != null">update_date=#{updateDate}</if>
+		</set>	
+		WHERE 
+			openid = #{openid}
+	</update>
+	
+	<select id="selUserByOpenid" parameterType="java.lang.String" resultMap="user_map">
+		SELECT 
+			*
+		FROM 
+			bind_user
+		WHERE 
+			openid = #{openid}
+	</select>
+	
+	<select id="selUserByUserid" parameterType="java.lang.String" resultMap="user_map">
+		SELECT 
+			*
+		FROM 
+			bind_user
+		WHERE 
+			user_id = #{userId}
+	</select>
+	
+</mapper>

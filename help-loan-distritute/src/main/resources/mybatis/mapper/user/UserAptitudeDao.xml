@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+        namespace="com.help.loan.distribute.service.user.dao.UserAptitudeDao">
+
+    <resultMap id="aptitude_map" type="com.help.loan.distribute.service.user.model.UserAptitudePO">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="mobile" property="mobile"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="loan_amount" property="loanAmount"/>
+        <result column="credit_card" property="creditCard"/>
+        <result column="zhima" property="zhima"/>
+        <result column="zhima_score" property="zhimaScore"/>
+        <result column="company" property="company"/>
+        <result column="public_fund" property="publicFund"/>
+        <result column="car" property="car"/>
+        <result column="house" property="house"/>
+        <result column="house_extension" property="houseExtension"/>
+        <result column="insurance" property="insurance"/>
+        <result column="getway_income" property="getwayIncome"/>
+        <result column="level" property="level"/>
+        <result column="occupation" property="occupation"/>
+        <result column="house_state" property="houseState"/>
+        <result column="channel" property="channel"/>
+        <result column="weight" property="weight"/>
+        <result column="gender" property="gender"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_date" property="updateDate"/>
+        <result column="car_price" property="carPrice" />
+        <result column="overdue" property="overdue" />
+        <result column="call_time" property="callTime" />
+        <result column="extension" property="extension"/>
+    </resultMap>
+
+    <select id="get" resultMap="aptitude_map" parameterType="java.lang.String">
+        SELECT * FROM user_aptitude WHERE user_id = #{userId}
+    </select>
+
+    <select id="getByLevel" resultMap="aptitude_map" parameterType="java.lang.Integer">
+        SELECT *
+        FROM user_aptitude
+        WHERE level = #{level}
+        limit 100000
+    </select>
+    
+    <select id="getByLevelByLimitDate" resultMap="aptitude_map">
+        SELECT *
+        FROM user_aptitude
+        WHERE create_date between #{startDate} and #{endDate}  and  level in( ${level}) and `name` not like concat('%','*','%')
+        limit 2000
+    </select>
+
+    <insert id="create" parameterType="com.help.loan.distribute.service.user.model.UserAptitudePO">
+        insert into user_aptitude
+        (user_id,create_by,create_date,update_by,update_date)
+        values
+        (#{userId},#{createBy},#{createDate},#{updateBy},#{updateDate})
+    </insert>
+
+    <update id="update" parameterType="com.help.loan.distribute.service.user.model.UserAptitudePO">
+        update user_aptitude
+        <set>
+            <if test="name !=null and name !=''">
+                name = #{name},
+            </if>
+            <if test="mobile !=null and mobile !=''">
+                mobile = #{mobile},
+            </if>
+            <if test="province !=null and province !=''">
+                province = #{province},
+            </if>
+            <if test="city !=null and city !=''">
+                city = #{city},
+            </if>
+            <if test="loanAmount !=null and loanAmount !=''">
+                loan_amount = #{loanAmount},
+            </if>
+            <if test="creditCard !=null">
+                credit_card = #{creditCard},
+            </if>
+            <if test="zhima !=null ">
+                zhima = #{zhima},
+            </if>
+            <if test="zhimaScore !=null">
+                zhima_score = #{zhimaScore},
+            </if>
+            <if test="company !=null">
+                company = #{company},
+            </if>
+            <if test="publicFund !=null and publicFund !=''">
+                public_fund = #{publicFund},
+            </if>
+            <if test="car !=null">
+                car = #{car},
+            </if>
+            <if test="house !=null ">
+                house = #{house},
+            </if>
+            <if test="insurance !=null ">
+                insurance = #{insurance},
+            </if>
+            <if test="getwayIncome !=null ">
+                getway_income = #{getwayIncome},
+            </if>
+            <if test="level !=null ">
+                level = #{level},
+            </if>
+            <if test="createBy !=null and createBy !=''">
+                create_by = #{createBy},
+            </if>
+            <if test="createDate !=null ">
+                create_date = #{createDate},
+            </if>
+            <if test="updateBy !=null and updateBy !=''">
+                update_by = #{updateBy},
+            </if>
+            <if test="updateDate !=null ">
+                update_date = #{updateDate},
+            </if>
+            <if test="occupation !=null ">
+                occupation = #{occupation},
+            </if>
+            <if test="houseState !=null ">
+                house_state = #{houseState},
+            </if>
+            <if test="callTime !=null ">
+                call_time = #{callTime},
+            </if>
+        </set>
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+
+
+    <select id="todayOrgCityLoanAmountCount" resultType="java.lang.Integer">
+        select count(rec.customer_id)
+        from org_dispatche_rec rec
+        join user_aptitude aptitude on rec.customer_id = aptitude.id
+        where rec.org_id=#{orgId}
+        and rec.create_date between #{startDate} and #{endDate}
+        and rec.dispatch_status=1 and aptitude.city=#{city} and aptitude.loan_amount = #{loanAmount}
+    </select>
+
+    <select id="todayOrgLoanAmountCount" resultType="java.lang.Integer">
+        select count(rec.customer_id)
+        from org_dispatche_rec rec
+        join user_aptitude aptitude on rec.customer_id = aptitude.id
+        where rec.org_id=#{orgId}
+        and rec.create_date between #{startDate} and #{endDate}
+        and rec.dispatch_status=1 and aptitude.loan_amount = #{loanAmount}
+    </select>
+
+    <select id="todayOrgEmptyNameCount" resultType="java.lang.Integer">
+        select count(rec.customer_id)
+        from org_dispatche_rec rec
+        join user_aptitude aptitude on rec.customer_id = aptitude.id
+        where rec.org_id=#{orgId}
+        and rec.create_date between #{startDate} and #{endDate}
+        and rec.dispatch_status=1 and (aptitude.`name` IS NULL or aptitude.`name` = '');
+
+    </select>
+
+    <select id="selectNotAptitudeUser" resultMap="aptitude_map">
+        select *
+        from user_aptitude aptitude
+        where aptitude.create_date BETWEEN #{startDate} and #{endDate}  and aptitude.`level` in(0,1,3,6,9)
+        and not exists(select 1 from user_not_aptitude_send_strategy_rec rec where aptitude.user_id = rec.user_id)
+        limit 1000
+    </select>
+    
+    
+    <insert id="insertUserNotAptitudeSendStrategyRec" parameterType="com.help.loan.distribute.service.user.model.UserNotAptitudeSendStrategyRecPO">
+        insert into user_not_aptitude_send_strategy_rec(user_id) values(#{userId})
+    </insert>
+    
+    <select id="selectCount" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.alibaba.fastjson.JSONObject" >
+    	SELECT COUNT(user_id) total,sum(occ) occ,SUM(fund) fund,SUM(income) income,SUM(house) house,SUM(car) car,SUM(company) company,
+		SUM(insurance) insurance,SUM(mobile1) mobile1,SUM(mobile2) mobile2,SUM(city1) city1,SUM(city2) city2 FROM 
+		(SELECT user_id,CASE WHEN occupation = 0 THEN 0 else 1 END occ,CASE WHEN public_fund = '0' THEN 0 ELSE 1 END fund,CASE WHEN getway_income = 0 THEN 0 else 1 END income,  
+		CASE WHEN house = 0 THEN 0 else 1 END house, CASE WHEN car = 0 THEN 0 else 1 END car,CASE WHEN company = 0 THEN 0 else 1 END company,CASE WHEN insurance = 0 THEN 0 else 1 END insurance,
+		CASE WHEN (public_fund = '有，个人月缴300-800元' OR public_fund = '有，个人月缴800元以上' OR getway_income = 1 OR house = 1 OR house = 2 OR car = 1 OR car =4 OR company =1 OR insurance =1 ) AND (mobile = '' OR mobile = NULL) THEN 1 ELSE 0 END mobile1,
+		CASE WHEN mobile != '' THEN 1 ELSE 0 END mobile2,CASE WHEN mobile != ''  AND city = ''  THEN 1 ELSE 0 END city1,CASE WHEN city != '' THEN 1 ELSE 0 END city2
+		FROM loan_cps.user_aptitude WHERE create_date BETWEEN #{startDate} AND #{endDate}) aa
+    </select>
+</mapper>

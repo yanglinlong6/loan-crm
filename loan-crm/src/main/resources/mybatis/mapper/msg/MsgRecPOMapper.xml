@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.sms.dao.MsgRecMapper">
+
+  <resultMap id="BaseResultMap" type="com.crm.service.sms.model.MsgRecPO">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="domain" jdbcType="VARCHAR" property="domain" />
+    <result column="status"  property="status" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+
+
+  <insert id="insertMsgRec" parameterType="com.crm.service.sms.model.MsgRecPO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    insert into msg_rec
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mobile != null">
+        `mobile`,
+      </if>
+      <if test="content != null">
+        `content`,
+      </if>
+      <if test="domain != null">
+        `domain`,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="createBy != null">
+        `create_by`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="domain != null">
+        #{domain,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

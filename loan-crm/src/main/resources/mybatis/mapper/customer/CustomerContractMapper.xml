@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.customer.dao.CustomerContractMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.customer.model.CustomerContractPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="team_id" jdbcType="BIGINT" property="teamId" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="employee_id" jdbcType="BIGINT" property="employeeId" />
+    <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
+    <result column="cost_rate" jdbcType="DECIMAL" property="costRate" />
+    <result column="deposit" jdbcType="DECIMAL" property="deposit" />
+    <result column="way" jdbcType="TINYINT" property="way" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="images" jdbcType="LONGVARCHAR" property="images" />
+    <result column="idcard_front" property="idcardFront" />
+    <result column="idcard_back" property="idcardBack" />
+    <result column="authorize_file" property="authorizeFile" />
+    <result column="credit_file" property="creditFile" />
+    <result column="other_file" property="otherFile" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="file_id" property="fileId" />
+    <result column="flow_id" property="flowId" />
+    <result column="file_name" property="fileName" />
+  </resultMap>
+  
+  <resultMap id="BO_BaseResultMap" type="com.crm.service.customer.model.CustomerContractBO" extends="BaseResultMap">
+    <result column="name" jdbcType="VARCHAR" property="customerName" />
+    <result column="mobile" jdbcType="VARCHAR" property="customerMobile" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    cc.id, cc.org_id, cc.shop_id, cc.team_id,
+    cc.customer_id, cc.employee_id, cc.contract_code, cc.cost_rate,
+    cc.deposit, cc.`way`, cc.`state`, cc.`remark`,cc.`images`, cc.create_by,cc.create_date,cc.update_by, cc.update_date,file_id,flow_id,file_name
+  </sql>
+  
+  <select id="selectPage" parameterType="com.crm.common.PageBO" resultMap="BO_BaseResultMap">
+    select
+        cc.id, cc.org_id, cc.shop_id, cc.team_id,
+        cc.customer_id, cc.employee_id, cc.contract_code, cc.cost_rate,
+        cc.deposit, cc.`way`, cc.`state`, cc.`remark`,cc.`images`,
+        cc.idcard_front,cc.idcard_back,cc.authorize_file,cc.credit_file,cc.other_file,
+        cc.create_by,cc.create_date,cc.update_by, cc.update_date,
+        cc.file_id,cc.flow_id,cc.file_name,
+        c.`name`,c.`mobile`
+    from customer_contract cc
+      join customer c on cc.customer_id = c.id
+    <where>
+      <if test="paramObject.orgId != null"> and cc.org_id = #{paramObject.orgId}</if>
+      <if test="paramObject.shopId != null"> and cc.shop_id = #{paramObject.shopId}</if>
+      <if test="paramObject.teamId != null"> and cc.team_id = #{paramObject.teamId}</if>
+      <if test="paramObject.employeeId != null"> and cc.employee_id = #{paramObject.employeeId}</if>
+      <if test="paramObject.customerName != null"> and c.`name` like concat('',#{paramObject.customerName},'')</if>
+      <if test="paramObject.customerMobile != null"> and c.`mobile` like concat('',#{paramObject.customerMobile},'')</if>
+      <if test="paramObject.startDate != null"> and cc.`create_date` <![CDATA[ >= ]]> #{paramObject.startDate} </if>
+      <if test="paramObject.endDate != null">   and cc.`create_date` <![CDATA[ <= ]]> #{paramObject.endDate}</if>
+    </where>
+    order by create_date desc
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer_contract cc
+    join customer c on cc.customer_id = c.id
+    <where>
+      <if test="paramObject.orgId != null"> and cc.org_id = #{paramObject.orgId}</if>
+      <if test="paramObject.shopId != null"> and cc.shop_id = #{paramObject.shopId}</if>
+      <if test="paramObject.teamId != null"> and cc.team_id = #{paramObject.teamId}</if>
+      <if test="paramObject.employeeId != null"> and cc.employee_id = #{paramObject.employeeId}</if>
+      <if test="paramObject.customerName != null"> and c.`name` like concat('%',#{paramObject.customerName},'%')</if>
+      <if test="paramObject.customerMobile != null"> and c.`mobile` like concat('%',#{paramObject.customerMobile},'%')</if>
+      <if test="paramObject.startDate != null"> and cc.`create_date` <![CDATA[ >= ]]> #{paramObject.startDate} </if>
+      <if test="paramObject.endDate != null">   and cc.`create_date` <![CDATA[ <= ]]> #{paramObject.endDate}</if>
+    </where>
+
+  </select>
+
+  <select id="selectCustomerContractById" parameterType="java.lang.Long" resultMap="BaseResultMap" >
+    select *
+    from customer_contract
+    where id=#{id}
+  </select>
+  
+
+  <select id="selectCustomerContractByCustomerIdAndState"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_contract cc
+    where cc.customer_id = #{customerId,jdbcType=BIGINT} and cc.`state` in(${state})
+    limit 1
+  </select>
+  
+  <select id="selectCustomerContractByContractIdAndState" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from customer_contract cc
+    where cc.id = #{id,jdbcType=BIGINT} and cc.`state` in(${state})
+    limit 1
+  </select>
+
+
+
+  <insert id="insertCustomerContract" parameterType="com.crm.service.customer.model.CustomerContractPO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    insert into customer_contract
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="teamId != null">
+        team_id,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="employeeId != null">
+        employee_id,
+      </if>
+      <if test="contractCode != null">
+        contract_code,
+      </if>
+      <if test="costRate != null">
+        cost_rate,
+      </if>
+      <if test="deposit != null">
+        deposit,
+      </if>
+      <if test="way != null">
+        way,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="images != null">
+        images,
+      </if>
+      <if test="idcardFront != null and idcardFront != ''">
+        idcard_front,
+      </if>
+      <if test="idcardBack != null and idcardBack != ''">
+        idcard_back,
+      </if>
+      <if test="authorizeFile != null and authorizeFile != ''">
+        authorize_file,
+      </if>
+      <if test="creditFile != null and creditFile != ''">
+        credit_file,
+      </if>
+      <if test="otherFile != null and otherFile != ''">
+        other_file,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="flowId != null">
+        flow_id,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="teamId != null">
+        #{teamId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="employeeId != null">
+        #{employeeId,jdbcType=BIGINT},
+      </if>
+      <if test="contractCode != null">
+        #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="costRate != null">
+        #{costRate,jdbcType=DECIMAL},
+      </if>
+      <if test="deposit != null">
+        #{deposit,jdbcType=DECIMAL},
+      </if>
+      <if test="way != null">
+        #{way,jdbcType=TINYINT},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="images != null">
+        #{images,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="idcardFront != null and  idcardFront != ''">
+        #{idcardFront},
+      </if>
+      <if test="idcardBack != null and idcardBack != ''">
+        #{idcardBack},
+      </if>
+      <if test="authorizeFile != null and authorizeFile != ''">
+        #{authorizeFile},
+      </if>
+      <if test="creditFile != null and creditFile != ''">
+        #{creditFile},
+      </if>
+      <if test="otherFile != null and otherFile != ''">
+        #{otherFile},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null">
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="flowId != null">
+        #{flowId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName}
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateCustomerContract" parameterType="com.crm.service.customer.model.CustomerContractPO">
+    update customer_contract
+    <set>
+      <if test="contractCode != null">
+        contract_code = #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="costRate != null">
+        cost_rate = #{costRate,jdbcType=DECIMAL},
+      </if>
+      <if test="deposit != null">
+        deposit = #{deposit,jdbcType=DECIMAL},
+      </if>
+      <if test="way != null">
+        `way` = #{way,jdbcType=TINYINT},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        `remark` = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="images != null and images != ''">
+        `images` = #{images,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="idcardFront != null and idcardFront != ''">
+        `idcard_front` = #{idcardFront},
+      </if>
+      <if test="idcardBack != null and idcardBack != ''">
+        `idcard_back` = #{idcardBack},
+      </if>
+      <if test="authorizeFile != null and authorizeFile != ''">
+        `authorize_file` = #{authorizeFile},
+      </if>
+      <if test="creditFile != null and creditFile != ''" >
+        `credit_file` = #{creditFile},
+      </if>
+      <if test="otherFile != null and otherFile != ''">
+        `other_file` = #{otherFile},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <select id="selectContractAll" parameterType="com.crm.service.customer.model.CustomerContractBO" resultMap="BO_BaseResultMap">
+    select
+    cc.id, cc.org_id, cc.shop_id, cc.team_id,
+    cc.customer_id, cc.employee_id, cc.contract_code, cc.cost_rate,
+    cc.deposit, cc.`way`, cc.`state`, cc.`remark`,cc.`images`, cc.create_by,cc.create_date,cc.update_by, cc.update_date,c.`name`,c.`mobile`
+    from customer_contract cc
+    join customer c on cc.customer_id = c.id
+    <where>
+      <if test="orgId != null"> and cc.org_id = #{orgId}</if>
+      <if test="shopId != null"> and cc.shop_id = #{shopId}</if>
+      <if test="teamId != null"> and cc.team_id = #{teamId}</if>
+      <if test="employeeId != null"> and cc.employee_id = #{employeeId}</if>
+      <if test="customerName != null">
+          and
+          (
+            c.`name` like concat('%',#{customerName},'%')
+            or
+            c.`mobile` like concat('%',#{customerName},'%')
+            or
+            cc.contract_code like concat('%',#{customerName},'%')
+          )
+      </if>
+    </where>
+  </select>
+
+
+  <select id="selectCustomerContractByCustomerId"  resultMap="BO_BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from customer_contract cc
+    where cc.customer_id = #{customerId}
+  </select>
+
+  <select id="selectCustomerContractByFlowId"  resultMap="BO_BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from customer_contract cc
+    where cc.flow_id = #{flowId}
+  </select>
+
+</mapper>

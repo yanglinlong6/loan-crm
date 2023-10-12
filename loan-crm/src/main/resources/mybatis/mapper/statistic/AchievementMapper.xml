@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.statistic.dao.AchievementMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.statistic.model.AchievementBO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" property="orgId" />
+    <result column="shop_id" property="shopId" />
+    <result column="team_id" property="teamId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="shopName" jdbcType="VARCHAR" property="shopName" />
+    <result column="teamName" jdbcType="VARCHAR" property="teamName" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    id,org_id,shop_id,team_id,`name`,shopName,teamName
+  </sql>
+  
+  <select id="selectPersonalPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap">
+    select em.id,em.org_id, em.shop_id,em.team_id,em.`name`,shop.`name` as shopName, team.`name` as teamName
+    from org_employee em
+      left join org_shop shop on em.shop_id = shop.id
+      left join org_shop_team  team on em.team_id = team.id
+    where em.org_id = #{paramObject.orgId} and em.`status`=1
+      <if test="paramObject.shopId != null and paramObject.shopId > 0 "> and em.shop_id = #{paramObject.shopId}</if>
+      <if test="paramObject.teamId != null and paramObject.teamId > 0 "> and em.team_id = #{paramObject.teamId}</if>
+      <if test="paramObject.employeeId != null"> and em.id = #{paramObject.employeeId}</if>
+      <if test="paramObject.name != null "> and em.`name` like concat('%',#{paramObject.name},'%')</if>
+    order by em.create_date desc
+    limit #{start},#{size}
+  </select>
+  <select id="selectPersonalPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from org_employee em
+    where em.org_id = #{paramObject.orgId} and em.`status`=1 and em.create_date BETWEEN #{paramObject.startDate} and #{paramObject.endDate}
+    <if test="paramObject.shopId != null and paramObject.shopId > 0 "> and em.shop_id = #{paramObject.shopId}</if>
+    <if test="paramObject.teamId != null and paramObject.teamId > 0 "> and em.team_id = #{paramObject.teamId}</if>
+    <if test="paramObject.name != null "> and em.`name` like concat('%',#{paramObject.name},'%')</if>
+  </select>
+
+
+
+
+  <select id="selectTeamPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap">
+    select id,org_id, shop_id,id as team_id,`name`
+    from org_shop_team
+    where org_id = #{paramObject.orgId}
+    <if test="paramObject.shopId != null and paramObject.shopId >0 "> and shop_id = #{paramObject.shopId}</if>
+    <if test="paramObject.teamId != null and paramObject.teamId >0 "> and id = #{paramObject.teamId}</if>
+    <if test="paramObject.name != null and paramObject.name !='' "> and `name` like concat('%',#{paramObject.name},'%')</if>
+    order by create_date desc
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectTeamPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from org_shop_team
+    where org_id = #{paramObject.orgId}
+    <if test="paramObject.shopId != null and paramObject.shopId >0 "> and shop_id = #{paramObject.shopId}</if>
+    <if test="paramObject.teamId != null and paramObject.teamId >0 "> and id = #{paramObject.teamId}</if>
+    <if test="paramObject.name != null and paramObject.name !='' "> and `name` like concat('%',#{paramObject.name},'%')</if>
+    order by create_date desc
+  </select>
+
+  <select id="selectShopPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap">
+    select id,org_id,id as shop_id,`name`
+    from org_shop
+    where org_id = #{paramObject.orgId}
+    <if test="paramObject.shopId != null and paramObject.shopId >0 "> and id = #{paramObject.shopId}</if>
+    <if test="paramObject.name != null and paramObject.name !='' "> and `name` like concat('%',#{paramObject.name},'%')</if>
+    order by create_date desc
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectShopPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select IFNULL(count(1),0)
+    from org_shop
+    where org_id = #{paramObject.orgId}
+    <if test="paramObject.shopId != null and paramObject.shopId >0 "> and id = #{paramObject.shopId}</if>
+    <if test="paramObject.name != null and paramObject.name !='' "> and `name` like concat('%',#{paramObject.name},'%')</if>
+    order by create_date desc
+  </select>
+
+
+
+  <select id="selectContractCount" parameterType="com.crm.service.statistic.model.AchievementBO" resultType="java.lang.Integer">
+    select IFNULL(count(1),0)
+    from customer_contract
+    where org_id = #{orgId} and `state` in(1,2,3,4) and create_date BETWEEN #{startDate} and #{endDate}
+      <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+      <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+      <if test="employeeId != null"> and employee_id = #{employeeId}</if>
+  </select>
+
+  <select id="selectContractDepositAmount" parameterType="com.crm.service.statistic.model.AchievementBO" resultType="java.lang.Double">
+    select IFNULL(sum(deposit),0.00)
+    from customer_contract
+    where org_id = #{orgId} and `state` in(1,2,3,4) and create_date BETWEEN #{startDate} and #{endDate}
+    <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null"> and employee_id = #{employeeId}</if>
+  </select>
+  
+  <select id="selectContractCostRateAvg" parameterType="com.crm.service.statistic.model.AchievementBO" resultType="java.lang.Double">
+    select IFNULL(avg(cost_rate),0.00)
+    from customer_contract
+    where org_id = #{orgId} and `state` in(1,2,3,4) and create_date BETWEEN #{startDate} and #{endDate}
+    <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null"> and employee_id = #{employeeId}</if>
+  </select>
+
+  <select id="selectImportCount" parameterType="com.crm.service.statistic.model.AchievementBO" resultType="java.lang.Integer">
+    select IFNULL(count(1),0)
+    from customer_import
+    where org_id = #{orgId} and `state` in(5.6) and create_date BETWEEN #{startDate} and #{endDate}
+      <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+      <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+      <if test="employeeId != null"> and employee_id = #{employeeId}</if>
+  </select>
+
+
+  <select id="selectImportCompletionAmount" parameterType="com.crm.service.statistic.model.AchievementBO" resultType="java.lang.Double">
+    select IFNULL(sum(completion),0.00)
+    from customer_import
+    where org_id = #{orgId} and `state` in(5,6) and create_date BETWEEN #{startDate} and #{endDate}
+    <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null"> and employee_id = #{employeeId}</if>
+  </select>
+
+
+  <select id="selectImportIncomeAmount" parameterType="com.crm.service.statistic.model.AchievementBO" resultType="java.lang.Double">
+    select IFNULL(sum(income),0.00)
+    from customer_import
+    where org_id = #{orgId} and `state` in(5,6) and create_date BETWEEN #{startDate} and #{endDate}
+    <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null"> and employee_id = #{employeeId}</if>
+  </select>
+
+  <select id="selectNewCustomerCount" parameterType="com.crm.service.statistic.model.AchievementBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer c
+    where c.org_id=#{orgId} and c.create_date between #{startDate} and #{endDate} and c.zijian = 0
+      <if test="shopId != null"> and c.shop_id = #{shopId}</if>
+      <if test="teamId != null"> and c.team_id = #{teamId}</if>
+      <if test="employeeId != null"> and c.first_employee = #{employeeId}</if>
+  </select>
+
+
+
+  <select id="selectConsumeAmount" parameterType="com.crm.service.statistic.model.AchievementBO" resultType="java.lang.Double">
+    select IFNULL(SUM(ROUND(tmp2.counts*cp.price,2)),0)
+    from (
+      select tmp.date,max(tmp.city) city,count(1) counts
+      from (
+        select c.id,c.org_id,c.shop_id,c.team_id,c.channel,c.city,c.media,c.`name`,c.mobile,c.`call`,c.field_1,c.employee_id,DATE_FORMAT(c.create_date,'%Y-%m-%d') date
+        from customer c
+        where c.org_id=1 and c.create_date between #{startDate} and #{endDate} and c.zijian = 0
+              <if test="shopId != null"> and c.shop_id = #{shopId}</if>
+              <if test="teamId != null"> and c.team_id = #{teamId}</if>
+              <if test="employeeId != null"> and c.first_employee = #{employeeId}</if>
+              <if test="city != null and city != '全国'"> and c.city = #{city}</if>
+      ) tmp
+      group by tmp.date <if test="city != null and city != '全国'"> ,tmp.city</if>
+    ) tmp2
+    join channel_price cp on tmp2.date = cp.input_date
+        <if test="city != null and city != '全国'"> and tmp2.city=cp.city</if>
+  </select>
+
+  <select id="selectCallCustomerCount" parameterType="com.crm.service.statistic.model.AchievementBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer c
+    where c.org_id=#{orgId} and c.create_date between #{startDate} and #{endDate} and c.zijian = 0 and c.`call` in(5,6)
+    <if test="shopId != null"> and c.shop_id = #{shopId}</if>
+    <if test="teamId != null"> and c.team_id = #{teamId}</if>
+    <if test="employeeId != null"> and c.first_employee = #{employeeId}</if>
+  </select>
+
+
+  <select id="selectFitCustomerCount" parameterType="com.crm.service.statistic.model.AchievementBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer c
+    where c.org_id=#{orgId} and c.create_date between #{startDate} and #{endDate} and c.zijian = 0 and c.`fit` = 1
+    <if test="shopId != null"> and c.shop_id = #{shopId}</if>
+    <if test="teamId != null"> and c.team_id = #{teamId}</if>
+    <if test="employeeId != null"> and c.first_employee = #{employeeId}</if>
+  </select>
+
+
+
+
+
+
+
+</mapper>

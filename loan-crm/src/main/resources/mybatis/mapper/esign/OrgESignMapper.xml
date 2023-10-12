@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.esign.dao.OrgESignMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.esign.model.OrgESignPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="appid" jdbcType="VARCHAR" property="appid" />
+    <result column="secret" jdbcType="VARCHAR" property="secret" />
+    <result column="auto" jdbcType="TINYINT" property="auto" />
+    <result column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="org_account_id" jdbcType="VARCHAR" property="orgAccountId" />
+    <result column="org_number" jdbcType="VARCHAR" property="orgNumber" />
+    <result column="pos_page" jdbcType="INTEGER" property="posPage" />
+    <result column="x" jdbcType="REAL" property="x" />
+    <result column="y" jdbcType="REAL" property="y" />
+    <result column="notice_url" jdbcType="VARCHAR" property="noticeUrl" />
+    <result column="redirect_url" jdbcType="VARCHAR" property="redirectUrl" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, org_id, appid, secret, `auto`, account_id, org_account_id, org_number, pos_page,
+    `x`, `y`, notice_url, redirect_url, create_by, create_date, update_by, update_date
+  </sql>
+  <select id="selectOrgESignById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from org_esign
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectOrgESignByOrgId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org_esign
+    where org_id = #{orgId}
+  </select>
+
+
+  <delete id="deleteOrgESignById" parameterType="java.lang.Long">
+    delete from org_esign
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <delete id="deleteOrgESignByOrgId" parameterType="java.lang.Long">
+    delete from org_esign
+    where org_id = #{orgId}
+  </delete>
+
+  <insert id="insertOrgESign" parameterType="com.crm.service.esign.model.OrgESignPO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    insert into org_esign
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="appid != null">
+        appid,
+      </if>
+      <if test="secret != null">
+        secret,
+      </if>
+      <if test="auto != null">
+        auto,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="orgAccountId != null">
+        org_account_id,
+      </if>
+      <if test="orgNumber != null">
+        org_number,
+      </if>
+      <if test="posPage != null">
+        pos_page,
+      </if>
+      <if test="x != null">
+        x,
+      </if>
+      <if test="y != null">
+        y,
+      </if>
+      <if test="noticeUrl != null">
+        notice_url,
+      </if>
+      <if test="redirectUrl != null">
+        redirect_url,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="appid != null">
+        #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="secret != null">
+        #{secret,jdbcType=VARCHAR},
+      </if>
+      <if test="auto != null">
+        #{auto,jdbcType=TINYINT},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgAccountId != null">
+        #{orgAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgNumber != null">
+        #{orgNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="posPage != null">
+        #{posPage,jdbcType=INTEGER},
+      </if>
+      <if test="x != null">
+        #{x,jdbcType=REAL},
+      </if>
+      <if test="y != null">
+        #{y,jdbcType=REAL},
+      </if>
+      <if test="noticeUrl != null">
+        #{noticeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="redirectUrl != null">
+        #{redirectUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateOrgESign" parameterType="com.crm.service.esign.model.OrgESignPO">
+    update org_esign
+    <set>
+      <if test="appid != null">
+        appid = #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="secret != null">
+        secret = #{secret,jdbcType=VARCHAR},
+      </if>
+      <if test="auto != null">
+        auto = #{auto,jdbcType=TINYINT},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgAccountId != null">
+        org_account_id = #{orgAccountId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgNumber != null">
+        org_number = #{orgNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="posPage != null">
+        pos_page = #{posPage,jdbcType=INTEGER},
+      </if>
+      <if test="x != null">
+        x = #{x,jdbcType=REAL},
+      </if>
+      <if test="y != null">
+        y = #{y,jdbcType=REAL},
+      </if>
+      <if test="noticeUrl != null">
+        notice_url = #{noticeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="redirectUrl != null">
+        redirect_url = #{redirectUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where org_id = #{orgId,jdbcType=BIGINT}
+  </update>
+
+
+
+</mapper>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size: 100px;">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>填写申请</title>
+    <link rel="stylesheet" href="./resource/index.css?v=1.0.8">
+    <script type="text/javascript" src="../codeConvert.js?v=1.5.5"></script>
+    <script type="text/javascript" src="./resource/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="./resource/index_07.js?v=1.4.8"></script>
+    <style>
+        .main footer{
+            width: 100%;
+            background-color: #f0f0f0;
+            padding: .35rem 0 .20rem;
+        }
+        .main footer .cooperation{
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            margin-bottom: .16rem;
+            border-top: 1px solid #696969;
+            position: relative;
+            padding-top: .50rem;
+        }
+        .main footer .cooperation .title{
+            width: 2.00rem;
+            height: .50rem;
+            line-height: .50rem;
+            text-align: center;
+            font-size: .30rem;
+            color: #696969;
+            margin: 0 auto.16rem;
+            position: absolute;
+            top: -.25rem;
+            left: 2.75rem;
+            background-color: #F0F0F0;
+        }
+        .main footer .cooperation .content{
+            width: 100%;
+        }
+        .main footer .cooperation .content img{
+            display: block;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<p class="tips"></p>
+<p class="messtips"></p>
+
+<div class="main" id="form_main" style="display: block;">
+    <header>
+        <img src="https://jiaxinde.oss-cn-shenzhen.aliyuncs.com/h5/123.jpg" alt="">
+        <script>
+            
+        </script>
+
+    </header>
+    <main>
+        <form action="##" method="post" id="myForm">
+            <input value="wx111301" name="channel" id="id" type="hidden">
+            <input value="0" name="mid" id="mid" type="hidden">
+            <input type="hidden" name="cookie" value="4C9406A6472DA6A91E1D7690D1CB5921">
+            <input type="hidden" name="plan" value="">
+            <input type="hidden" name="from_tb" value="tb_cicf_12">
+
+            <div class="count">
+                <div class="process">
+                    <div class="process-item">申请</div>
+                    <div class="process-item">审核</div>
+                    <div class="process-item">放款</div>
+                </div>
+                <div class="count-res">
+                    <div class="loan">我要借：<span class="loan-money">10</span>万元</div>
+                </div>
+
+                <div class="supplement-item loan_input">
+                    <label for="loan">借款金额</label>
+                    <input type="tel" name="loan_amount" id="loan" value="10" maxlength="2"><span style="font-size: .30rem;color: #f74e61">万元</span>
+                </div>
+
+               <!-- <div class="loan-time">
+                    <input type="hidden" name="loan_time" id="loan_time" value="24">
+                    <p>借款时间（12个月-48个月）</p>
+                    <div class="loan-time-sel">
+                        <span class="loan-time-item clickLoanTime">6个月</span>
+                        <span class="loan-time-item clickLoanTime">12个月</span>
+                        <span class="loan-time-item clickLoanTime sel">48个月</span>
+                    </div>
+                </div>
+            </div>-->
+
+            <div class="supplement-item">
+                <label for="occup">城市</label>
+                <select name="city" id="city" style="color: #bbbbbb">
+                    <option value="-1">请选择您的城市</option>
+		    <option value="1">深圳</option>
+		    <option value="2">北京</option>
+		    <option value="3">上海</option> 
+                </select>
+            </div>
+
+            <div class="supplement-item name">
+                <label for="name">您的姓名</label>
+                <input type="text" placeholder="请输入您的姓名" name="name" id="name">
+                <span class="slide">
+                  <span class="slide-block" id="male">先生</span>
+                   <span class="slide-block sliding" id="female">女士</span>
+               </span>
+               <input type="hidden" name="sex" id="sex" value="女">
+            </div>
+
+            <div class="supplement-item tel tel_ini">
+                <label for="telphone">您的手机</label>
+                <input type="tel" placeholder="请输入您的手机号码" name="telphone" id="telphone" maxlength="11">
+            </div>
+
+            <div class="supplement-item name">
+                <label for="name">验证码</label>
+                <input type="text" placeholder="请输入验证码" id="verifyCode">
+                <span id="getVerifyCode" class="slide" style="background-color:#3586e0; border-color:#3586e0; color:#ffffff; font-size: .30rem;text-align:center;">发验证码</span>
+
+            </div>
+
+            <div class="supplement-item">
+                <label for="occup">您的职业</label>
+                <select name="vocation" id="occup" style="color: #bbbbbb">
+                    <option value="-1">请选择您的职业类型</option>
+                    <option value="0">工薪族</option>
+                    <option value="1">公务员</option>
+                    <option value="2">企业主</option>
+                    <option value="3">其他</option>
+                </select>
+            </div>
+
+            <div class="supplement-item">
+                <label for="salary">月收入</label>
+                <select name="salary" id="salary" style="color: #bbbbbb">
+                    <option value="-1">每月收入</option>
+                    <option value="0">0-5000</option>
+                    <option value="1">5000-10000</option>
+                    <option value="2">10000以上</option>
+                    <option value="3">20000以上</option>
+                </select>
+            </div>
+
+            <div class="supplement-item">
+                <label>发薪方式</label>
+                <select name="payway" id="payway" style="color: #bbbbbb">
+                    <option value="-1">请选择您的发薪方式</option>
+                    <option value="0">银行转账</option>
+                    <option value="1">现金发薪</option>
+                </select>
+            </div>
+           
+            <div class="supplement-item">
+                <label for="birthday">您的年龄</label>
+                <input name="birthday" type="text" id="birthday" placeholder="您的年龄">
+            </div>
+           
+
+
+            <div class="extra-box">
+                <div class="extra-message">
+                    <p class="extra-message-title">选择附属信息，提高您的贷款成功率（可多选）</p>
+                    <div class="message-box">
+                        <!--<input type="hidden" name="have_car" id="have_car" value="N">-->
+                        <span class="message-item clickShebao" id="h_shebao">有社保</span>
+                        <input type="hidden" name="shebao" value="N">
+                        <span class="message-item clickFund" id="h_fund">有公积金</span>
+                        <input type="hidden" name="have_fund" id="have_fund" value="N">
+                        <span class="message-item clickcredit" id="h_card">有信用卡</span>
+                        <input type="hidden" name="have_credit_card" value="N">
+                        <span class="message-item clickShouxian" id="h_baoxian">有寿险保单</span>
+                        <input type="hidden" name="have_baoxian" value="N">
+                        <input type="hidden" name="have_loan" value="N">
+                        <span class="message-item clickHouse" id="h_house">有房</span>
+                        <input type="hidden" name="have_house" id="have_house" value="N">
+                        <span class="message-item clickCar" id="h_car">有车</span>
+                        <input type="hidden" name="have_car" id="h_car1" value="N">
+                    </div>
+                </div>
+            </div>
+
+
+            <button type="button" class="submit" id="subData"></button>
+
+            <input type="hidden" name="need_insurance" value="N">
+            <p class="states"><span class="agree agreed"></span>
+                点击预约借款即同意<a style="color:#4298BA;text-decoration:none" href="/privacypolicies.html">《个人信息授权及服务协议》</a><br>
+
+            </p>
+
+            <div class="oo states">
+		<font size="1">
+		【贷款额度、放款时间等以实际审批为准.贷款有风险，借款需谨慎，请根据个人能力合理贷款】
+                </font>            </div>
+        </form>
+    </main>
+    <footer style="text-align: center;background-image:linear-gradient(#ff7c2e,#ffa952);">
+        <img src="https://jiaxinde.oss-cn-shenzhen.aliyuncs.com/h5/111.png" alt="" width="90%">
+        <div style="font-size:14px;padding: 5px 10px;color: #FFFFFF;margin-top: 5px;">
+            <p>贷款有风险，借款需谨慎，请根据个人能力合理贷款</p>
+            <p>贷款额度、放款时间等以实际审批为准</p>
+            <br>
+            <p>深圳前海小象金服信息咨询有限公司</p>
+            <!-- <p>粤ICP备19147930号</p> -->
+            <br>
+            <p>深圳前海小象金服信息咨询有限公司保证严格遵守金融相关法律法规，
+            合法合规经营, 提供的借贷及借贷撮合业务未违反国家利率规定、
+            未包含国家禁止金融产品或服务等。并通过合理有效的
+            信息安全技术和管理流程,合法收集和使用用户个人信息，
+            防止泄露、损毁、丢失。</p>
+	    <p>合作放贷机构：平安银行</p>
+        </div>
+        
+    </footer>
+</div>
+
+<script>
+</script>
+</body></html>

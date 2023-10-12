@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.channel.dao.ChannelRationMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.channel.model.ChannelRationPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="channel_id" jdbcType="BIGINT" property="channelId" />
+    <result column="media" jdbcType="VARCHAR" property="media" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="day_count" jdbcType="INTEGER" property="dayCount" />
+    <result column="week_count" jdbcType="INTEGER" property="weekCount" />
+    <result column="month_count" jdbcType="INTEGER" property="monthCount" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <resultMap id="BO_BaseResultMap" type="com.crm.service.channel.model.ChannelRationBO" extends="BaseResultMap">
+    <result column="nickname" jdbcType="VARCHAR" property="channel" />
+  </resultMap>
+
+
+
+  <sql id="Base_Column_List">
+    id, org_id, channel_id, `media`, `city`, day_count, week_count, month_count, create_by,
+    create_date, update_by, update_date
+  </sql>
+  <sql id="BO_Base_Column_List">
+    <include refid="Base_Column_List"/>,`channel`
+  </sql>
+
+  
+  
+  <select id="selectChannelRationPage" parameterType="com.crm.common.PageBO" resultMap="BO_BaseResultMap">
+    select
+      cr.id, cr.org_id, cr.channel_id, cr.`media`, cr.`city`, cr.day_count, cr.week_count, cr.month_count,c.`nickname`, cr.create_by, cr.create_date, cr.update_by, cr.update_date
+    from channel_ration cr
+      left join channel c on cr.channel_id = c.id
+    <where>
+      <if test="paramObject.orgId != null"    > and cr.org_id = #{paramObject.orgId}          </if>
+      <if test="paramObject.channelId != null"> and cr.channel_id = #{paramObject.channelId} </if>
+      <if test="paramObject.media != null"    > and cr.`media` = #{paramObject.media}         </if>
+      <if test="paramObject.city != null"     > and cr.`city` = #{paramObject.city}           </if>
+    </where>
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectChannelRationPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select
+      count(1)
+    from channel_ration cr
+    <where>
+      <if test="paramObject.orgId != null"     > and cr.org_id = #{paramObject.orgId}          </if>
+      <if test="paramObject.channelId != null"> and cr.channel_id = #{paramObject.channelId} </if>
+      <if test="paramObject.media != null"     > and cr.`media` = #{paramObject.media}         </if>
+      <if test="paramObject.city != null"      > and cr.`city` = #{paramObject.city}           </if>
+    </where>
+  </select>
+
+
+  <select id="selectChannelRationPO"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from channel_ration
+    where channel_id=#{channelId} and  `media`=#{media} and `city`=#{city}
+  </select>
+
+
+  <insert id="insertChannelRation" parameterType="com.crm.service.channel.model.ChannelRationPO" useGeneratedKeys="true" keyProperty="id">
+    insert into channel_ration
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="channelId != null">
+        channel_id,
+      </if>
+      <if test="media != null">
+        media,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="dayCount != null">
+        day_count,
+      </if>
+      <if test="weekCount != null">
+        week_count,
+      </if>
+      <if test="monthCount != null">
+        month_count,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="channelId != null">
+        #{channelId,jdbcType=BIGINT},
+      </if>
+      <if test="media != null">
+        #{media,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="dayCount != null">
+        #{dayCount,jdbcType=INTEGER},
+      </if>
+      <if test="weekCount != null">
+        #{weekCount,jdbcType=INTEGER},
+      </if>
+      <if test="monthCount != null">
+        #{monthCount,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateChannelRationPO" parameterType="com.crm.service.channel.model.ChannelRationPO">
+    update channel_ration
+    <set>
+      <if test="channelId != null">
+        channel_id = #{channelId,jdbcType=BIGINT},
+      </if>
+      <if test="media != null">
+        media = #{media,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="dayCount != null">
+        day_count = #{dayCount,jdbcType=INTEGER},
+      </if>
+      <if test="weekCount != null">
+        week_count = #{weekCount,jdbcType=INTEGER},
+      </if>
+      <if test="monthCount != null">
+        month_count = #{monthCount,jdbcType=INTEGER},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

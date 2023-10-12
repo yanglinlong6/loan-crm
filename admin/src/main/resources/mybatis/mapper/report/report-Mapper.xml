@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.admin.service.report.dao.ReportDao">
+   
+
+    <select id="selectChannelReport" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT channel,city,SUM(v1) v1,SUM(v2) v2,SUM(v3) v3,SUM(v4) v4,SUM(v5) v5,
+        		<trim>
+        			<if test="dimension == 1"> date(create_date) time </if>
+        			<if test="dimension == 2"> week(create_date) time </if>
+        			<if test="dimension == 3"> MONTH(create_date) time </if>
+        		</trim> 
+        	
+        FROM loan_cps.media_channel_cust_apt 
+		<where>
+			<if test="channel != null "> and channel LIKE concat('%' ,#{channel},'%') </if>
+			<if test="city != null "> and city = #{city}</if>
+			<if test="start != null and end != null"> and create_date BETWEEN #{start} and #{end} </if>
+		</where>
+		GROUP BY <trim>
+        			<if test="dimension == 1"> date(create_date) </if>
+        			<if test="dimension == 2"> week(create_date) </if>
+        			<if test="dimension == 3"> MONTH(create_date) </if>
+        		 </trim>
+    </select>
+
+
+</mapper>

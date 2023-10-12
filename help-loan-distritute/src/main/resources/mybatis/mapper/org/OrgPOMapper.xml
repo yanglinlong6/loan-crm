@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.help.loan.distribute.service.org.dao.OrgDao">
+    <resultMap id="Org_BaseResultMap" type="com.help.loan.distribute.service.org.model.OrgPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="org_id" jdbcType="BIGINT" property="orgId"/>
+        <result column="org_name" jdbcType="VARCHAR" property="orgName"/>
+        <result column="org_nickname" jdbcType="VARCHAR" property="orgNickname"/>
+        <result column="linkman" jdbcType="VARCHAR" property="linkman"/>
+        <result column="linkman_mobile" jdbcType="VARCHAR" property="linkmanMobile"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="state" property="state"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+    </resultMap>
+    <sql id="Org_Base_Column_List">
+        id, org_id, org_name, org_nickname, linkman, linkman_mobile, address,state,create_by,create_date, update_by,update_date
+    </sql>
+
+    <select id="selectAllOrg" resultMap="Org_BaseResultMap">
+        select
+        <include refid="Org_Base_Column_List"/>
+        from org
+        where `state` = 1
+    </select>
+
+    <select id="selectOrg" parameterType="java.lang.Long" resultMap="Org_BaseResultMap">
+        select
+        <include refid="Org_Base_Column_List"/>
+        from org
+        where org_id = #{orgId,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insertOrg" parameterType="com.help.loan.distribute.service.org.model.OrgPO">
+        insert into org
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgId != null">
+                org_id,
+            </if>
+            <if test="orgName != null">
+                org_name,
+            </if>
+            <if test="orgNickname != null">
+                org_nickname,
+            </if>
+            <if test="linkman != null">
+                linkman,
+            </if>
+            <if test="linkmanMobile != null">
+                linkman_mobile,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgId != null">
+                #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="orgName != null">
+                #{orgName,jdbcType=VARCHAR},
+            </if>
+            <if test="orgNickname != null">
+                #{orgNickname,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null">
+                #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanMobile != null">
+                #{linkmanMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateOrg" parameterType="com.help.loan.distribute.service.org.model.OrgPO">
+        update org
+        <set>
+            <if test="orgName != null">
+                org_name = #{orgName,jdbcType=VARCHAR},
+            </if>
+            <if test="orgNickname != null">
+                org_nickname = #{orgNickname,jdbcType=VARCHAR},
+            </if>
+            <if test="linkman != null">
+                linkman = #{linkman,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanMobile != null">
+                linkman_mobile = #{linkmanMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where org_id = #{orgId,jdbcType=BIGINT}
+    </update>
+
+    <resultMap id="OrgAptitudePO_BaseResultMap" type="com.help.loan.distribute.service.org.model.OrgAptitudePO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="org_id" jdbcType="BIGINT" property="orgId"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="week" jdbcType="VARCHAR" property="week"/>
+        <result column="limit_time" jdbcType="VARCHAR" property="limitTime"/>
+        <result column="limit_count" jdbcType="INTEGER" property="limitCount"/>
+        <result column="single_income" jdbcType="DECIMAL" property="singleIncome"/>
+        <result column="wechat" jdbcType="VARCHAR" property="wechat"/>
+        <result column="channel" property="channel" />
+        <result column="api" jdbcType="VARCHAR" property="api"/>
+        <result column="weight" property="weight"/>
+        <result column="amount_rate" property="amountRate"/>
+        <result column="loan_amount" property="loanAmount"/>
+        <result column="repeat_rate" property="repeatRate"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="type" property="type" />
+    </resultMap>
+    <sql id="OrgAptitudePO_Base_Column_List">
+        id, org_id, province, city,week, limit_time, limit_count, single_income,wechat,api,
+        weight,channel,amount_rate,loan_amount,repeat_rate,create_by, create_date,
+        update_by, update_date,`type`
+    </sql>
+
+    <select id="selectOrgAptitude" parameterType="java.lang.Long" resultMap="OrgAptitudePO_BaseResultMap">
+        select
+        <include refid="OrgAptitudePO_Base_Column_List"/>
+        from org_aptitude
+        where org_id = #{orgId,jdbcType=BIGINT} and limit_count > 0
+    </select>
+
+    <select id="selectOrgAptitudeByType" parameterType="java.lang.String"  resultMap="OrgAptitudePO_BaseResultMap">
+        select
+        <include refid="OrgAptitudePO_Base_Column_List"/>
+        from org_aptitude
+        where limit_count > 0 and `type` in(${type})
+    </select>
+
+
+    <insert id="insertOrgAptitude" parameterType="com.help.loan.distribute.service.org.model.OrgAptitudePO">
+        insert into org_aptitude
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgId != null">
+                org_id,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="limitTime != null">
+                limit_time,
+            </if>
+            <if test="limitCount != null">
+                limit_count,
+            </if>
+            <if test="singleIncome != null">
+                single_income,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgId != null">
+                #{orgId,jdbcType=BIGINT},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="limitTime != null">
+                #{limitTime,jdbcType=VARCHAR},
+            </if>
+            <if test="limitCount != null">
+                #{limitCount,jdbcType=INTEGER},
+            </if>
+            <if test="singleIncome != null">
+                #{singleIncome,jdbcType=DECIMAL},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateOrgAptitude" parameterType="com.help.loan.distribute.service.org.model.OrgAptitudePO">
+        update org_aptitude
+        <set>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="limitTime != null">
+                limit_time = #{limitTime,jdbcType=VARCHAR},
+            </if>
+            <if test="limitCount != null">
+                limit_count = #{limitCount,jdbcType=INTEGER},
+            </if>
+            <if test="singleIncome != null">
+                single_income = #{singleIncome,jdbcType=DECIMAL},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where org_id = #{orgId,jdbcType=BIGINT}
+    </update>
+
+    <select id="getOrgCityList" resultType="java.lang.String">
+        select  oapt.city
+        from org org
+            left join org_aptitude oapt on org.org_id = oapt.org_id
+        where org.state=1 and oapt.org_id not in(${excludeOrgIds})
+                and  oapt.limit_count >0
+                and oapt.`week` like concat('%',#{week},'%')
+        GROUP BY oapt.city
+    </select>
+
+    <select id="selectTodayDistributeSuccessCount" resultType="java.lang.Integer">
+        select count(1)
+        from org_dispatche_rec
+        where org_id=#{orgId} and dispatch_status=1 and create_date BETWEEN #{startDate} and #{endDate}
+    </select>
+
+    <select id="selectTodayDistributeSuccessCount2" resultType="java.lang.Integer">
+        select count(1)
+        from org_dispatche_rec rec
+        where rec.org_id=#{orgId} and rec.dispatch_status=1 and rec.create_date between #{startDate} and #{endDate}
+        and EXISTS(
+        select 1
+        from user_aptitude aptitude
+        where rec.customer_id = aptitude.id
+            <if test="city != null">
+                and aptitude.city = #{city}
+            </if>
+        )
+    </select>
+
+
+    <select id="selectTodayDistributeRepeatCount" resultType="java.lang.Integer">
+        select count(1)
+        from user_aptitude uapt
+        where  uapt.update_date between #{startDate} and #{endDate} and uapt.`level`=5 and uapt.update_by = #{orgId} ;
+    </select>
+
+
+
+
+    <select id="selectTodayHouseAndPublicFundCountInDistributeSuccess" resultType="java.lang.Integer">
+        select count(1)
+        from user_aptitude apt
+        where apt.create_date BETWEEN #{startDate} and #{endDate} and apt.city = #{city} and apt.house in(1,2) and apt.public_fund LIKE '有，%'
+	        and EXISTS(select 1 from org_dispatche_rec orec where apt.id = orec.customer_id and orec.dispatch_status=1 and orec.org_id=#{orgId} )
+    </select>
+
+    <select id="selectOrgDistributeCount"
+            resultType="com.help.loan.distribute.service.org.model.OrgDistributeStatisticsBO">
+        select
+            temp.*,
+            (select limit_count from org_aptitude  where temp.orgId = org_id and temp.city=city) limitCount,
+            (select loan_amount from org_aptitude  where temp.orgId = org_id and temp.city=city) loanAmount
+        from (
+            select rec.org_id orgId,max(org.org_name) orgName,user_a.city city,count(1) counts
+            from org_dispatche_rec rec
+                JOIN user_aptitude  user_a on rec.customer_id = user_a.id
+                JOIN org org on rec.org_id = org.org_id
+            where rec.create_date BETWEEN #{startDate} and #{endDate} and rec.dispatch_status = 1
+            group by rec.org_id,user_a.city
+            order by rec.org_id
+        ) temp
+
+    </select>
+
+    <select id="selectOrgDistributeCountSummation" resultType="java.util.Map">
+        <!--
+        select
+            temp2.org_id,
+            temp2.机构名称,
+            temp2.机构城市,
+            temp2.限制时间,
+            temp2.每日限量,
+            temp2.分发成功数,
+            temp2.分发成功数*temp2.单价 预期收益,
+            temp2.被除重数,
+            temp2.其他失败数,
+            temp2.高分客户数量,
+            (temp2.分发成功数+temp2.被除重数+temp2.其他失败数)  分发总数,
+            CONCAT(ROUND(temp2.分发成功数/(temp2.分发成功数+temp2.被除重数+temp2.其他失败数)*100,2),'%')  分发成功占比,
+            CONCAT(ROUND(temp2.被除重数/(temp2.分发成功数+temp2.被除重数+temp2.其他失败数)*100,2),'%')  	被除重占比,
+            CONCAT(ROUND(temp2.其他失败数/(temp2.分发成功数+temp2.被除重数+temp2.其他失败数)*100,2),'%')  其他失败占比,
+            CONCAT(ROUND(temp2.高分客户数量/temp2.分发成功数*100,2),'%') 高分客户数量占比
+        from (
+            SELECT
+                org.org_id,
+                org.org_name 机构名称,
+                org.state,
+                CASE
+                    WHEN orgApt.`type` = 1 THEN '房抵'
+                    WHEN orgApt.`type` = 2 THEN '车抵'
+                    WHEN orgApt.`type` = 3 THEN '信用逾期'
+                    ELSE orgApt.city
+                END as 机构城市,
+                concat(orgApt.`week`,':',orgApt.limit_time) 限制时间,
+                orgApt.limit_count 每日限量,
+                orgApt.single_income 单价,
+                CASE
+                    WHEN orgApt.`type` = 1 or orgApt.`type` = 2 or orgApt.`type` = 3 THEN (select count(1) from org_dispatche_rec rec2  where rec2.create_date BETWEEN #{startDate} and #{endDate} and dispatch_status=1 and rec2.org_id=org.org_id)
+                    ELSE (select count(1) from org_dispatche_rec rec2 join user_aptitude  aptitude on rec2.customer_id =aptitude.id  where rec2.org_id=org.org_id and aptitude.city=orgApt.city and rec2.create_date BETWEEN #{startDate} and #{endDate} and rec2.dispatch_status=1)
+                END 分发成功数,
+                CASE
+                    WHEN orgApt.`type` = 1 or orgApt.`type` = 2 or orgApt.`type` = 3 THEN (select count(1) from org_dispatche_rec rec2  where rec2.create_date BETWEEN #{startDate} and #{endDate} and dispatch_status=0 and rec2.org_id=org.org_id)
+                    ELSE (select count(1) from org_dispatche_rec rec2 join user_aptitude  aptitude on rec2.customer_id =aptitude.id  where rec2.org_id=org.org_id and aptitude.city=orgApt.city and rec2.create_date BETWEEN #{startDate} and #{endDate} and rec2.dispatch_status=0)
+                END 被除重数,
+                CASE
+                    WHEN orgApt.`type` = 1 or orgApt.`type` = 2 or orgApt.`type` = 3 THEN (select count(1) from org_dispatche_rec rec2  where rec2.create_date BETWEEN #{startDate} and #{endDate} and dispatch_status=2 and rec2.org_id=org.org_id)
+                    ELSE (select count(1) from org_dispatche_rec rec2 join user_aptitude  aptitude on rec2.customer_id =aptitude.id  where rec2.org_id=org.org_id and aptitude.city=orgApt.city and rec2.create_date BETWEEN #{startDate} and #{endDate} and rec2.dispatch_status=2)
+                END 其他失败数,
+                CASE
+                    WHEN orgApt.`type` = 1 or orgApt.`type` = 2 or orgApt.`type` = 3 or orgApt.`type` = 3 THEN 0
+                    ELSE (select count(1) from org_dispatche_rec rec2 join user_aptitude  aptitude on rec2.customer_id =aptitude.id  where rec2.org_id=org.org_id and aptitude.city=orgApt.city and aptitude.weight>=0.093 and rec2.create_date BETWEEN #{startDate} and #{endDate} and rec2.dispatch_status=1)
+                end 高分客户数量
+            FROM org org
+                JOIN org_aptitude orgApt on org.org_id = orgApt.org_id
+            where org.org_id not in(11)
+            order by org.org_id asc
+        ) temp2
+-->
+        select
+        temp2.org_id,
+        temp2.机构名称,
+        temp2.机构城市,
+        temp2.`type`,
+        temp2.限制时间,
+        temp2.每日限量,
+        temp2.推送成功数 分发成功数,
+        temp2.推送成功数*temp2.单价 预期收益,
+        temp2.被除重数,
+        temp2.其他失败数,
+        temp2.高分客户数量,
+        (temp2.推送成功数+temp2.被除重数+temp2.其他失败数)  分发总数,
+        CONCAT(ROUND(temp2.推送成功数/(temp2.推送成功数+temp2.被除重数+temp2.其他失败数)*100,2),'%')   分发成功占比,
+        CONCAT(ROUND(temp2.被除重数/(temp2.推送成功数+temp2.被除重数+temp2.其他失败数)*100,2),'%')  	被除重占比,
+        CONCAT(ROUND(temp2.其他失败数/(temp2.推送成功数+temp2.被除重数+temp2.其他失败数)*100,2),'%')   其他失败占比,
+        CONCAT(ROUND(temp2.高分客户数量/temp2.推送成功数*100,2),'%') 高分客户数量占比
+        from (
+            SELECT
+            org.org_id,
+            org.org_name 机构名称,
+            org.state,
+            orgApt.city 机构城市,
+            orgApt.`type`,
+            concat(orgApt.`week`,':',orgApt.limit_time) 限制时间,
+            orgApt.limit_count 每日限量,
+            orgApt.single_income 单价,
+            (
+                select count(1)
+                from org_dispatche_rec rec2
+                join user_aptitude  aptitude on rec2.customer_id =aptitude.id
+                where rec2.org_id=org.org_id and aptitude.city=orgApt.city and rec2.create_date BETWEEN #{startDate} and #{endDate} and rec2.dispatch_status=1 and aptitude.`type` = orgApt.`type`
+            ) 推送成功数,
+            (
+                select count(1)
+                from org_dispatche_rec rec2
+                join user_aptitude  aptitude on rec2.customer_id =aptitude.id
+                where rec2.org_id=org.org_id and aptitude.city=orgApt.city and rec2.create_date BETWEEN #{startDate} and #{endDate} and rec2.dispatch_status=0 and aptitude.`type` = orgApt.`type`
+            )被除重数,
+            (
+                select count(1)
+                from org_dispatche_rec rec2
+                join user_aptitude  aptitude on rec2.customer_id =aptitude.id
+                where rec2.org_id=org.org_id and aptitude.city=orgApt.city and rec2.create_date BETWEEN #{startDate} and #{endDate} and rec2.dispatch_status=2 and aptitude.`type` = orgApt.`type`
+            ) 其他失败数,
+            (
+            select count(1)
+                from org_dispatche_rec rec2
+                join user_aptitude  aptitude on rec2.customer_id =aptitude.id
+                where rec2.org_id=org.org_id and aptitude.city=orgApt.city and aptitude.weight>=0.093 and rec2.create_date BETWEEN #{startDate} and #{endDate} and rec2.dispatch_status=1 and aptitude.`type` = orgApt.`type`
+            ) 高分客户数量
+            FROM org org
+            LEFT JOIN org_aptitude orgApt on org.org_id = orgApt.org_id
+                where org.`state` = 1 and orgApt.limit_count > 0
+            order by org.org_id asc
+        ) temp2
+    </select>
+    
+    <select id="selectDistributeSuccessNotNameCounts" resultType="java.lang.Integer" >
+        select count(*)
+        from (
+        select aptitude.id
+        from org_dispatche_rec rec
+            join user_aptitude aptitude on rec.customer_id = aptitude.id
+        where rec.create_date BETWEEN #{startDate} and #{endDate} and rec.dispatch_status =1 and rec.org_id =#{orgId} and (aptitude.`name` ='' or aptitude.`name` is NULL)
+        group by aptitude.mobile
+        )tmp
+    </select>
+    
+    <select id="selectChannelQualityForAverage" resultType="java.util.Map">
+        select
+            tmp.city 城市,
+            tmp.城市获客数量 当日获客数量,
+            tmp.一般客户,
+            tmp.良好客户,
+            tmp.优秀客户,
+            tmp.重要客户,
+            CONCAT(ROUND(tmp.一般客户/tmp.城市获客数量*100,2),'%')	一般占比,
+            CONCAT(ROUND(tmp.良好客户/tmp.城市获客数量*100,2),'%')	良好占比,
+            CONCAT(ROUND(tmp.优秀客户/tmp.城市获客数量*100,2),'%')	优秀占比,
+            CONCAT(ROUND(tmp.重要客户/tmp.城市获客数量*100,2),'%')	重要占比
+        from (
+            select
+                uapt.city,count(1) 城市获客数量,
+                (select count(1) from user_aptitude uapt2 where uapt2.create_date BETWEEN #{startDate} and #{endDate} and uapt2.city = uapt.city and uapt2.weight >= 0 and uapt2.weight <![CDATA[ <= ]]> 0.05 ) 一般客户,
+                (select count(1) from user_aptitude uapt2 where uapt2.create_date BETWEEN #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.weight >0.05 and uapt2.weight <![CDATA[ < ]]> 0.093) 良好客户,
+                (select count(1) from user_aptitude uapt2 where uapt2.create_date BETWEEN #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.weight BETWEEN 0.093 and 0.14) 优秀客户,
+                (select count(1) from user_aptitude uapt2 where uapt2.create_date BETWEEN #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.weight >= 0.14) 重要客户
+            from user_aptitude uapt
+            where uapt.create_date BETWEEN #{startDate} and #{endDate} and uapt.city in(${mainCityList})
+            group by uapt.city
+        ) tmp;
+    </select>
+    
+    <select id="selectChannelQuality" resultType="java.util.Map">
+        select
+	        tmp.*,
+	        CONCAT(ROUND(tmp.高分数量/tmp.当日获客数量*100,2),'%')	高分客户占比
+            from (
+                select
+                    uapt.city 城市,
+                    uapt.channel 渠道,
+                    count(1) 当日获客数量,
+                    (select count(1) from user_aptitude uapt2 where uapt2.create_date BETWEEN #{startDate} and #{endDate} and uapt2.channel !='' and uapt2.weight >=0.093 and uapt2.city = uapt.city and uapt2.channel=uapt.channel ) 高分数量,
+                    (select count(1) from user_aptitude uapt2 where uapt2.create_date BETWEEN #{startDate} and #{endDate} and uapt2.city = uapt.city and uapt2.channel=uapt.channel and uapt2.`level`=7 ) 连接失败数量
+                from user_aptitude uapt
+                where uapt.create_date BETWEEN #{startDate} and #{endDate}  and uapt.channel !=''
+                group by uapt.city,uapt.channel
+            ) tmp
+            order by tmp.`城市`,tmp.高分数量 desc
+    </select>
+
+
+    <select id="selectonlineLenderCountSummation" resultType="java.util.Map">
+        select max(lender.`name`) lenderName,count(temp.lender_id) counts
+        from (
+            select rec.user_id,rec.lender_id
+                from user_apply_record rec
+                where rec.create_date BETWEEN #{startDate} and #{endDate}
+                UNION
+                select cps_rec.user_id,cps_rec.lender_id
+                from loan_cps.user_apply_record cps_rec
+                where  cps_rec.create_date BETWEEN  #{startDate} and #{endDate}
+        ) temp
+        join lender lender on temp.lender_id = lender.lender_id
+        group by temp.lender_id
+        UNION
+        select max('合计') lenderName,count(temp.lender_id) counts
+        from (
+                select rec.user_id,rec.lender_id
+                from user_apply_record rec
+                where rec.create_date BETWEEN #{startDate} and #{endDate}
+                UNION
+                select cps_rec.user_id,cps_rec.lender_id
+                from loan_cps.user_apply_record cps_rec
+                where  cps_rec.create_date BETWEEN #{startDate} and #{endDate}
+        ) temp
+    </select>
+
+
+    <resultMap id="aptitude_map2" type="com.help.loan.distribute.service.user.model.UserAptitudePO">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="mobile" property="mobile"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="loan_amount" property="loanAmount"/>
+        <result column="credit_card" property="creditCard"/>
+        <result column="zhima" property="zhima"/>
+        <result column="zhima_score" property="zhimaScore"/>
+        <result column="company" property="company"/>
+        <result column="public_fund" property="publicFund"/>
+        <result column="car" property="car"/>
+        <result column="house" property="house"/>
+        <result column="insurance" property="insurance"/>
+        <result column="getway_income" property="getwayIncome"/>
+        <result column="level" property="level"/>
+        <result column="occupation" property="occupation"/>
+        <result column="house_state" property="houseState"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_date" property="updateDate"/>
+    </resultMap>
+
+    <select id="selectOrgDistributeSuccessUser"  resultMap="aptitude_map2" >
+        select aptitude.*
+        from user_aptitude  aptitude
+        where aptitude.id in(
+            select rec.customer_id
+            from org_dispatche_rec rec
+            where rec.org_id in(${orgIds}) and rec.dispatch_status=1 and rec.create_date BETWEEN #{startDate} and #{endDate} and rec.dispatch_status=1
+        )
+    </select>
+
+
+
+</mapper>

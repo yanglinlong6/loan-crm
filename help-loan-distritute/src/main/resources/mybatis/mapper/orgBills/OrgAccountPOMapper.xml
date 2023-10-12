@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.help.loan.distribute.service.orgOffer.dao.OrgAccountDao">
+  <resultMap id="BaseResultMap" type="com.help.loan.distribute.service.orgOffer.model.OrgAccountPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="org_nickname" jdbcType="VARCHAR" property="orgNickname" />
+    <result column="init_amount" jdbcType="DECIMAL" property="initAmount" />
+    <result column="remaining_amount" jdbcType="DECIMAL" property="remainingAmount" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, org_id, org_nickname, init_amount, remaining_amount, email, mobile, create_date, 
+    update_date
+  </sql>
+  <select id="selectByOrgId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from org_account
+    where org_id = #{orgId}
+  </select>
+
+  <update id="updateByOrgId" parameterType="com.help.loan.distribute.service.orgOffer.model.OrgAccountPO">
+    update org_account
+    <set>
+      <if test="orgNickname != null">
+        org_nickname = #{orgNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="remainingAmount != null">
+        remaining_amount = #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where org_id = #{orgId,jdbcType=BIGINT}
+  </update>
+
+  <insert id="insertOrgAccount" parameterType="com.help.loan.distribute.service.orgOffer.model.OrgAccountPO">
+    insert into org_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="orgNickname != null">
+        org_nickname,
+      </if>
+      <if test="initAmount != null">
+        init_amount,
+      </if>
+      <if test="remainingAmount != null">
+        remaining_amount,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="orgNickname != null">
+        #{orgNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="initAmount != null">
+        #{initAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="remainingAmount != null">
+        #{remainingAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+</mapper>

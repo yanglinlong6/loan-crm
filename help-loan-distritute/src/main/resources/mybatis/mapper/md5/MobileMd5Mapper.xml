@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+        namespace="com.help.loan.distribute.service.md5.dao.MobileMd5Dao">
+
+    <resultMap id="mobile_md5_map" type="com.help.loan.distribute.service.md5.model.MobileMd5PO">
+        <result column="id" property="id"/>
+        <result column="city" property="city"/>
+        <result column="md5" property="md5"/>
+    </resultMap>
+
+    <select id="selectByCityAndMd5" resultMap="mobile_md5_map" parameterType="com.help.loan.distribute.service.md5.model.MobileMd5PO">
+        SELECT *
+        FROM city_mobile_md5
+        WHERE md5=#{md5} and city=#{city}
+            <if test="orgName != null">
+                and org_name = #{orgName}
+            </if>
+        limit 1
+    </select>
+
+
+    <insert id="insertMobileMd5" parameterType="com.help.loan.distribute.service.md5.model.MobileMd5PO">
+        insert into city_mobile_md5(city,md5,org_name)
+        values
+        (#{city},#{md5},#{orgName});
+    </insert>
+
+
+
+
+    
+
+</mapper>

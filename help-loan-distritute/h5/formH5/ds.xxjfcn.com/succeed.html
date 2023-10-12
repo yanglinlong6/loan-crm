@@ -1,0 +1,170 @@
+<html data-blockbyte-bs-uid="82100">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=6">
+    <meta http-equiv="X-UA-Compatible" content="IE=7">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta name="HandheldFriendly" content="true">
+    <title>提交成功</title>
+    <script src="view/index/js/jquery-1.8.2.min.js"></script>
+    <script src="view/index/js/ProvinceAndCities.js"></script>
+    <script type="text/javascript" src="view/index/layer/layer.js"></script>
+    <link rel="stylesheet" href="view/index/layer/skin/layer.css" id="layui_layer_skinlayercss" style="">
+    <style class="blockbyte-bs-style" data-name="content">
+    body>div#blockbyte-bs-indicator>div {
+        opacity: 0;
+        pointer-events: none
+    }
+
+    body>iframe#blockbyte-bs-sidebar.blockbyte-bs-visible,
+    body>iframe#blockbyte-bs-overlay.blockbyte-bs-visible {
+        opacity: 1;
+        pointer-events: auto
+    }
+
+    body.blockbyte-bs-noscroll {
+        overflow: hidden !important
+    }
+
+    body>div#blockbyte-bs-indicator>div {
+        position: absolute;
+        transform: translate3d(-40px, 0, 0);
+        top: 0;
+        left: 0;
+        width: 40px !important;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 0 10px 10px 0;
+        transition: opacity 0.3s, transform 0.3s;
+        z-index: 2
+    }
+
+    body>div#blockbyte-bs-indicator>div>span {
+        -webkit-mask: no-repeat center/32px;
+        -webkit-mask-image: url(chrome-extension://jdbnofccmhefkmjbkkdkfiicjkgofkdh/img/icon-bookmark.svg);
+        background-color: #ffffff;
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%
+    }
+
+    body>div#blockbyte-bs-indicator[data-pos='right'] {
+        left: auto;
+        right: 0
+    }
+
+    body>div#blockbyte-bs-indicator[data-pos='right']>div {
+        transform: translate3d(40px, 0, 0);
+        left: auto;
+        right: 0;
+        border-radius: 10px 0 0 10px
+    }
+
+    body>div#blockbyte-bs-indicator.blockbyte-bs-fullHeight>div {
+        border-radius: 0
+    }
+
+    body>div#blockbyte-bs-indicator.blockbyte-bs-hover>div {
+        transform: translate3d(0, 0, 0);
+        opacity: 1
+    }
+
+    body>div#blockbyte-bs-indicator[data-pos='left'].blockbyte-bs-has-lsb {
+        height: 100% !important;
+        top: 0 !important
+    }
+
+    body>div#blockbyte-bs-indicator[data-pos='left'].blockbyte-bs-has-lsb>div {
+        background: transparent
+    }
+
+    body>div#blockbyte-bs-indicator[data-pos='left'].blockbyte-bs-has-lsb>div>span {
+        -webkit-mask-position-y: 20px
+    }
+
+    body>iframe#blockbyte-bs-sidebar {
+        width: 350px;
+        max-width: none;
+        height: 0;
+        z-index: 2147483646;
+        background-color: rgba(0, 0, 0, 0.6) !important;
+        border: none;
+        display: block !important;
+        transform: translate3d(-350px, 0, 0);
+        will-change: width, height, opacity, transform;
+        transition: width 0s 0.3s, height 0s 0.3s, opacity 0.3s, transform 0.3s
+    }
+
+    body>iframe#blockbyte-bs-sidebar[data-pos='right'] {
+        left: auto;
+        right: 0;
+        transform: translate3d(350px, 0, 0)
+    }
+
+    body>iframe#blockbyte-bs-sidebar.blockbyte-bs-visible {
+        width: calc(100% + 350px);
+        height: 100%;
+        transform: translate3d(0, 0, 0);
+        transition: opacity 0.3s, transform 0.3s
+    }
+
+    body>iframe#blockbyte-bs-sidebar.blockbyte-bs-hideMask {
+        background: none !important
+    }
+
+    body>iframe#blockbyte-bs-sidebar.blockbyte-bs-hideMask:not(.blockbyte-bs-hover) {
+        width: calc(350px + 50px)
+    }
+
+    body>iframe#blockbyte-bs-overlay {
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        z-index: 2147483647;
+        border: none;
+        background: rgba(0, 0, 0, 0.5) !important;
+        transition: opacity 0.3s
+    }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrap">
+        <img src="view/mobile/page/img/tjwc.jpg">
+    </div>
+    <style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        text-decoration: none;
+        box-sizing: border-box;
+        color: #333;
+        border-radius: 2px;
+        border: none
+    }
+
+    .page-wrap {
+        width: 100%;
+        display: table;
+        margin: auto;
+        text-align: center
+    }
+
+    img {
+        max-width: 100%
+    }
+    </style>
+    <div id="blockbyte-bs-indicator" class="blockbyte-bs-fullHeight" style="width: 20px; height: 100%; top: 0%;"></div>
+</body>
+
+</html>

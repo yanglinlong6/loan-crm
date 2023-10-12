@@ -1,0 +1,334 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.loan</groupId>
+  <artifactId>loan-cps</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>loan-cps</name>
+  <url>http://maven.apache.org</url>
+
+  <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.4.RELEASE</version>
+	</parent>
+
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+    </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.4.3</version>
+		</dependency>
+	<dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+
+        </dependency>
+
+        <!-- MONGODB DRIVER-->
+
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+		  <dependency>
+			  <groupId>com.alibaba</groupId>
+			  <artifactId>fastjson</artifactId>
+			  <version>1.2.58</version>
+		  </dependency>
+        
+        <dependency>
+     		 <groupId>junit</groupId>
+     		 <artifactId>junit</artifactId>
+     		 <version>3.8.1</version>
+      		<scope>test</scope>
+    	</dependency>
+
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+        
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        
+        <dependency>  
+           <groupId>org.springframework.boot</groupId>  
+           <artifactId>spring-boot-starter-websocket</artifactId>  
+       </dependency>
+
+        <dependency>
+   			 <groupId>org.mybatis.spring.boot</groupId>
+   			 <artifactId>mybatis-spring-boot-starter</artifactId>
+   			 <version>1.1.1</version>
+  		</dependency>
+  		
+  		<dependency>
+   			 <groupId>org.springframework.boot</groupId>
+    		 <artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+  		
+  		<dependency>
+   			 <groupId>mysql</groupId>
+   			 <artifactId>mysql-connector-java</artifactId>
+   			 <version>5.1.40</version>
+  		</dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
+        </dependency>
+
+        <!--图片合成工具-->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.8</version>
+        </dependency>
+         <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.22</version>
+        </dependency>
+        <dependency>
+            <groupId>org.msgpack</groupId>
+            <artifactId>msgpack</artifactId>
+            <version>0.6.12</version>
+        </dependency>
+        <dependency>
+  		<groupId>com.huaban</groupId>
+  			<artifactId>jieba-analysis</artifactId>
+ 			 <version>1.0.2</version>
+		</dependency>
+		<dependency>
+   		 <groupId>com.aliyun</groupId>
+    	 <artifactId>aliyun-java-sdk-core</artifactId>
+    	 <version>4.0.3</version>
+		</dependency>
+  </dependencies>
+  <build>
+		<finalName>loan-cps-${version}</finalName>
+
+		<sourceDirectory>src/main/java</sourceDirectory>
+
+		<resources>
+
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>*.xml</include>
+					<include>*.properties</include>
+				</includes>
+			</resource>
+
+			<!-- 配置文件外置的资源(存放到config目录，也是classpath路径，下面会配置) -->
+
+			<resource>
+				<directory>src/main/etc</directory>
+				<includes>
+					<include>*.xml</include>
+					<include>*.properties</include>
+				</includes>
+				<targetPath>/etc</targetPath>
+			</resource>
+			
+			<resource>
+				<directory>src/main/java/com/loan/cps/dao</directory>
+				<includes>
+					<include>*.xml</include>
+					<include>*.properties</include>
+				</includes>
+				<targetPath>/com/loan/cps/dao</targetPath>
+			</resource>
+
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<layout>ZIP</layout>
+					<!--去除在生产环境中不变的依赖 -->
+					<excludeGroupIds>
+						cglib,
+						ch.qos.logback,
+						com.alibaba,
+						com.alipay,
+						com.fasterxml,
+						com.fasterxml.jackson.core,
+						commons-beanutils,
+						commons-codec,
+						commons-collections,
+						commons-httpclient,
+						commons-logging,
+						dom4j,
+						javax.validation,
+						junit,
+						mysql,
+						org.apache.ant,
+						org.apache.commons,
+						org.apache.httpcomponents,
+						org.apache.tomcat,
+						org.apache.tomcat.embed,
+						org.hamcrest,
+						org.hibernate,
+						org.jboss.logging,
+						org.lucee,
+						org.mongodb,
+						org.mybatis,
+						org.ow2.asm,
+						org.slf4j,
+						org.springframework,
+						org.springframework.boot,
+						org.yaml,
+						redis.clients,
+						xml-apis,
+						org.freemarker,log4j,
+						com.sun.mail,
+						javax.servlet,
+						commons-fileupload,
+						commons-configuration,
+						org.apache.poi,
+						commons-lang,
+						org.apache.axis,
+						axis,
+						org.springframework.data,
+						javax.activation,
+						org.apache.commons,
+						org.springframework.hateoas,
+						org.springframework.plugin,
+						org.hibernate.validator,
+						org.apache.logging.log4j,
+						org.atteo,
+						stax,
+						org.apache.xmlbeans,
+						com.fasterxml.jackson.module,
+						com.fasterxml.jackson.module,
+						net.java
+					</excludeGroupIds>
+					 
+		          <!-- 
+		          <jvmArguments>
+		            -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
+		          </jvmArguments> 
+		          -->
+       
+				</configuration>
+			</plugin>
+
+			<!-- 设置编译版本 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- 打包jar文件时，配置manifest文件，加入lib包的jar依赖 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<!-- 清单文件，设置入口类和classpath -->
+						<manifest>
+							<mainClass>com.loan.cps.ReceiveApplication</mainClass>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<!-- 拷贝依赖的jar包到lib目录 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>
+								${project.build.directory}/lib
+							</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- 解决资源文件的编码问题 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+</project>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.cache.dao.CacheConfigMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.cache.model.CacheConfigPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="field" jdbcType="VARCHAR" property="field" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="explain"  property="explain" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    id, `field`, `key`, `value`,`explain`
+  </sql>
+
+  <select id="selectAllCacheConfig" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from cache_config
+  </select>
+
+  <select id="selectCacheConfigPO" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cache_config
+    where `field`=#{field} and `key`=#{key}
+  </select>
+  
+  <select id="selectOrgConfig" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from cache_config
+    where `key` = #{orgId}
+  </select>
+
+  <insert id="insertConfig" parameterType="com.crm.service.cache.model.CacheConfigPO" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+    insert into cache_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="field != null">
+        field,
+      </if>
+      <if test="key != null">
+        `key`,
+      </if>
+      <if test="value != null">
+        `value`,
+      </if>
+      <if test="explain != null">
+        `explain`,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="field != null">
+        #{field,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null">
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="explain != null">
+        #{explain,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateConfig" parameterType="com.crm.service.cache.model.CacheConfigPO">
+    update cache_config set `value` = #{value} where `field` = #{field} and `key` = #{key}
+  </update>
+
+
+
+</mapper>

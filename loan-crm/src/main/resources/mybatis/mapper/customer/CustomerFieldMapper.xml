@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.customer.dao.CustomerFieldMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.customer.model.CustomerFieldPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="field_code" jdbcType="VARCHAR" property="fieldCode" />
+    <result column="field_name" jdbcType="VARCHAR" property="fieldName" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, field_code, field_name,`value`
+  </sql>
+
+
+  <select id="selectAllField" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_field
+    where org_id = #{orgId,jdbcType=BIGINT} and display=1
+    order by sort asc
+  </select>
+
+
+</mapper>

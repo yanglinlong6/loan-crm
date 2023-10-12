@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)http://www.51yhdai.com/index.php?c=mobile&a=hzjg -->
+<html data-dpr="1" style="font-size: 33.3333px;" lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>合作机构</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            font-family: "Microsoft Yahei";
+            color: #333333;
+            background-color: #ffffff;
+        }
+
+        ul,
+        ol {
+            list-style: none;
+        }
+
+        input {
+            border: none;
+            outline: none;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        *::after {
+            pointer-events: none;
+        }
+
+        .cl:after {
+            content: "\200B";
+            display: block;
+            height: 0;
+            clear: both;
+        }
+
+        .cl {
+            *zoom: 1;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .warp {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .box {
+            border: 1px solid #616061;
+            margin: .6rem .6rem 0;
+        }
+
+        .box .title {
+            height: 1.5rem;
+            line-height: 1.5rem;
+            font-size: .6rem;
+            text-align: center;
+            color: #000;
+        }
+
+        .box li {
+            list-style: none;
+            border-top: 1px solid #616061;
+            padding: .3rem .5rem;
+            font-size: .42rem;
+        }
+
+        .box li:nth-child(2n) {
+            background-color: #f7f5fd;
+        }
+
+        #more {
+            margin: .2rem .6rem;
+            padding-bottom: .3rem;
+            text-align: center;
+            font-size: .42rem;
+        }
+        .footText-box{
+            margin: -10px .7rem 20px .7rem;
+        }
+        .footText-box span{
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body style="font-size: 12px;">
+    <div class="warp">
+        <div class="box">
+            <h2 class="title">合作机构</h2>
+            <ul id="box">
+            </ul>
+        </div>
+        <div id="more"></div>
+        <div class='footText-box'>
+            <span>不定期更新合作公司信息，实时信息请来电咨询13682365526</span>
+        </div>
+    </div>
+    <script src="https://backend.zdt360.com/h5/formH5/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var list = []
+            var url = 'https://backend.zdt360.com/server/apis/getPartners'
+            $.get(url, function (res) {
+                console.log('res', res);
+                if (res.error !== 0) return
+                for (let index = 0; index < res.partners.length; index++) {
+                    const element = res.partners[index];
+                    list.push(element.partner_name)
+                }
+
+                function setList(id, arr) {
+                    $("#" + id).html("")
+                    var _html = ""
+                    for (var i = 0; i < arr.length; i++) {
+                        _html += "<li>" + arr[i] + "</li>";
+                    }
+                    $("#" + id).append(_html)
+                }
+
+                setList('box', list);
+
+                var type = true,
+                    first = true;
+                $("#more").on('click', function () {
+                    if (first && type) {
+                        setList('box_m', list_m);
+                    }
+                    if (type) {
+                        type = false
+                        $(this).text('收起')
+                    } else {
+                        type = true
+                        $(this).text('查看更多')
+                    }
+                    $("#box_m").slideToggle()
+                })
+            });
+        })
+    </script>
+
+
+</body>
+
+</html>

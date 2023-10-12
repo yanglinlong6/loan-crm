@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.channel.dao.ChannelReportMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.channel.model.ChannelReportBO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="channelId" jdbcType="BIGINT" property="channelId" />
+    <result column="channel" jdbcType="VARCHAR" property="channel" />
+    <result column="media" jdbcType="VARCHAR" property="media" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="counts"  property="counts" />
+    <result column="level0Count"  property="level0Count" />
+    <result column="level1Count"  property="level1Count" />
+    <result column="level2Count"  property="level2Count" />
+    <result column="level25Count"  property="level25Count" />
+    <result column="level3Count"  property="level3Count" />
+    <result column="level4Count"  property="level4Count" />
+    <result column="level5Count"  property="level5Count" />
+    <result column="callCount"  property="callCount" />
+    <result column="fixCount"  property="fixCount" />
+  </resultMap>
+
+
+
+  <select id="getChannelReportByPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap">
+    <!--
+    select c.id channelId,c.nickname channel,tmp.`media`,tmp.`city`,tmp.counts
+    from
+    (
+      select channel,media,city,count(1) counts
+      from customer c
+      where c.org_id = #{paramObject.orgId} and c.create_date BETWEEN #{paramObject.startDate} and #{paramObject.endDate}
+        <if test="paramObject.channelId != null"> and c.id = #{paramObject.channelId} </if>
+      group by c.channel,c.media,c.city
+    ) tmp
+    LEFT JOIN channel c on tmp.channel = c.id
+    <where>
+      <if test="paramObject.channel != null"> and c.nickname like concat('%' #{paramObject.channel},'%')</if>
+      <if test="paramObject.media != null"> and tmp.`media` like concat('%',#{paramObject.media},'%')</if>
+      <if test="paramObject.city != null"> and  tmp.`city` like concat('%',#{paramObject.city},'%')</if>
+    </where>
+  -->
+    select
+      ration.channel_id as channelId,
+      c.nickname channel,
+      ration.`media`,
+      ration.`city`,
+      (
+        select count(1)
+        from customer customer
+        where IF(ration.city='全国',1=1,customer.city = ration.city)
+          and customer.org_id = #{paramObject.orgId}
+          and customer.`channel` = ration.channel_id
+          and customer.media = ration.media
+          and customer.create_date BETWEEN #{paramObject.startDate} and #{paramObject.endDate}
+      ) as counts
+    from channel_ration ration
+      LEFT JOIN channel c ON ration.channel_id = c.id
+    <where>
+      <if test="paramObject.orgId != null"> and ration.org_id = #{paramObject.orgId} </if>
+      <if test="paramObject.channelId != null"> and ration.channel_id = #{paramObject.channelId} </if>
+      <if test="paramObject.channel != null"> and c.nickname like concat('%' #{paramObject.channel},'%')</if>
+      <if test="paramObject.media != null"> and ration.`media` like concat('%',#{paramObject.media},'%')</if>
+      <if test="paramObject.city != null"> and  ration.`city` like concat('%',#{paramObject.city},'%')</if>
+    </where>
+    limit #{start},#{size}
+  </select>
+
+  <select id="getChannelReportCountByPage" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from channel_ration ration
+      LEFT JOIN channel c ON ration.channel_id = c.id
+    <where>
+      <if test="paramObject.orgId != null"> and ration.org_id = #{paramObject.orgId} </if>
+      <if test="paramObject.channelId != null"> and ration.channel_id = #{paramObject.channelId} </if>
+      <if test="paramObject.channel != null"> and c.nickname like concat('%' #{paramObject.channel},'%')</if>
+      <if test="paramObject.media != null"> and ration.`media` like concat('%',#{paramObject.media},'%')</if>
+      <if test="paramObject.city != null"> and  ration.`city` like concat('%',#{paramObject.city},'%')</if>
+    </where>
+  </select>
+
+  
+  <select id="selectLevelCount" resultType="java.lang.Integer">
+    select count(1)
+    from   customer
+    where org_id=#{orgId} and channel = #{channelId} and media = #{media} and city=#{city}  and create_date BETWEEN #{startDate} and #{endDate} and `level` = #{level}
+  </select>
+
+  <select id="selectFitCount" resultType="java.lang.Integer">
+    select count(1)
+    from   customer
+    where org_id=#{orgId} and channel = #{channelId} and media = #{media} and city=#{city}  and create_date BETWEEN #{startDate} and #{endDate} and `fit` = #{fit}
+  </select>
+
+  <select id="selectCallCount" resultType="java.lang.Integer">
+    select count(1)
+    from  customer
+    where org_id=#{orgId} and channel = #{channelId} and media = #{media} and city=#{city}  and create_date BETWEEN #{startDate} and #{endDate} and `call` = #{call}
+  </select>
+
+  <select id="selectContractAmount" resultType="java.lang.Double">
+    select IFNULL(SUM(contract.deposit),0)
+    from customer_contract contract
+      join customer c on contract.customer_id = c.id
+      where contract.org_id=#{orgId} and contract.state=1 and contract.create_date between #{startDate} and #{endDate}
+            and c.channel=#{channelId} and  c.city=#{city} and c.media=#{media}
+  </select>
+
+  <select id="selectImportAmount" resultType="java.lang.Double">
+    select IFNULL(SUM(ci.income),0)
+    from customer_import ci
+      join customer c on ci.customer_id = c.id
+    where ci.org_id=#{orgId} and ci.state=1 and ci.progress in(5,6) and ci.create_date between #{startDate} and #{endDate}
+          and c.channel=#{channelId} and  c.city=#{city} and c.media=#{media}
+  </select>
+
+  <select id="selectChannelConsumeAmount" resultType="java.lang.Double">
+    select IFNULL(SUM(ROUND(tmp2.counts*cp.price,2)),0)
+    from (
+      select tmp.date,count(1) counts
+      from (
+        select c.id,c.org_id,c.shop_id,c.team_id,c.channel,c.city,c.media,c.`name`,c.mobile,c.`call`,c.field_1,c.employee_id,DATE_FORMAT(c.create_date,'%Y-%m-%d') date
+        from customer c
+        where c.org_id=#{orgId} and c.channel=#{channelId} and  c.city=#{city} and c.media=#{media} and c.create_date between #{startDate} and #{endDate}
+      ) tmp
+      group by tmp.date
+    ) tmp2
+    join channel_price cp on tmp2.date = cp.input_date
+  </select>
+
+
+
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+        namespace="com.help.loan.distribute.service.user.dao.CustReportDao">
+
+    <select id="getMediaChannelCustApt" resultType="com.alibaba.fastjson.JSONObject" parameterType="com.alibaba.fastjson.JSONObject">
+    	<![CDATA[
+        SELECT channel,city,aptitude,COUNT(1) num FROM (
+			SELECT CASE WHEN apt.channel != '' THEN apt.channel
+			 		ELSE base.wechat END channel,
+			 		apt.city,
+			 		CASE WHEN apt.weight <=0.005 THEN 1
+			 		WHEN apt.weight >0.005 AND apt.weight <=0.05  THEN 2
+					WHEN apt.weight >0.05 AND apt.weight <=0.093  THEN 3
+					WHEN apt.weight >0.093 AND apt.weight <=0.14  THEN 4
+					WHEN apt.weight >0.14 THEN 5 END aptitude
+			FROM loan_cps.user_aptitude apt 
+			LEFT JOIN 
+				loan_menu.bind_user bind ON apt.user_id = bind.user_id 
+			LEFT JOIN loan_menu.wechat_basedata base ON bind.wx_type = base.wxType
+			WHERE apt.city != '' AND apt.create_date BETWEEN #{startDate} AND #{endDate}
+		) aa GROUP BY channel,city,aptitude;
+		]]>
+    </select>
+    
+    <select id="getOrgApt" resultType="com.alibaba.fastjson.JSONObject" parameterType="com.alibaba.fastjson.JSONObject">
+   		<![CDATA[
+    	SELECT 	org_name,city,aptitude,COUNT(1) num FROM
+		(
+			SELECT org.org_name,apt.city,
+				CASE WHEN apt.weight <=0.005 THEN 1
+				WHEN apt.weight >0.005 AND apt.weight <=0.05  THEN 2
+				WHEN apt.weight >0.05 AND apt.weight <=0.093  THEN 3
+				WHEN apt.weight >0.093 AND apt.weight <=0.14  THEN 4
+				WHEN apt.weight >0.14 THEN 5 END aptitude
+ 			FROM 
+				loan_cps.org_dispatche_rec rec 
+				LEFT JOIN 
+				loan_cps.user_aptitude apt ON rec.customer_id = apt.id 
+				LEFT JOIN loan_cps.org org ON rec.org_id = org.org_id
+			WHERE rec.create_date BETWEEN #{startDate} AND #{endDate} AND rec.dispatch_status =1 AND rec.org_id NOT IN (11,12)
+		)cc WHERE cc.city IS NOT NULL GROUP BY org_name,city,aptitude;
+		]]>
+    </select>
+
+    <insert id="insertMediaCustAptReport" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO loan_cps.media_channel_cust_apt
+			(channel,city,v1,v2,v3,v4,v5,quality,create_by,create_date,update_by,update_date)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+				#{item.channel},
+				#{item.city},
+				#{item.v1},
+				#{item.v2},
+				#{item.v3},
+				#{item.v4},
+				#{item.v5},
+				#{item.quality},
+				'',
+				NOW(),
+				'',
+				NOW()
+			)
+		</foreach>
+    </insert>
+    
+    <insert id="insertOrgCustAptReport" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO loan_cps.org_cust_apt
+			(org_name,city,v1,v2,v3,v4,v5,quality1,quality2,quality3,create_by,create_date,update_by,update_date)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+				#{item.org_name},
+				#{item.city},
+				#{item.v1},
+				#{item.v2},
+				#{item.v3},
+				#{item.v4},
+				#{item.v5},
+				#{item.quality1},
+				#{item.quality2},
+				#{item.quality3},
+				'',
+				NOW(),
+				'',
+				NOW()
+			)
+		</foreach>
+    </insert>
+    
+    <select id="selOrgDetailedReport" resultType="com.alibaba.fastjson.JSONObject">
+    	select * from loan_cps.org_cust_apt_detailed 
+    </select>
+    
+</mapper>

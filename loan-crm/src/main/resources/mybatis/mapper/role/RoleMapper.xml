@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.role.dao.RolePOMapper">
+
+
+  <resultMap id="RoleResultMap" type="com.crm.service.role.model.RolePO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <resultMap id="PermissonResultMap" type="com.crm.service.role.model.PermissionPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="h5_uri" jdbcType="VARCHAR" property="h5Uri" />
+    <result column="data_uri" jdbcType="VARCHAR" property="dataUri" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+
+  <sql id="Role_Column_List">
+    id, org_id, name, type, create_by, create_date, update_by, update_date
+  </sql>
+
+  <sql id="Permission_Column_List">
+    p.id, p.`name`, p.h5_uri, p.data_uri, p.parent_id, p.`sort`, p.create_by, p.create_date, p.update_by, p.update_date
+  </sql>
+
+
+  <select id="selectRoleById" parameterType="java.lang.Long" resultMap="RoleResultMap">
+    select 
+    <include refid="Role_Column_List" />
+    from role
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectRole" parameterType="com.crm.service.role.model.RolePO" resultMap="RoleResultMap">
+    select
+    <include refid="Role_Column_List" />
+    from role
+    <where>
+      <if test="orgId != null"> and org_id=#{orgId}</if>
+      <if test="name != null"> and `name` =#{name} </if>
+      <if test="type != null"> and `type`=#{type}</if>
+    </where>
+    limit 1
+  </select>
+
+
+  <delete id="deleteRoleById" parameterType="java.lang.Long">
+    delete from role
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertRole" parameterType="com.crm.service.role.model.RolePO" useGeneratedKeys="true" keyProperty="id">
+    insert into role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateRole" parameterType="com.crm.service.role.model.RolePO">
+    update role
+    <set>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectRoles" parameterType="java.lang.Long" resultMap="RoleResultMap" >
+    select <include refid="Role_Column_List" />
+    from role
+    where org_id = #{orgId}
+  </select>
+  
+  <insert id="inserRolePermisson">
+    insert into role_permission(role_id,permissions_id) values(#{roleId},#{permissionId})
+  </insert>
+  
+  <delete id="delRolePermission" parameterType="java.lang.Long">
+    delete from role_permission where role_id = #{roleId}
+  </delete>
+
+  <select id="selectRolePermissionsByRoleId" parameterType="java.lang.Long" resultMap="PermissonResultMap">
+    select <include refid="Permission_Column_List" />
+    from role_permission rp
+      join permission p on rp.permissions_id = p.id
+    where rp.role_id=#{roleId}
+    order by sort asc
+  </select>
+  
+  <select id="selectRolePermissions"  resultMap="PermissonResultMap">
+    select <include refid="Permission_Column_List" />
+    from permission p
+    order by p.`sort` asc
+  </select>
+
+</mapper>

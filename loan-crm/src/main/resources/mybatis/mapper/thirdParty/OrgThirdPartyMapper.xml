@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.thirdparty.dao.OrgThirdPartyMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.thirdparty.model.OrgThirdPartyPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="belong_org_id" jdbcType="BIGINT" property="belongOrgId" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="admin_name" jdbcType="VARCHAR" property="adminName" />
+    <result column="admin_phone" jdbcType="VARCHAR" property="adminPhone" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="auto" jdbcType="TINYINT" property="auto" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, org_id, belong_org_id , nickname, `name`, address, org_code, admin_name, admin_phone, product_id,
+    product_name, `city`, `status`, `auto`, create_by, create_date, update_by, update_date
+  </sql>
+
+  <select id="selectThirdPartyOrgByPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org_third_party
+    where belong_org_id = #{paramObject.orgId}
+      <if test="paramObject.name != null"> and (`name` like concat('%',#{paramObject.name},'%') or nickname like concat('%',#{paramObject.name},'%')) </if>
+      <if test="paramObject.city != null"> and `city` = #{paramObject.city} </if>
+      <if test="paramObject.productId != null"> and product_id = #{paramObject.productId}</if>
+      <if test="paramObject.productName != null"> and product_name = #{paramObject.productName}</if>
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectThirdPartyOrgByPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select IFNULL(count(1),0)
+    from org_third_party
+    where belong_org_id = #{paramObject.orgId}
+    <if test="paramObject.name != null"> and (`name` like concat('%',#{paramObject.name},'%') or nickname like concat('%',#{paramObject.name},'%')) </if>
+    <if test="paramObject.city != null"> and `city` = #{paramObject.city} </if>
+    <if test="paramObject.productId != null"> and product_id = #{paramObject.productId}</if>
+    <if test="paramObject.productName != null"> and product_name = #{paramObject.productName}</if>
+  </select>
+
+  <select id="selectThirdPartyOrgById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org_third_party
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectThirdPartyOrgByOrgId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org_third_party
+    where belong_org_id = #{orgId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectThirdPartyOrg"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org_third_party
+    where belong_org_id = #{orgId,jdbcType=BIGINT}
+      <if test="city != null"> and `city` = #{city}</if>
+      <if test="productId != null"> and product_id = #{productId}</if>
+  </select>
+
+  <insert id="insertThirdPartyOrg" parameterType="com.crm.service.thirdparty.model.OrgThirdPartyPO"
+          useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into org_third_party
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="belongOrgId != null">
+        belong_org_id,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="orgCode != null">
+        org_code,
+      </if>
+      <if test="adminName != null">
+        admin_name,
+      </if>
+      <if test="adminPhone != null">
+        admin_phone,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="auto != null">
+        auto,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="belongOrgId != null">
+        #{belongOrgId},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="adminName != null">
+        #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPhone != null">
+        #{adminPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="auto != null">
+        #{auto,jdbcType=TINYINT},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateThirdPartyOrgById" parameterType="com.crm.service.thirdparty.model.OrgThirdPartyPO">
+    update org_third_party
+    <set>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="orgCode != null">
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="auto != null">
+        auto = #{auto,jdbcType=TINYINT},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

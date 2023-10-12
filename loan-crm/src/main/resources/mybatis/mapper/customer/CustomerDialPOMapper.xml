@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.dial.dao.CustomerDialPOMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.dial.model.CustomerDialPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="employee_id" jdbcType="BIGINT" property="employeeId" />
+    <result column="employee_phone" jdbcType="VARCHAR" property="employeePhone" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="customer_phone" jdbcType="VARCHAR" property="customerPhone" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+      id, org_id, employee_id, employee_phone, customer_id, customer_phone, `status`,create_by,
+    create_date, update_by, update_date
+  </sql>
+  <insert id="insert" parameterType="com.crm.service.dial.model.CustomerDialPO">
+    insert into customer_dial
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="employeeId != null">
+        employee_id,
+      </if>
+      <if test="employeePhone != null">
+        employee_phone,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="customerPhone != null">
+        customer_phone,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="employeeId != null">
+        #{employeeId,jdbcType=BIGINT},
+      </if>
+      <if test="employeePhone != null">
+        #{employeePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="customerPhone != null">
+        #{customerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateDialStatus">
+    update customer_dial set `status` = #{status}  where id = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

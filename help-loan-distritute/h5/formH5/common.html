@@ -1,0 +1,140 @@
+<!--
+ * @Description: 
+ * @Version: 1.0
+ * @Autor: zcqia
+ * @LastEditors: zcqia
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <script type="text/javascript" src="codeConvert.js?v=1.5.5"></script>
+    <script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+    <script>
+        function dealUrl(url) {
+            //吴贷通
+            if (url ==
+                'https://backend.zdt360.com/h5/formH5/common.html?tenxunCode=1000&tenxunName=1007&wechatCode=1001&urlCode=1000'
+            ) {
+                url =
+                    'https://backend.zdt360.com/h5/formH5/common.html?tenxunCode=1000&tenxunName=1011&wechatCode=1000&urlCode=1001'
+            }
+            //阳光有信
+            if (url == 'https://backend.zdt360.com/h5/formH5/common.html?wechatCode=1004&urlCode=1000') {
+                url = 'https://backend.zdt360.com/h5/formH5/common.html?wechatCode=1004&urlCode=1001&qrWechatCode=1000'
+            }
+            //沪周转
+            if (url == 'https://backend.zdt360.com/h5/formH5/common.html?wechatCode=1006&urlCode=1000') {
+                url = 'https://backend.zdt360.com/h5/formH5/common.html?wechatCode=1006&urlCode=1001&qrWechatCode=1000'
+            }
+            //周转助手
+            if (url == 'https://backend.zdt360.com/h5/formH5/common.html?wechatCode=1009&urlCode=1000') {
+                url = 'https://backend.zdt360.com/h5/formH5/common.html?wechatCode=1009&urlCode=1001&qrWechatCode=1000'
+            }
+            //小泽
+            if (url ==
+                'https://backend.zdt360.com/h5/formH5/common.html?tenxunCode=1000&tenxunName=1012&wechatCode=1000&urlCode=1000'
+            ) {
+                url =
+                    'https://backend.zdt360.com/h5/formH5/common.html?tenxunCode=1000&tenxunName=1012&wechatCode=1000&urlCode=1001&qrWechatCode=1000'
+            }
+            //小极
+            if (url ==
+                'https://backend.zdt360.com/h5/formH5/common.html?tenxunCode=1000&tenxunName=1001&wechatCode=1002&urlCode=1000'
+            ) {
+                url =
+                    'https://backend.zdt360.com/h5/formH5/common.html?tenxunCode=1000&tenxunName=1001&wechatCode=1002&urlCode=1001&qrWechatCode=1000'
+            }
+            return url
+        }
+        //获取当前url的get参数
+        function GetQueryString(name) {
+            var url = window.location.href;
+            url = dealUrl(url)
+            var query = url.split('?')[1]
+            console.log('query', query.substring(1));
+            // var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == name) {
+                    return pair[1];
+                }
+            }
+            return null;
+        }
+
+        function GetUrlLink() {
+            var url = window.location.href;
+            url = dealUrl(url)
+            return url.split('?')[0]
+        }
+        //字符串转base64
+        function encode(str) {
+            // 对字符串进行编码
+            var encode = encodeURI(str);
+            // 对编码的字符串转化base64
+            var base64 = btoa(encode);
+            return base64;
+        }
+    </script>
+    <script>
+        $(function () {
+            var urlLink = GetUrlLink() || '';
+            var urlCode = GetQueryString('urlCode') || ''
+            var url = urlCode && codeConverts.urlCode[urlCode] ? codeConverts.urlCode[urlCode] : ''
+            var planId = GetQueryString('plan') || ''
+            var flag = GetQueryString('flag') || ''
+            var wechatCode = GetQueryString('wechatCode') || ''
+            var wechat = wechatCode && codeConverts.wechatCode[wechatCode] ? codeConverts.wechatCode[
+                wechatCode] : ''
+            var qrWechatCode = GetQueryString('qrWechatCode') || ''
+            var qrWechat = qrWechatCode && codeConverts.wechatCode[qrWechatCode] ? codeConverts.wechatCode[
+                qrWechatCode] : ''
+            var tenxunCode = GetQueryString('tenxunCode') || ''
+            var tenxun = tenxunCode && codeConverts.tenxunCode[tenxunCode] ? codeConverts.tenxunCode[
+                tenxunCode] : ''
+            var tenxunName = GetQueryString('tenxunName') || ''
+            var tenxunN = tenxunName && codeConverts.tenxunName[tenxunName] ? codeConverts.tenxunName[
+                tenxunName] : ''
+            var toutiaoName = GetQueryString('toutiaoName') || ''
+            var toutiao = toutiaoName && codeConverts.toutiaoName[toutiaoName] ? codeConverts.toutiaoName[
+                toutiaoName] : ''
+            var baiduName = GetQueryString('baiduName') || ''
+            var baidu = baiduName && codeConverts.baiduName[baiduName] ? codeConverts.baiduName[baiduName] : ''
+            if (baidu) toutiao = baidu
+            var gdt_vid = GetQueryString('gdt_vid') || ''
+            var gdt_vidStr = gdt_vid ? '&gdt_vid=' + gdt_vid : ''
+            var planStr = planId ? '&planId=' + planId : ''
+            var flagStr = flag ? '&flag=' + encodeURI(flag) : ''
+            var wechatStr = wechat ? '&wechatId=' + wechat : ''
+            var qrWechatStr = qrWechat ? '&qrWechatId=' + qrWechat : ''
+            var tenxunStr = tenxun ? '&tenxunId=' + tenxun : ''
+            var tenxunNStr = tenxunN ? '&tenxunName=' + encode(tenxunN) : ''
+            var toutiaoStr = toutiao ? '&toutiaoName=' + encode(toutiao) : ''
+            console.log(wechat);
+            console.log(url);
+            console.log(tenxun);
+            console.log(tenxunN);
+            console.log(urlLink);
+            console.log(url);
+
+            if (url) window.location.href = url + '?_r=' + Math.random() + wechatStr + tenxunStr + gdt_vidStr +
+                tenxunNStr + toutiaoStr + qrWechatStr + planStr + flagStr
+        })
+    </script>
+</head>
+
+<body id='main'>
+
+</body>
+
+</html>

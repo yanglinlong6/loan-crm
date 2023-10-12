@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.crm.service.order.dao.OrderMapper">
+
+  <resultMap id="BaseResultMap" type="com.daofen.crm.service.order.model.OrderPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="customer_mobile" jdbcType="VARCHAR" property="customerMobile" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="order_date" jdbcType="TIMESTAMP" property="orderDate" />
+    <result column="business_id" jdbcType="BIGINT" property="businessId" />
+    <result column="rate"  property="rate" />
+    <result column="quota" jdbcType="INTEGER" property="quota" />
+    <result column="contract" jdbcType="VARCHAR" property="contract" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="bank_manager" jdbcType="VARCHAR" property="bankManager" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="data_state" jdbcType="INTEGER" property="dataState" />
+    <result column="business_name" jdbcType="VARCHAR" property="businessName" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="sincerity" jdbcType="INTEGER" property="sincerity" />
+    <result column="receivables" jdbcType="VARCHAR" property="receivables" />
+    <result column="receivables_bank" jdbcType="VARCHAR" property="receivablesBank" />
+    <result column="receivables_amount" jdbcType="INTEGER" property="receivablesAmount" />
+    <result column="receivables_date" jdbcType="TIMESTAMP" property="receivablesDate" />
+    <result column="channel_cost" jdbcType="INTEGER" property="channelCost" />
+    <result column="introduce_cost" jdbcType="INTEGER" property="introduceCost" />
+    <result column="net_income" jdbcType="INTEGER" property="netIncome" />
+    <result column="loan_type" jdbcType="INTEGER" property="loanType" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="team_id" jdbcType="BIGINT" property="teamId" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ord.id,ord.customer_id,ord.customer_name,ord.customer_mobile,ord.city,ord.order_date,ord.business_id,ord.rate,quota,ord.contract,ord.bank,ord.bank_manager,ord.state,ord.data_state,ord.amount,
+    ord.sincerity,ord.receivables,ord.receivables_bank,ord.receivables_amount,ord.receivables_date,ord.channel_cost,ord.introduce_cost,ord.net_income,loan_type,ord.business_name,
+    ord.company_id,ord.shop_id,ord.team_id,ord.create_by,ord.create_date,ord.update_by,ord.update_date
+  </sql>
+
+
+  <select id="getOrderList" parameterType="com.daofen.crm.base.PageVO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dolphin_customer_examine_order ord
+    <where>
+    	<if test="param.id != null">
+    		and ord.id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.city != null">
+    		and ord.city = #{param.city,jdbcType=VARCHAR}
+    	</if>
+    	<if test="param.businessName != null">
+    		and (ord.business_id like   CONCAT('%',#{param.businessName,jdbcType=VARCHAR},'%')  or ord.business_name like CONCAT('%',#{param.businessName,jdbcType=VARCHAR},'%'))
+    	</if>
+    	<if test="param.bank != null">
+    		and ord.bank = #{param.bank,jdbcType=VARCHAR}
+    	</if>
+    	<if test="param.state != null">
+    		and ord.state = #{param.state,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.dataState != null">
+    		and ord.data_state = #{param.dataState,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.loanType != null">
+    		and ord.loan_type = #{param.loanType,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.contract != null">
+    		and ord.contract = #{param.contract,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.receivables != null">
+    		and ord.receivables = #{param.receivables,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.receivablesBank != null">
+    		and ord.receivables_bank = #{param.receivablesBank,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.dateType =1 and param.startDate != null and param.endDate != null">
+    		and ord.order_date BETWEEN #{param.startDate,jdbcType=TIMESTAMP} and #{param.endDate,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="param.dateType =2 and param.startDate != null and param.endDate != null">
+    		and ord.receivables_date BETWEEN #{param.startDate,jdbcType=TIMESTAMP} and #{param.endDate,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( ord.customer_id like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    				or ord.customer_mobile like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%')
+    				or ord.customer_name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test="param.companyId != null">
+    		and ord.company_id = #{param.companyId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.shopId != null">
+    		and ord.shop_id = #{param.shopId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.teamId != null">
+    		and ord.team_id = #{param.teamId,jdbcType=BIGINT}
+    	</if>
+    </where>
+    order by create_date desc 
+    limit #{startIndex,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getOrderListCount" parameterType="com.daofen.crm.base.PageVO" resultType="java.lang.Integer">
+    select
+    count(1)
+    from dolphin_customer_examine_order ord
+    <where>
+    	<if test="param.id != null">
+    		and ord.id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.city != null">
+    		and ord.city = #{param.city,jdbcType=VARCHAR}
+    	</if>
+    	<if test="param.businessName != null">
+    		and (ord.business_id like #{param.businessId,jdbcType=VARCHAR} or ord.business_name like #{param.businessId,jdbcType=VARCHAR})
+    	</if>
+    	<if test="param.bank != null">
+    		and ord.bank = #{param.bank,jdbcType=VARCHAR}
+    	</if>
+    	<if test="param.state != null">
+    		and ord.state = #{param.state,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.dataState != null">
+    		and ord.data_state = #{param.dataState,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.loanType != null">
+    		and ord.loan_type = #{param.loanType,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.contract != null">
+    		and ord.contract = #{param.contract,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.receivables != null">
+    		and ord.receivables = #{param.receivables,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.receivablesBank != null">
+    		and ord.receivables_bank = #{param.receivablesBank,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.dateType =1 and param.startDate != null and param.endDate != null">
+    		and ord.order_date BETWEEN #{param.startDate,jdbcType=TIMESTAMP} and #{param.endDate,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="param.dateType =2 and param.startDate != null and param.endDate != null">
+    		and ord.receivables_date BETWEEN #{param.startDate,jdbcType=TIMESTAMP} and #{param.endDate,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( ord.customer_id like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    				or ord.customer_mobile like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%')
+    				or ord.customer_name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test="param.companyId != null">
+    		and ord.company_id = #{param.companyId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.shopId != null">
+    		and ord.shop_id = #{param.shopId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.teamId != null">
+    		and ord.team_id = #{param.teamId,jdbcType=BIGINT}
+    	</if>
+    </where>
+  </select>
+
+  <insert id="addOrderPO" parameterType="com.daofen.crm.service.order.model.OrderPO">
+    insert into dolphin_customer_examine_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="orderDate != null">
+        order_date,
+      </if>
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="rate != null">
+        rate,
+      </if>
+      <if test="quota != null">
+        quota,
+      </if>
+      <if test="contract != null">
+        contract,
+      </if>
+      <if test="bank != null">
+        bank,
+      </if>
+      <if test="bankManager != null">
+        bank_manager,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="dataState != null">
+        data_state,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="sincerity != null">
+        sincerity,
+      </if>
+      <if test="receivables != null">
+        receivables,
+      </if>
+      <if test="receivablesBank != null">
+        receivablesBank,
+      </if>
+      <if test="receivablesAmount != null">
+        receivables_amount,
+      </if>
+      <if test="receivablesDate != null">
+        receivables_date,
+      </if>
+      <if test="channelCost != null">
+        channel_cost,
+      </if>
+      <if test="introduceCost != null">
+        introduce_cost,
+      </if>
+      <if test="netIncome != null">
+        net_income,
+      </if>
+      <if test="loanType != null">
+        loan_type,
+      </if>
+      <if test="customerMobile != null">
+        customer_mobile,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="teamId != null">
+        team_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDate != null">
+        #{orderDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessId != null">
+         #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="rate != null">
+        #{rate,jdbcType=INTEGER},
+      </if>
+      <if test="quota != null">
+        #{quota,jdbcType=INTEGER},
+      </if>
+      <if test="contract != null">
+        #{contract,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null">
+        #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankManager != null">
+        #{bankManager,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="dataState != null">
+        #{dataState,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="sincerity != null">
+        #{sincerity,jdbcType=INTEGER},
+      </if>
+      <if test="receivables != null">
+        #{receivables,jdbcType=VARCHAR},
+      </if>
+      <if test="receivablesBank != null">
+         #{receivablesBank,jdbcType=VARCHAR},
+      </if>
+      <if test="receivablesAmount != null">
+        #{receivablesAmount,jdbcType=INTEGER},
+      </if>
+      <if test="receivablesDate != null">
+        #{receivablesDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="channelCost != null">
+        #{channelCost,jdbcType=INTEGER},
+      </if>
+      <if test="introduceCost != null">
+        #{introduceCost,jdbcType=INTEGER},
+      </if>
+      <if test="netIncome != null">
+        #{netIncome,jdbcType=INTEGER},
+      </if>
+      <if test="loanType != null">
+        #{loanType,jdbcType=INTEGER},
+      </if>
+      <if test="customerMobile != null">
+        #{customerMobile,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="teamId != null">
+        #{teamId,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateOrderPO" parameterType="com.daofen.crm.service.order.model.OrderPO">
+    update dolphin_customer_examine_order
+    <set>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="dataState != null">
+        data_state = #{dataState,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="sincerity != null">
+        sincerity = #{sincerity,jdbcType=INTEGER},
+      </if>
+      <if test="receivables != null">
+        receivables = #{receivables,jdbcType=VARCHAR},
+      </if>
+      <if test="receivablesBank != null">
+        receivables_bank = #{receivablesBank,jdbcType=VARCHAR},
+      </if>
+      <if test="receivablesAmount != null">
+        receivables_amount = #{receivablesAmount,jdbcType=INTEGER},
+      </if>
+      <if test="receivablesDate != null">
+        receivables_date = #{receivablesDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="channelCost != null">
+        channel_cost = #{channelCost,jdbcType=INTEGER},
+      </if>
+      <if test="introduceCost != null">
+        introduce_cost = #{introduceCost,jdbcType=TIMESTAMP},
+      </if>
+      <if test="netIncome != null">
+        net_income = #{netIncome,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)http://xmvxh52.zdt360.com/wechat/agree/hzjg.html -->
+<html data-dpr="1" style="font-size: 53.3333px;" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>合作机构</title>
+    <script type="text/javascript" src="./hzjg_files/jquery.js.下载"></script>
+    <script type="text/javascript" src="./hzjg_files/rem.js.下载"></script>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            font-family: "Microsoft Yahei";
+            color: #333333;
+            background-color: #ffffff;
+        }
+
+        ul,
+        ol {
+            list-style: none;
+        }
+
+        input {
+            border: none;
+            outline: none;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        *::after {
+            pointer-events: none;
+        }
+
+        .cl:after {
+            content: "\200B";
+            display: block;
+            height: 0;
+            clear: both;
+        }
+
+        .cl {
+            *zoom: 1;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .warp {
+            width: 12rem;
+            margin: 0 auto;
+        }
+
+        .box {
+            border: 1px solid #616061;
+            margin: .6rem .6rem 0;
+        }
+
+        .box .title {
+            height: 1.5rem;
+            line-height: 1.5rem;
+            font-size: .6rem;
+            text-align: center;
+            color: #000;
+        }
+
+        .box li {
+            list-style: none;
+            border-top: 1px solid #616061;
+            padding: .3rem .5rem;
+            font-size: .42rem;
+        }
+
+        .box li:nth-child(2n) {
+            background-color: #f7f5fd;
+        }
+
+        #more {
+            margin: .2rem .6rem;
+            padding-bottom: .3rem;
+            text-align: center;
+            font-size: .42rem;
+        }
+    </style>
+</head>
+
+<body style="font-size: 12px;">
+<div class="warp">
+    <div class="box">
+        <h2 class="title">合作机构</h2>
+        <ul id="box">
+		<li>武汉荣西子信息科技有限公司</li><li>深圳市普江信息科技有限公司</li><li>深圳永捷信息技术有限公司</li><li>钱智信息技术（东莞）有限公司深圳分公司</li>
+		<li>深圳市嘉信德资产管理有限公司</li><li>上海曦本科技有限公司</li><li>南京新欣科技信息有限公司</li><li>南京企峨商务信息咨询有限公司</li><li>深圳平安综合金融服务有限公司上海分公司</li>
+		<li>杭州苌久科技信息科技有限公司 </li><li>上海钱智金融信息服务有限公司</li><li>湖南小微纳克网络科技有限公司</li>
+		</ul>
+    </div>
+    <div id="more">我司不定期更新合作公司信息，实时信息请咨询我司商务</div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        var list= [
+            '武汉荣西子信息科技有限公司',
+            '深圳市普江信息科技有限公司',
+            '深圳永捷信息技术有限公司',
+            '钱智信息技术（东莞）有限公司深圳分公司',
+            '深圳市嘉信德资产管理有限公司',
+			'上海曦本科技有限公司',
+			'南京新欣科技信息有限公司',
+			'南京企峨商务信息咨询有限公司',
+			'深圳平安综合金融服务有限公司上海分公司',
+			'杭州苌久科技信息科技有限公司',
+			'上海钱智金融信息服务有限公司',
+			'湖南小微纳克网络科技有限公司'
+        ]
+        
+        function setList(id, arr) {
+            $("#" + id).html("")
+            var _html = ""
+            for(var i = 0; i < arr.length; i++) {
+                _html += "<li>" + arr[i] + "</li>";
+
+            }
+
+            //					console.log($("#" + id))
+            $("#" + id).append(_html)
+        }
+
+        setList('box', list);
+
+        var type = true,
+            first = true;
+        $("#more").on('click', function() {
+            if(first && type) {
+                setList('box_m', list_m);
+            }
+
+            if(type) {
+                type = false
+                $(this).text('等，我司不定期更新合作公司信息，实时信息请咨询我司商务')
+            } else {
+                type = true
+                $(this).text('查看更多')
+            }
+
+            $("#box_m").slideToggle()
+        })
+
+    })
+</script>
+
+
+</body></html>

@@ -1,0 +1,76 @@
+server:
+  port: 80
+  servlet:
+    context-path: /crm
+    
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: name=dolphin-distribute
+  http:
+    encoding:
+      charset: UTF-8
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+  redis:
+    host: r-7xv8tfvokohqxerdau.redis.rds.aliyuncs.com
+    port: 6379
+    password: 102115Zh
+    timeout: 5000
+    database: 0
+    jedis:
+      pool:
+        max-active: 200
+        min-idle: 20
+        max-idle: 100
+        max-wait: 3000
+  jpa:
+    open-in-view: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-7xvzrbm9648o34949.mysql.rds.aliyuncs.com:3306/crm?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 102115Zh
+    hikari:
+      minimum-idle: 20
+      maximum-pool-size: 1000
+      auto-commit: true
+      idle-timeout: 300000
+      pool-name: DatebookHikariCP
+      max-lifetime: 6000000
+      connection-timeout: 5000
+      connection-test-query: select 1
+
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations:
+    - classpath*:mybatis/mapper/*/*.xml
+
+
+
+
+
+logging:
+  file:
+    name: /data/logs/crm/crm.log
+  level:
+    root: info
+    sql: info
+    web: warn
+    com.daofen.crm: info
+    org.quartz: warn
+    org.hibernate: warn
+    org.hibernate.jpa: warn
+    com.zaxxer: warn
+    org.springframework: warn
+    org.springframework.boot: warn
+    org.apache: warn
+    com.dy.springboot.server.mapper: warn
+    springfox.documentation: warn
+  pattern:
+    console: '[%d{yyyy-MM-dd HH:mm:ss.SSS}]-[%thread]-%-5level-%logger{20}-%msg%n'
+    file: '[%d{yyyy-MM-dd HH:mm:ss.SSS}]-[%thread]-%-5level-%logger{20}-%msg%n'
+    dateformat: yyyy-MM-dd HH:mm:ss.SSS

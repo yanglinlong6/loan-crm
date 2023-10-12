@@ -1,0 +1,72 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /crm
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: name=loan-crm
+  http:
+    encoding:
+      charset: UTF-8
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+  jpa:
+    open-in-view: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-bp13fc5831y3xut83ko.mysql.rds.aliyuncs.com:3306/dewufagu?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: dewufagu
+    password: 102115Zh
+    hikari:
+      minimum-idle: 20
+      maximum-pool-size: 1000
+      auto-commit: true
+      idle-timeout: 300000
+      pool-name: DatebookHikariCP
+      max-lifetime: 6000000
+      connection-timeout: 5000
+      connection-test-query: select 1
+  redis:
+    host: r-bp1mudl1fkwuqk2syxpd.redis.rds.aliyuncs.com
+    port: 6379
+    password: 102115Zh
+    timeout: 5000
+    database: 0
+    jedis:
+      pool:
+        max-active: 100
+        min-idle: 20
+        max-idle: 100
+        max-wait: 3000
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations:
+    - classpath*:mybatis/mapper/*/*.xml
+
+
+logging:
+  file:
+    name: /data/logs/crm/crm.log
+  level:
+    root: debug
+    sql: debug
+    web: debug
+    org.quartz: debug
+    org.hibernate: debug
+    org.hibernate.jpa: debug
+    com.zaxxer: debug
+    org.springframework: debug
+    org.springframework.boot: debug
+    org.apache: debug
+    com.dy.springboot.server.mapper: debug
+    springfox.documentation: debug
+  pattern:
+    console: '[%d{yyyy-MM-dd HH:mm:ss.SSS}][%thread]%-5level-%logger{10}-%msg%n'
+    file: '[%d{yyyy-MM-dd HH:mm:ss.SSS}][%thread]%-5level-%logger{10}-%msg%n'
+    dateformat: yyyy-MM-dd HH:mm:ss.SSS
+

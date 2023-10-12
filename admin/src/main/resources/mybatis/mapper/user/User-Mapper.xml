@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.admin.service.user.dao.UserDao">
+    <resultMap id="BaseResultMap" type="com.daofen.admin.service.user.model.UserPO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" property="name"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_date" property="updateDate"/>
+    </resultMap>
+    <!-- , create_by, create_date, update_by, update_date -->
+    <sql id="Base_Column_List">
+        id,`name`,username,password,create_by,create_date,update_by,update_date
+    </sql>
+
+    <select id="selectUserByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from daofen_admin.`user`
+        where username=#{username}
+    </select>
+
+
+</mapper>

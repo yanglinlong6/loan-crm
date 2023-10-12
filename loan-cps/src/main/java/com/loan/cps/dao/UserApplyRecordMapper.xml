@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loan.cps.dao.UserApplyRecordMapper">
+  <resultMap id="BaseResultMap" type="com.loan.cps.entity.UserApplyRecordPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="apply_id" jdbcType="VARCHAR" property="applyId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="lender_id" jdbcType="VARCHAR" property="lenderId" />
+    <result column="redirect_url" jdbcType="LONGVARCHAR" property="redirectUrl" />
+    <result column="resource" jdbcType="TINYINT" property="resource" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    id, apply_id, user_id, company_id, lender_id, redirect_url,resource, create_by, create_date, update_by,update_date
+  </sql>
+
+  <select id="selectByApplyId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from loan_cps.user_apply_record
+    where apply_id = #{applyId}
+  </select>
+  
+  <select id="selectApplyNumByLenderId" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select COUNT(id)
+    from loan_cps.user_apply_record
+    where lender_id = #{lenderId}
+  </select>
+
+  <insert id="insertApplyRecord" parameterType="com.loan.cps.entity.UserApplyRecordPO">
+    insert into loan_cps.user_apply_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="applyId != null">
+        apply_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="lenderId != null">
+        lender_id,
+      </if>
+      <if test="redirectUrl != null">
+        redirect_url,
+      </if>
+      <if test="resource != null">
+        resource,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="applyId != null">
+        #{applyId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="lenderId != null">
+        #{lenderId,jdbcType=VARCHAR},
+      </if>
+      <if test="redirectUrl != null">
+        #{redirectUrl,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="resource != null">
+        #{resource,jdbcType=TINYINT},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+
+    </trim>
+  </insert>
+
+
+</mapper>

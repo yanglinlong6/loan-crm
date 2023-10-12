@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.crm.service.customer.dao.CallLogMapper">
+
+  <resultMap id="BaseResultMap" type="com.daofen.crm.service.customer.model.CallLogPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="business_id" jdbcType="BIGINT" property="businessId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="call_time" jdbcType="TIMESTAMP" property="callTime" />
+    <result column="call_time_math" jdbcType="INTEGER" property="callTimeMath" />
+    <result column="duration" jdbcType="BIGINT" property="duration" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, business_id, type, mobile, name, call_time, call_time_math,duration,customer_id,create_by, create_date, update_by, update_date
+  </sql>
+
+
+  <select id="getCallLogList" parameterType="com.daofen.crm.base.PageVO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dolphin_customer_call_log
+    <where>
+    	<if test="param.id != null">
+    		id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.businessId != null">
+    		and business_id = #{param.businessId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.type != null">
+    		and type = #{param.type,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    				or mobile like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%')
+    				or customer_id like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    </where>
+    limit #{startIndex,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getCallLogListCount" parameterType="com.daofen.crm.base.PageVO" resultType="java.lang.Integer">
+    select
+    count(id)
+    from dolphin_customer_call_log
+    <where>
+    	<if test="param.id != null">
+    		id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.businessId != null">
+    		and business_id = #{param.businessId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.type != null">
+    		and type = #{param.type,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    				or mobile like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%')
+    				or customer_id like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    </where>
+  </select>
+  
+  <delete id="delCallLog" parameterType="java.lang.Long">
+    delete from dolphin_customer_call_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="addCallLog" parameterType="com.daofen.crm.service.customer.model.CallLogPO">
+    insert into dolphin_customer_call_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="callTime != null">
+        call_time,
+      </if>
+      <if test="callTimeMath != null">
+        call_time_math,
+      </if>
+      <if test="duration != null">
+        duration,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="businessId != null">
+        #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="callTime != null">
+         #{callTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="callTimeMath != null">
+        #{callTimeMath,jdbcType=INTEGER},
+      </if>
+      <if test="duration != null">
+        #{duration,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

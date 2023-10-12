@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.crm.service.order.dao.BankMapper">
+
+  <resultMap id="BaseResultMap" type="com.daofen.crm.service.order.model.BankPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, name,create_by, create_date, update_by, update_date
+  </sql>
+
+
+  <select id="getBankList" parameterType="com.daofen.crm.base.PageVO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dolphin_bank
+    <where>
+    	<if test="param.id != null">
+    		id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    	</if>
+    </where>
+    limit #{startIndex,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getBankListCount" parameterType="com.daofen.crm.base.PageVO" resultType="java.lang.Integer">
+    select
+    count(1)
+    from dolphin_bank
+    <where>
+    	<if test="param.id != null">
+    		id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    	</if>
+    </where>
+  </select>
+  
+  <delete id="delBank" parameterType="java.lang.Long">
+    delete from dolphin_bank
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="addBank" parameterType="com.daofen.crm.service.order.model.BankPO">
+    insert into dolphin_bank
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.help.loan.distribute.service.orgOffer.dao.OrgCityOfferBillsDao">
+  <resultMap id="BaseResultMap" type="com.help.loan.distribute.service.orgOffer.model.OrgCityOfferBillsPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="date_num" jdbcType="VARCHAR" property="dateNum" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="real_price" jdbcType="DECIMAL" property="realPrice" />
+    <result column="second_price" jdbcType="DECIMAL" property="secondPrice" />
+    <result column="wind_up_price" jdbcType="DECIMAL" property="windUpPrice" />
+    <result column="wind_count" jdbcType="INTEGER" property="windCount" />
+    <result column="wind_amount" jdbcType="DECIMAL" property="windAmount" />
+      <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, date_num, org_id,org_name, city, real_price, second_price, wind_up_price, wind_count,
+    wind_amount,remark, create_by, create_date, update_by, update_date
+  </sql>
+
+    <delete id="deleteAllByDateNum" parameterType="java.lang.String">
+        delete from org_city_offer_bills where date_num=#{dateNum}
+    </delete>
+
+    <insert id="insertBySelect" >
+        insert into org_city_offer_bills(date_num,org_id,org_name,city,real_price,second_price,wind_up_price,wind_count,wind_amount)
+        select
+            bills.date_num,bills.org_id,bills.org_name,bills.city,bills.real_price,bills.second_price,
+            CASE
+                WHEN bills.cost = 1 THEN bills.second_price
+                WHEN bills.org_id=10071 THEN 90.00
+                WHEN bills.org_id=10053 and bills.second_price <![CDATA[ <= ]]> 90 THEN ROUND(bills.second_price*1.1,2)
+                WHEN bills.org_id=10053 and bills.second_price > 90 and bills.second_price <![CDATA[ <= ]]> 100  THEN ROUND(bills.second_price*1.07,2)
+                WHEN bills.org_id=10053 and bills.second_price > 100  THEN ROUND(bills.second_price*1.05,2)
+                ELSE ROUND(bills.second_price*(1+bills.offer_rate),2)
+            END wind_up_price,
+            bills.successCount as wind_count,
+            CASE
+                WHEN bills.cost = 1 THEN bills.second_price*bills.successCount
+                ELSE ROUND(bills.second_price*(1+bills.offer_rate)*bills.successCount,2)
+            END wind_amount
+        from(
+            select #{dateNum} date_num,orgs.*,price.real_price,price.second_price,price.cost,oapt.org_name,oapt.offer_rate
+            from (
+                select orec.org_id,uapt.city,count(1) successCount
+                from org_dispatche_rec orec
+                    join user_aptitude uapt on orec.customer_id = uapt.id
+                where orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                group by orec.org_id,uapt.city
+                order by uapt.city desc
+            ) orgs
+                LEFT JOIN org_city_price price on orgs.city = price.city and price.date_num=#{dateNum}
+                LEFT JOIN org_aptitude oapt on orgs.org_id=oapt.org_id and orgs.city = oapt.city
+        ) bills;
+      </insert>
+
+    <select id="selectAllByDateNum" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from org_city_offer_bills
+        where date_num=#{dateNum} and `status` = 0
+    </select>
+
+    <select id="selectAllByOrgIdAndDateNum" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from org_city_offer_bills
+        where org_id=#{orgId} and date_num =#{dateNum}
+    </select>
+
+    <select id="selectAllByOrgIdAndDate" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from org_city_offer_bills
+        where org_id=#{orgId} and create_date >= #{startDate}
+        <if test="endDate != null">
+            and create_date <![CDATA[ <= ]]> #{endDate}
+        </if>
+        order by date_num desc
+    </select>
+
+
+</mapper>

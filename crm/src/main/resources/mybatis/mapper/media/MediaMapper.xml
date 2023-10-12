@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.crm.service.media.dao.MediaMapper">
+
+  <resultMap id="BaseResultMap" type="com.daofen.crm.service.media.model.MediaPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="shorthand" jdbcType="VARCHAR" property="shorthand" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="appid" jdbcType="VARCHAR" property="appid" />
+    <result column="secret" jdbcType="VARCHAR" property="secret" />
+    <result column="public_key" jdbcType="VARCHAR" property="publicKey" />
+    <result column="private_key" jdbcType="VARCHAR" property="privateKey" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, name, shorthand, state, appid, secret, public_key,private_key,company_id,remark,create_by, create_date, update_by, update_date
+  </sql>
+
+
+  <select id="getCPMediaListPage" parameterType="com.daofen.crm.base.PageVO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dolphin_media
+    <where>
+    	<if test="param.id != null">
+    		id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.companyId != null">
+    		and company_id = #{param.companyId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.appid != null">
+    		and appid = #{param.appid,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.state != null">
+    		and state = #{param.state,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    				or shorthand like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    </where>
+    limit #{startIndex,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getCPMediaListPageCount" parameterType="com.daofen.crm.base.PageVO" resultType="java.lang.Integer">
+    select
+    count(1)
+    from dolphin_media
+    <where>
+    	<if test="param.id != null">
+    		id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.companyId != null">
+    		and company_id = #{param.companyId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.appid != null">
+    		and appid = #{param.appid,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.state != null">
+    		and state = #{param.state,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    				or shorthand like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    </where>
+  </select>
+  
+  <delete id="delCPMedia" parameterType="java.lang.Long">
+    delete from dolphin_media
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="addCPMedia" parameterType="com.daofen.crm.service.media.model.MediaPO">
+    insert into dolphin_media
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="shorthand != null">
+        shorthand,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="appid != null">
+        appid,
+      </if>
+      <if test="secret != null">
+        secret,
+      </if>
+      <if test="publicKey != null">
+        public_key,
+      </if>
+      <if test="privateKey != null">
+        private_key,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="shorthand != null">
+        #{shorthand,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="appid != null">
+        #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="secret != null">
+         #{secret,jdbcType=VARCHAR},
+      </if>
+      <if test="publicKey != null">
+        #{publicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="privateKey != null">
+        #{privateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateCPMedia" parameterType="com.daofen.crm.service.media.model.MediaPO">
+    update dolphin_media
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="shorthand != null">
+        shorthand = #{shorthand,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="appid != null">
+        appid = #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="secret != null">
+        secret = #{secret,jdbcType=VARCHAR},
+      </if>
+      <if test="publicKey != null">
+        public_key = #{publicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="privateKey != null">
+        private_key = #{privateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

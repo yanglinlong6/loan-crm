@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.crm.service.company.dao.TeamMapper">
+  <resultMap id="BaseResultMap" type="com.daofen.crm.service.company.model.TeamPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <resultMap id="BO_BaseResultMap" type="com.daofen.crm.service.company.model.TeamBO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="companyName" jdbcType="VARCHAR" property="companyName" />
+    <result column="shopName" jdbcType="VARCHAR" property="shopName" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, company_id, shop_id, `name`, remark, create_by, create_date, update_by, update_date
+  </sql>
+  
+  <select id="selectCompanyShopTeamList" resultMap="BaseResultMap">
+    select  <include refid="Base_Column_List" />
+    from company_shop_team
+    <where>
+      <choose>
+        <when test="companyId != null and shopId != null">company_id = #{companyId} and shop_id =#{shopId}</when>
+        <otherwise>
+          <if test="companyId != null">company_id = #{companyId}</if>
+          <if test="shopId != null">shop_id = #{shopId}</if>
+        </otherwise>
+      </choose>
+    </where>
+  </select>
+  
+  <select id="selectTeamPage" parameterType="com.daofen.crm.base.PageVO" resultMap="BO_BaseResultMap">
+    SELECT
+      team.*,
+      (select `name` from company where id=team.company_id) AS companyName,
+      (select `name` from company_shop where id=team.shop_id) AS shopName,
+      (select city from company where id=team.company_id) AS city
+    FROM company_shop_team team
+    where team.company_id in(${param.companyIds})
+      <if test="param != null">
+        <if test="param.shopId != null"> and team.shop_id = #{param.shopId}</if>
+        <if test="param.name !=null and param.name != ''"> and team.name like concat('%',#{param.name},'%')</if>
+        <if test="param.city != null and param.city != ''"> and company.city like concat('%',#{param.city},'%')</if>
+        <if test="param.companyName != null and param.companyName != ''"> and company.name like concat('%',#{param.companyName},'%')</if>
+      </if>
+    limit #{startIndex},#{size}
+  </select>
+
+  <select id="selectTeamPageCount" parameterType="com.daofen.crm.base.PageVO" resultType="java.lang.Integer">
+    select count(id)
+    from  company_shop_team team
+    where team.company_id in(${param.companyIds})
+    <if test="param != null">
+      <if test="param.shopId != null"> and team.shop_id = #{param.shopId}</if>
+      <if test="param.name !=null and param.name != ''"> and team.name like concat('%',#{param.name},'%')</if>
+      <if test="param.city != null and param.city != ''"> and company.city like concat('%',#{param.city},'%')</if>
+      <if test="param.companyName != null and param.companyName != ''"> and company.name like concat('%',#{param.companyName},'%')</if>
+    </if>
+  </select>
+
+  <select id="selectTeamById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from company_shop_team
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteTeam" parameterType="java.lang.Long">
+    delete from company_shop_team
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertTeam" parameterType="com.daofen.crm.service.company.model.TeamPO">
+    insert into company_shop_team
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateTeam" parameterType="com.daofen.crm.service.company.model.TeamPO">
+    update company_shop_team
+    <set>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+
+</mapper>

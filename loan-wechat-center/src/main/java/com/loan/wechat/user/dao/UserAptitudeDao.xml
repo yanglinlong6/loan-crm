@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.loan.wechat.user.dao.UserAptitudeDao">
+	
+	<resultMap id="aptitude_map"  type="com.loan.wechat.user.UserAptitudePO" >
+		<result column="id"  property="id"/>
+		<result column="user_id" property="userId"/>
+		<result column="name" property="name"/>
+		<result column="mobile" property="mobile"/>
+		<result column="province" property="province"/>
+		<result column="city" property="city"/>
+		<result column="loan_amount" property="loanAmount"/>
+		<result column="credit_card" property="creditCard"/>
+		<result column="zhima" property="zhima"/>
+		<result column="zhima_score" property="zhimaScore"/>
+		<result column="company" property="company"/>
+		<result column="public_fund" property="publicFund"/>
+		<result column="car" property="car"/>
+		<result column="house" property="house"/>
+		<result column="insurance" property="insurance"/>
+		<result column="getway_income" property="getwayIncome"/>
+		<result column="level" property="level"/>
+		<result column="occupation" property="occupation"/>
+		<result column="house_state" property="houseState"/>
+		<result column="create_by" property="createBy"/>
+		<result column="create_date" property="createDate"/>
+		<result column="update_by" property="updateBy"/>
+		<result column="update_date" property="updateDate"/>
+		<result column="age" property="age"/>
+		<result column="gender" property="gender"/>
+		<result column="channel" property="channel"/>
+		<result column="weight" property="weight"/>
+		<result column="mobile_location" property="mobileLocation"/>
+		<result column="ip_location" property="ipLocation"/>
+	</resultMap>
+    
+    <select id="selectCityCountByLevel" resultType="java.lang.Integer">
+        select count(1)
+        from loan_cps.user_aptitude uapt
+        where uapt.city=#{city} and uapt.create_date between #{startDate} and #{endDate}
+            <if test="level != null">
+                and uapt.`level` = #{level}
+            </if>
+    </select>
+
+	<select id="selectChannelCountByLevel" resultType="java.lang.Integer">
+		select count(1)
+		from loan_cps.user_aptitude uapt
+		where uapt.channel=#{channel} and uapt.create_date between #{startDate} and #{endDate}
+		<if test="level != null">
+			and uapt.`level` = #{level}
+		</if>
+	</select>
+	
+	<select id="selectChannelUserAptitudePO" resultMap="aptitude_map">
+		select `id`,user_id,`name`,`mobile`,`city`,`level`,mobile_location,ip_location
+		from loan_cps.user_aptitude uapt
+		where uapt.channel=#{channel} and uapt.create_date between #{startDate} and #{endDate}
+		order by uapt.create_date desc
+		limit 1
+	</select>
+	
+</mapper>

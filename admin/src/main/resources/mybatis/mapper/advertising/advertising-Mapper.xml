@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.admin.service.media.dao.AdvertisingDao">
+   
+
+    <select id="add" parameterType="java.util.List" >
+        insert into loan_cps.advertising 
+        	(channel,operators,advertising_date,city,account,media,type,consume,conversion,price,create_by,create_date,update_by,update_date) 
+      	VALUES
+      <foreach collection="list" item="ads" separator=",">
+          (#{ads.channel},#{ads.operators},#{ads.advertisingDate},#{ads.city},#{ads.account},#{ads.media},#{ads.type},#{ads.consume}
+          ,#{ads.conversion},#{ads.price},#{ads.createBy},#{ads.createDate},#{ads.updateBy},#{ads.updateDate})
+      </foreach>
+    </select>
+
+
+</mapper>

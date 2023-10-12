@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.loan.wechat.docking.dao.MarketDao">
+ 	
+ 	<select id="getById" resultType="com.alibaba.fastjson.JSONObject" >
+ 		SELECT * FROM loan_cps.user_market_log WHERE id = #{id}
+ 	</select>
+ 	
+ 	<select id="getByChannel" resultType="com.alibaba.fastjson.JSONObject"  >
+ 		SELECT log.*,mc.ratio from loan_cps.market_channel mc LEFT JOIN loan_cps.user_market_log log ON mc.channel = log.channel 
+			WHERE
+				log.create_date BETWEEN date_add(NOW(),interval -30 minute) AND date_add(NOW(),interval -5 minute) and log.status = 0
+ 	</select>
+	
+	<insert id="add" parameterType="com.alibaba.fastjson.JSONObject" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO  
+			loan_cps.user_market_log
+			(account,click,type ,status,channel,url,create_date,update_date)
+		VALUES 
+			(#{account},#{click},#{type},#{status},#{channel},#{url},now(),now())
+	</insert>
+	
+	<update id="update" parameterType="com.alibaba.fastjson.JSONObject" >
+		UPDATE 
+			loan_cps.user_market_log
+		set	
+			status = #{status}
+		WHERE 
+			id = #{id}
+	</update>
+	
+</mapper>

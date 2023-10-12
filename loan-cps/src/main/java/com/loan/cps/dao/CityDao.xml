@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.loan.cps.dao.CityDao">
+
+	<resultMap id="BaseResultMap" type="com.loan.cps.service.city.model.CityPO">
+		<id column="id" jdbcType="VARCHAR" property="id"/>
+		<result column="name" jdbcType="VARCHAR" property="name"/>
+		<result column="level" property="level"/>
+		<result column="ordered" property="ordered"/>
+		<result column="parentId" property="parentId"/>
+		<result column="create_by" property="createBy"/>
+		<result column="create_date" property="createDate"/>
+		<result column="update_by" property="updateBy"/>
+		<result column="update_date" property="updateDate"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		city.id, city.name, city.level, city.ordered, city.parentId
+	</sql>
+ 	
+ 	<select id="getByName" resultType="com.alibaba.fastjson.JSONObject"  >
+ 		SELECT *
+		FROM `city`
+		WHERE `name` like CONCAT('%',#{name},'%') and `level` = #{level}
+ 	</select>
+
+	<select id="selectAll" parameterType="java.lang.Byte" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from `city` city
+		<if test="level != null">
+			where city.level <![CDATA[ <= ]]>  #{level}
+		</if>
+		order by ordered desc
+	</select>
+	
+</mapper>

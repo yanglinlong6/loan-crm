@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.label.dao.LabelMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.label.model.LabelPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="status"  property="status" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, org_id, `name`,`status`, create_by, create_date, update_by, update_date
+  </sql>
+
+  <select id="selectAllLabel" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from label
+    where org_id = #{orgId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectLabel" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from label
+    where org_id = #{orgId,jdbcType=BIGINT} and `name` = #{name}
+    limit 1
+  </select>
+
+
+  <delete id="deleteLabel" parameterType="java.lang.Long">
+    delete
+    from label
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+
+  <insert id="insertLabel" parameterType="com.crm.service.label.model.LabelPO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    insert into label
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+</mapper>

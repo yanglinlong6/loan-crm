@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.loan.wechat.docking.dao.WechatBaseDataDao">
+	
+	<resultMap id="WechatDTO_Map"  type="com.loan.wechat.docking.entity.WechatDTO" >
+		<result column="id"  property="id"/>
+		<result column="wechatId" property="wechatId"/>
+		<result column="wxType" property="wxType"/>
+		<result column="appId" property="appId"/>
+		<result column="appSecret" property="appSecret"/>
+		<result column="domain2" property="domain2"/>
+		<result column="openid" property="openid"/>
+		<result column="mediaId" property="mediaId"/>
+		<result column="mediaName" property="mediaName"/>
+		<result column="wechat" property="wechat"/>
+		<result column="app_type" property="appType"/>
+	</resultMap>
+ 	
+ 	<select resultMap="WechatDTO_Map" id="getAllWechatsList"   >
+ 		SELECT id,wechatId,wxType,appId,appSecret,domain2,openid,mediaId,mediaName,wechat,app_type FROM wechat_basedata WHERE status = 0
+ 	</select>
+	
+</mapper>

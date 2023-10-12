@@ -1,0 +1,423 @@
+<!--
+ * @Description: 
+ * @Version: 1.0
+ * @Autor: zcqia
+ * @LastEditors: zcqia
+-->
+<!DOCTYPE html>
+<html lang="en" style="font-size: 40px;">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>专业贷款平台</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            font-family: "Microsoft YaHei";
+            height: 100%;
+            -webkit-touch-callout: none;
+            /*系统默认菜单被禁用*/
+            -webkit-user-select: none;
+            /*webkit浏览器*/
+            -khtml-user-select: none;
+            /*早起浏览器*/
+            -moz-user-select: none;
+            /*火狐浏览器*/
+            -ms-user-select: none;
+            /*IE浏览器*/
+            user-select: none;
+            /*用户是否能够选中文本*/
+        }
+
+        html {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        html,
+        button,
+        input,
+        select,
+        textarea {
+            font-family: "Microsoft YaHei", "lucida Grande", Verdana;
+        }
+
+        input,
+        select {
+            -webkit-appearance: none;
+            /*閸樺娅庣化鑽ょ埠姒涙ǹ顓婚惃鍕壉瀵拷*/
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            /* 閻愮懓鍤妯瑰瘨閻ㄥ嫰顤侀懝锟�*/
+        }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        img {
+            display: block;
+        }
+
+        .clearfix {
+            *zoom: 1;
+        }
+
+        .clearfix:before,
+        .clearfix:after {
+            display: table;
+            line-height: 0;
+            content: "";
+        }
+
+        .clearfix:after {
+            clear: both;
+        }
+
+        input::-webkit-input-placeholder {
+            color: #999;
+        }
+
+        input:-ms-input-placeholder {
+            color: #999;
+        }
+
+        input::-moz-placeholder {
+            color: #999;
+        }
+
+        input:-moz-placeholder {
+            color: #999;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        .flex {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .flex-v {
+            -webkit-box-orient: vertical;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+        }
+
+        .flex-1 {
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+        }
+
+        .flex-align-center {
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+        .flex-pack-center {
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+        }
+
+        .flex-pack-justify {
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        .qrBox,
+        .footer {
+
+            position: relative;
+        }
+
+        .btn,
+        .btn02 {
+            position: absolute;
+
+            left: 50%;
+            bottom: .8rem;
+            margin-left: -6.5rem;
+            width: 13rem;
+            height: 2.8rem;
+            background: url("../img/button01.png.html") no-repeat;
+            background-size: 100% 100%;
+
+        }
+
+        .btn02 {
+            height: 1.6rem;
+            background: url("../img/button02.png.html") no-repeat;
+            background-size: 100% 100%;
+        }
+
+        #qr {
+            height: 100%;
+
+            /* width: 7rem; */
+            /* margin: auto; */
+            /* border: 1px solid #65a2f3; */
+            /* background: #f7f8fd; */
+        }
+
+        .finger {
+            width: 170px;
+            height: 145px;
+        }
+
+        .finger img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .qrBox-qr {
+            width: 100%;
+            height: 175px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #qr {
+            width: 175px;
+            height: 175px;
+            background-image: url("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQHL8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyemlncnREWElkRkYxY05CM052Y2UAAgSxqvpeAwSAOgkA");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .qrBox-qr-img {
+            width: 175px;
+            height: 175px;
+        }
+
+        .qrBox-footer {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qrBox-footer span {
+            font-size: 19px;
+            font-weight: 500;
+            color: rgba(230, 164, 26, 1);
+            line-height: 140px;
+        }
+
+        .qrBox {
+            padding: 0 2%;
+            background-color: white;
+        }
+
+        .header {
+            position: relative;
+        }
+
+        .logo {
+            position: absolute;
+            width: 1rem;
+            top: 0.5rem;
+            left: 0.7rem;
+        }
+
+        .inpBox {
+            /* background: rgba(245,245,245) */
+        }
+
+        .inpBox span {
+            font-size: 16px;
+        }
+
+        .inpBox input {
+            /* background: rgba(245,245,245); */
+            border: none;
+            font-size: 16px;
+        }
+
+        .jieqian {
+            width: 40%;
+            margin: 0 auto;
+        }
+
+        .da {
+            display: flex;
+            align-items: center;
+            width: 90%;
+            margin: 8% auto;
+        }
+
+        .icon {
+            width: 24px;
+        }
+
+        #name {
+            position: absolute;
+            width: 2.4rem;
+            top: 1.8rem;
+            left: 0;
+            color: white;
+            font-size: 9px;
+            text-align: center;
+        }
+
+        .submit-btn {
+            background: pink;
+            padding: .3rem;
+        }
+
+        .qrBox-header {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qrBox-header span {
+            font-size: 21px;
+            font-weight: 500;
+            color: rgba(52, 155, 248, 1);
+            line-height: 140px;
+        }
+
+        .footer {
+            width: 100%;
+            height: 80px;
+            background-color: #379BFB;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .footer span {
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(254, 254, 254, 1);
+            line-height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <img src="css/logo.png" alt="" id="bg">
+        <!-- <img class="logo" src="../css/logo.png" alt=""> -->
+        <div id="name"></div>
+    </div>
+    <div class="qrBox">
+        <div class='qrBox-header'>
+            <span>立即关注我们</span>
+        </div>
+        <div class='qrBox-qr'>
+            <div id="qr"></div>
+            <div class='finger'>
+                <img src="css/finger.gif" alt="" id="bg">
+            </div>
+        </div>
+        <div class='qrBox-footer'>
+            <span>长按二维码识别&nbsp;&nbsp;&nbsp;立即借钱</span>
+        </div>
+        <!-- <img src="http://w1.iplayers.cn/upload/bdcecbab9608954f/667dccdf2deb5f6e.jpg" id="qr2" alt=""> -->
+    </div>
+    <div class='footer'>
+        <span>资金来源：正规持牌机构</span>
+        <span>贷款有风险，借贷需谨慎</span>
+        <span>请根据个人合理贷款，理性消费，避免逾期</span>
+    </div>
+    <!-- <img src="http://w1.iplayers.cn/upload/0d82c2c44b74117e/38a1453f42f30fff.jpg" alt=""> -->
+    <script src="https://backend.zdt360.com/h5/formH5/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var gdt_vid = getQueryString("gdt_vid") || '';
+            var phone = getQueryString("phone") || '';
+            var wx_official_account = getQueryString("wx_official_account");
+            var url = 'https://backend.zdt360.com/server/apis/getWechat'
+            var data = { "wx_official_account": wx_official_account }
+            var access_token
+            var ticket
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    console.log('res', res);
+                    if (res.code === 1000 && res.data) {
+                        access_token = res.data.access_token
+                        var wx_code_url = 'https://backend.zdt360.com/server/apis/getQrcode'
+                        var wx_code_data = { "access_token": access_token, "clickId": gdt_vid, "phone": phone }
+                        console.log('wx_code_data', wx_code_data);
+
+                        $.ajax({
+                            type: 'POST',
+                            url: wx_code_url,
+                            data: wx_code_data,
+                            dataType: 'json',
+                            success: function (res) {
+                                console.log('res', res);
+                                ticket = res.ticket || ''
+                                setList('qr', ticket)
+                            }
+                        })
+                    }
+                }
+            });
+        })
+        function setList(id, ticket) {
+            let url = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + ticket
+            $("#" + id).html("")
+            var _html = "<img class='qrBox-qr-img' src=" + url + ">"
+            $("#" + id).append(_html)
+
+            var _html2 = "<img style='width:100%;height: 100vh;position: absolute;top: 0;left: 0;z-index: 100;opacity:0' src=" + url + ">"
+            $("body").append(_html2)
+        }
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            var q = window.location.pathname.substr(1).match(reg_rewrite);
+            if (r != null) {
+                return unescape(r[2]);
+            } else if (q != null) {
+                return unescape(q[2]);
+            } else {
+                return null;
+            }
+        }
+    </script>
+</body>
+
+
+</html>

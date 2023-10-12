@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.statistic.dao.HomeStatisticMapper">
+
+
+  <select id="selectNewCustomerCount" parameterType="com.crm.service.statistic.model.HomeStatisticBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer
+    where org_id =#{orgId}
+      <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+      <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+      <if test="employeeId != null and employeeId > 0"> and (employee_id = #{employeeId} and again_distribute = 0)</if>
+      <if test="startDate != null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+      <if test="endDate != null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+  </select>
+
+
+  <select id="selectHelpCustomerCount" parameterType="com.crm.service.statistic.model.HomeStatisticBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer
+    where org_id = #{orgId}  and help_employee_id > 0
+    <if test="shopId != null and shopId > 0"> and  shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and  team_id = #{teamId}</if>
+    <if test="employeeId != null and employeeId > 0"> and  employee_id = #{employeeId}</if>
+    <if test="startDate != null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+    <if test="endDate != null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+  </select>
+
+
+  <select id="selectAgainCustomerCount" parameterType="com.crm.service.statistic.model.HomeStatisticBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer
+    where org_id = #{orgId} and again_distribute = 1
+    <if test="shopId != null and shopId > 0"> and  shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null and employeeId > 0"> and  employee_id = #{employeeId}</if>
+    <if test="startDate != null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+    <if test="endDate != null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+  </select>
+
+  <select id="selectCallCount" parameterType="com.crm.service.statistic.model.HomeStatisticBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer
+    where org_id = #{orgId} and `call` in(5,6)
+    <if test="shopId != null and shopId > 0"> and  shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null and employeeId > 0"> and  employee_id = #{employeeId}</if>
+    <if test="startDate != null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+    <if test="endDate != null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+  </select>
+
+  <select id="selectFitCount" parameterType="com.crm.service.statistic.model.HomeStatisticBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer
+    where org_id = #{orgId} and `fit` = 1
+    <if test="shopId != null and shopId > 0"> and  shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null and employeeId > 0"> and  employee_id = #{employeeId}</if>
+    <if test="startDate != null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+    <if test="endDate != null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+  </select>
+
+  <select id="selectAppointmentCustomerCount" parameterType="com.crm.service.statistic.model.HomeStatisticBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer
+    where org_id =#{orgId}  and `progress` = 4
+    <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null and employeeId > 0"> and employee_id = #{employeeId}</if>
+    <if test="startDate != null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+    <if test="endDate != null and endDate != ''"> and  create_date <![CDATA[ <= ]]> #{endDate} </if>
+  </select>
+
+
+  <select id="selectUpCustomerCount" parameterType="com.crm.service.statistic.model.HomeStatisticBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer
+    where org_id =#{orgId} and `progress` = 5
+    <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null and employeeId > 0"> and  employee_id = #{employeeId}</if>
+    <if test="startDate != null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+    <if test="endDate != null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+  </select>
+
+
+  <select id="selectContractCount" parameterType="com.crm.service.statistic.model.HomeStatisticBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer_contract
+    where org_id = #{orgId} and `state` in(0,1)
+    <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null and employeeId > 0"> and  employee_id = #{employeeId}</if>
+    <if test="startDate != null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+    <if test="endDate != null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+  </select>
+
+
+  <select id="selectDepositAmount" parameterType="com.crm.service.statistic.model.HomeStatisticBO" resultType="java.lang.Double">
+    select IFNULL(sum(deposit),0.00)
+    from customer_contract
+    where org_id =#{orgId}  and `state` in(1)
+    <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null and employeeId > 0"> and employee_id = #{employeeId}</if>
+    <if test="startDate != null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+    <if test="endDate != null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+  </select>
+
+  <select id="selectImportCount" parameterType="com.crm.service.statistic.model.HomeStatisticBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer_import
+    where org_id =#{orgId} and `state` in(1)
+    <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null and employeeId > 0"> and employee_id = #{employeeId}</if>
+    <if test="startDate != null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+    <if test="endDate != null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+  </select>
+
+  <select id="selectIncomeAmount" parameterType="com.crm.service.statistic.model.HomeStatisticBO" resultType="java.lang.Double">
+    select IFNULL(sum(income),0.00)
+    from customer_import
+    where org_id =#{orgId} and `state` in(1)
+    <if test="shopId != null and shopId > 0"> and shop_id = #{shopId}</if>
+    <if test="teamId != null and teamId > 0"> and team_id = #{teamId}</if>
+    <if test="employeeId != null and employeeId > 0"> and employee_id = #{employeeId}</if>
+    <if test="startDate != null and startDate != ''"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+    <if test="endDate != null and endDate != ''"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+  </select>
+
+
+  <select id="selectEmployeeCustomerCount" parameterType="com.crm.service.statistic.model.HomeIncomeSortBO" resultType="java.lang.Integer">
+    select IFNULL(count(1),0)
+    from customer
+    where org_id=#{orgId}
+      and first_employee = #{employeeId}
+      and create_date <![CDATA[ >= ]]> #{startDate} and create_date <![CDATA[ <= ]]> #{endDate}
+      and zijian = 0
+  </select>
+
+  <select id="selectEmployeeCustomerContractCount" parameterType="com.crm.service.statistic.model.HomeIncomeSortBO" resultType="java.lang.Integer">
+    select IFNULL(count(1),0)
+    from customer customer
+    where customer.org_id=#{orgId}
+      and customer.first_employee = #{employeeId}
+      and customer.create_date <![CDATA[ >= ]]> #{startDate}
+      and customer.create_date <![CDATA[ <= ]]> #{endDate}
+      and customer.zijian = 0
+      and EXISTS(
+        select 1
+        from customer_contract contract where customer.id = contract.customer_id and  contract.employee_id = #{employeeId} and contract.`state` <![CDATA[ >= ]]> 1
+      )
+  </select>
+
+
+  <select id="selectEmployeeNewCustomerIncomeAmount" parameterType="com.crm.service.statistic.model.HomeIncomeSortBO" resultType="java.lang.Double">
+    select IFNULL(SUM(ci.income),0.00)
+    from customer c
+      join customer_import ci on  c.id = ci.customer_id and ci.`state` = 1 and ci.progress in (5,6) and ci.employee_id=#{employeeId}
+    where c.org_id = #{orgId} and c.first_employee = #{employeeId} and c.zijian = 0
+      and c.create_date <![CDATA[ >= ]]> #{startDate}
+      and c.create_date <![CDATA[ <= ]]> #{endDate}
+  </select>
+  
+  <select id="selectCustomerCount" parameterType="com.crm.service.statistic.model.CustomerStateBO" resultType="java.lang.Integer">
+    select IFNULL(count(1),0)
+    from customer
+    where org_id=#{orgId}
+      and zijian = 0
+      <if test="process != null"> and `progress` = #{process} </if>
+      <if test="startDate != null"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+      <if test="endDate != null"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+      <if test="shopId != null"> and shop_id = #{shopId}</if>
+      <if test="teamId != null"> and team_id = #{teamId}</if>
+      <if test="employeeId != null"> and employee_id = #{employeeId}</if>
+      <if test="channelId != null"> and `channel` = #{channelId}</if>
+      <if test="media != null">  and `media` = #{media}</if>
+
+  </select>
+
+
+  <select id="selectCustomerLabelCount" parameterType="com.crm.service.statistic.model.CustomerLabelBO" resultType="java.lang.Integer">
+    select IFNULL(count(1),0)
+    from customer
+    where org_id=#{orgId}
+    and zijian = 0
+    <if test="label != null"> and `label` like concat('%' #{label},'%') </if>
+    <if test="startDate != null"> and create_date <![CDATA[ >= ]]> #{startDate} </if>
+    <if test="endDate != null"> and create_date <![CDATA[ <= ]]> #{endDate} </if>
+    <if test="shopId != null"> and shop_id = #{shopId}</if>
+    <if test="teamId != null"> and team_id = #{teamId}</if>
+    <if test="employeeId != null"> and employee_id = #{employeeId}</if>
+    <if test="channelId != null"> and `channel` = #{channelId}</if>
+    <if test="media != null">  and `media` = #{media}</if>
+
+  </select>
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.loan.cps.dao.LenderDao">
+  <resultMap id="BaseResultMap" type="com.loan.cps.entity.LenderPO">
+    <result column="lender_id" jdbcType="VARCHAR" property="lenderId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+    <result column="redirect_url" jdbcType="VARCHAR" property="redirectUrl" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="quality" jdbcType="TINYINT" property="quality" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="require" jdbcType="VARCHAR" property="require" />
+    <result column="min_amount" jdbcType="INTEGER" property="minAmount" />
+    <result column="max_amount" jdbcType="INTEGER" property="maxAmount" />
+    <result column="deadline" jdbcType="VARCHAR" property="deadline" />
+    <result column="deadline_unit" jdbcType="VARCHAR" property="deadlineUnit" />
+    <result column="make_loan_time" jdbcType="VARCHAR" property="makeLoanTime" />
+    <result column="total_fee" jdbcType="VARCHAR" property="totalFee" />
+    <result column="evaluate" jdbcType="VARCHAR" property="evaluate" />
+    <result column="apply_num"  property="applyNum" />
+    <result column="apply_base_num"  property="applyBaseNum" />
+    <result column="is_recommend" jdbcType="TINYINT" property="isRecommend" />
+    <result column="average" jdbcType="INTEGER" property="average" />
+    <result column="conversion_rate" jdbcType="DECIMAL" property="conversionRate" />
+    <result column="repay_way" jdbcType="VARCHAR" property="repayWay" />
+    <result column="apply_condition" jdbcType="VARCHAR" property="applyCondition" />
+    <result column="aptitude_require" jdbcType="VARCHAR" property="aptitudeRequire" />
+    <result column="aptitude_require_exp" jdbcType="VARCHAR" property="aptitudeRequireExp" />
+    <result column="service_telephone" jdbcType="VARCHAR" property="serviceTelephone" />
+    <result column="service_time" jdbcType="VARCHAR" property="serviceTime" />
+    <result column="query_credit" jdbcType="TINYINT" property="queryCredit" />
+    <result column="prepayment" jdbcType="TINYINT" property="prepayment" />
+    <result column="loan_time" jdbcType="INTEGER" property="loanTime" />
+    <result column="baihu" jdbcType="TINYINT" property="baihu" />
+    <result column="can_add_limit" jdbcType="TINYINT" property="canAddLimit" />
+    <result column="loan_rate_unit" jdbcType="VARCHAR" property="loanRateUnit" />
+    <result column="loan_rate_min" jdbcType="DECIMAL" property="loanRateMin" />
+    <result column="loan_rate_max" jdbcType="DECIMAL" property="loanRateMax" />
+    <result column="service_cost" jdbcType="VARCHAR" property="serviceCost" />
+    <result column="go_heavy" jdbcType="TINYINT" property="goHeavy" />
+    <result column="unite_login" jdbcType="TINYINT" property="uniteLogin" />
+    <result column="recommend_reason" jdbcType="VARCHAR" property="recommendReason" />
+    <result column="lable" jdbcType="VARCHAR" property="lable" />
+    <result column="apply_flow" jdbcType="VARCHAR" property="applyFlow" />
+    <result column="sort"  property="sort" />
+    <result column="settlement"  property="settlement" />
+    <result column="quota"  property="quota" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    lender_id, company_id, `name`, logo_url, redirect_url, `status`, quality, remark,
+    `require`, min_amount, max_amount, deadline, deadline_unit, make_loan_time, total_fee,
+    evaluate,apply_num, apply_base_num, is_recommend, average, conversion_rate, repay_way, apply_condition,
+    aptitude_require, aptitude_require_exp, service_telephone, service_time, query_credit, 
+    prepayment, loan_time, baihu, can_add_limit, loan_rate_unit, loan_rate_min, loan_rate_max, 
+    service_cost, go_heavy, unite_login, recommend_reason, lable, apply_flow,sort,settlement,quota, create_by,
+    create_date, update_by, update_date
+  </sql>
+
+  <select id="selectByLenderId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from loan_cps.lender
+    where lender_id = #{lenderId}
+  </select>
+
+
+  <select id="selectByCompanyId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from loan_cps.lender
+    where company_id = #{companyId}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from loan_cps.lender
+    where status != 1
+    order by sort desc <!-- 降序排序 -->
+  </select>
+  
+  <select id="selByUser" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+ 	select
+    <include refid="Base_Column_List" />
+    from loan_cps.lender
+    where status != 1 AND <![CDATA[ ABS(#{settlement}-settlement)<=2 ]]>
+    ORDER BY ABS(#{settlement}-settlement),quota*#{quota} DESC,sort DESC
+  </select>
+  
+  <select id="selExclude" parameterType="java.lang.String" resultType="java.lang.Long">
+  	select company_id from loan_cps.exclude_repeat_record where mobile = #{mobile} and status = 1 group by company_id
+  </select>
+  
+  <select id="selByName" parameterType="java.lang.String" resultMap="BaseResultMap" >
+  	select 
+    <include refid="Base_Column_List" />
+    from loan_cps.lender
+    where name like CONCAT('%',#{searchWord},'%') and status != 1
+  </select>
+  
+   <select id="selByNoApplyList" parameterType="java.lang.String" resultMap="BaseResultMap" >
+  	select 
+    <include refid="Base_Column_List" />
+	from loan_cps.lender len
+	where NOT EXISTS(SELECT lender_id FROM user_apply_record rec  WHERE user_id = #{userId} AND len.lender_id = rec.lender_id GROUP BY lender_id ) AND status != 1
+  </select>
+
+</mapper>

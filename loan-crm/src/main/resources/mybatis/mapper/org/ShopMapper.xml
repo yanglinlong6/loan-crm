@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.org.dao.ShopPOMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.org.model.ShopPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="adress" jdbcType="VARCHAR" property="adress" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="type" property="type"/>
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    `id`, org_id, name,`city`, adress, `state`, `count`,`type`, create_by, create_date, update_by, update_date
+  </sql>
+  
+  <select id="selectShopListByPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from org_shop
+    where org_id=#{paramObject.orgId}
+      <if test="paramObject.name != null"> and name like concat('%',#{paramObject.name},'%') </if>
+      <if test="paramObject.city != null"> and `city` like concat('%',#{paramObject.city},'%') </if>
+    order by create_date desc
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectShopTotalCountByPage" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from org_shop
+    where org_id=#{paramObject.orgId}
+      <if test="paramObject.name != null"> and name like concat('%',#{paramObject.name},'%') </if>
+      <if test="paramObject.city != null"> and `city` like concat('%',#{paramObject.city},'%') </if>
+  </select>
+
+  <select id="selectShopById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from org_shop
+    where id = #{id,jdbcType=BIGINT}
+    limit 1
+  </select>
+  
+  <select id="selectShop" parameterType="com.crm.service.org.model.ShopPO" resultMap="BaseResultMap">
+    select *
+    from org_shop
+    <where>
+      <if test="orgId != null"> and org_id=#{orgId} </if>
+      <if test="name != null"> and name = #{name} </if>
+      <if test="state != null"> and state = #{state} </if>
+      <if test="id != null"> and id not in(#{id})</if>
+    </where>
+    limit 1
+  </select>
+  
+  <select id="selectShopByOrgId" resultMap="BaseResultMap">
+    select *
+    from org_shop
+    where org_id = #{orgId} and `state` = 1
+      <if test="city != null and city != ''"> and `city` = #{city}</if>
+      <if test="type != null "> and `type` = #{type}</if>
+  </select>
+
+  <delete id="delShop" parameterType="java.lang.Long">
+    delete from org_shop
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertShop" parameterType="com.crm.service.org.model.ShopPO"  useGeneratedKeys="true" keyProperty="id">
+    insert into org_shop
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="city != null">
+        `city`,
+      </if>
+      <if test="adress != null">
+        adress,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="count != null">
+        count,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city},
+      </if>
+      <if test="adress != null">
+        #{adress,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateShop" parameterType="com.crm.service.org.model.ShopPO">
+    update org_shop
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="adress != null">
+        adress = #{adress,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="count != null">
+        count = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        `type` = #{type},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectAll"  resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from org_shop
+    where org_id=#{orgId}
+          <if test="type != null"> and `type` = #{type} </if>
+    order by create_date asc
+  </select>
+  
+</mapper>

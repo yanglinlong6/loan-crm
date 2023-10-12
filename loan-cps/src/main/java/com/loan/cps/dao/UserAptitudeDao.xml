@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.loan.cps.dao.UserAptitudeDao">
+	
+	<resultMap id="aptitude_map"  type="com.loan.cps.entity.UserAptitudePO" >
+		<result column="id"  property="id"/>
+		<result column="user_id" property="userId"/>
+		<result column="name" property="name"/>
+		<result column="mobile" property="mobile"/>
+		<result column="province" property="province"/>
+		<result column="city" property="city"/>
+		<result column="loan_amount" property="loanAmount"/>
+		<result column="credit_card" property="creditCard"/>
+		<result column="zhima" property="zhima"/>
+		<result column="zhima_score" property="zhimaScore"/>
+		<result column="company" property="company"/>
+		<result column="public_fund" property="publicFund"/>
+		<result column="car" property="car"/>
+		<result column="house" property="house"/>
+		<result column="insurance" property="insurance"/>
+		<result column="getway_income" property="getwayIncome"/>
+		<result column="level" property="level"/>
+		<result column="occupation" property="occupation"/>
+		<result column="house_state" property="houseState"/>
+		<result column="create_by" property="createBy"/>
+		<result column="create_date" property="createDate"/>
+		<result column="update_by" property="updateBy"/>
+		<result column="update_date" property="updateDate"/>
+		<result column="age" property="age"/>
+		<result column="gender" property="gender"/>
+		<result column="channel" property="channel"/>
+		<result column="weight" property="weight"/>
+		<result column="mobile_location" property="mobileLocation"/>
+		<result column="ip_location" property="ipLocation"/>
+        <result column="car_price" property="carPrice" />
+        <result column="overdue" property="overdue"></result>
+        <result column="call_time" property="callTime"></result>
+        <result column="md5" property="md5"></result>
+        <result column="type" property="type"></result>
+        <result column="extension" property="extension"></result>
+	</resultMap>
+ 	
+ 	<select id="get" resultMap="aptitude_map"  parameterType="java.lang.String" >
+ 		SELECT * FROM loan_cps.user_aptitude WHERE user_id = #{userId}
+ 	</select>
+ 	
+ 	<select id="getByMobile" resultMap="aptitude_map"  parameterType="java.lang.String" >
+ 		SELECT * FROM loan_cps.user_aptitude WHERE mobile = #{mobile} AND create_date >= DATE_SUB(CURDATE(), INTERVAL 1 DAY) limit 1
+ 	</select>
+
+    <select id="getByMobileMD5" resultMap="aptitude_map"  parameterType="java.lang.String" >
+        SELECT * FROM loan_cps.user_aptitude WHERE `md5` = #{mobileMD5} AND create_date >= DATE_SUB(CURDATE(), INTERVAL 1 DAY) limit 10
+    </select>
+    
+    <select id="getByMobileByCreateBy" resultMap="aptitude_map">
+        SELECT *
+        FROM loan_cps.user_aptitude
+        WHERE mobile = #{mobile} AND  create_by = #{createBy} AND create_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) limit 1
+    </select>
+ 	
+ 	<select id="getByLevel" resultMap="aptitude_map"  parameterType="java.lang.Integer" >
+ 		SELECT * FROM loan_cps.user_aptitude WHERE level = #{level}
+ 	</select>
+ 	
+ 	<insert id="create" parameterType="com.loan.cps.entity.UserAptitudePO">
+ 		insert into loan_cps.user_aptitude
+ 		(user_id,create_by,create_date,update_by,update_date)
+ 		values
+ 		(#{userId},#{createBy},#{createDate},#{updateBy},#{updateDate})
+ 	</insert>
+ 	
+ 	<update id="update" parameterType="com.loan.cps.entity.UserAptitudePO">
+ 		update loan_cps.user_aptitude
+ 		<set>
+ 			<if test="name !=null and name !=''">
+        		name = #{name},
+      		</if>
+      		<if test="mobile !=null and mobile !=''">
+        		mobile = #{mobile},
+      		</if>
+      		<if test="province !=null and province !=''">
+        		province = #{province},
+      		</if>
+      		<if test="city !=null and city !=''">
+        		city = #{city},
+      		</if>
+      		<if test="loanAmount !=null and loanAmount !=''">
+        		loan_amount = #{loanAmount},
+      		</if>
+      		<if test="creditCard !=null">
+        		credit_card = #{creditCard},
+      		</if>
+      		<if test="zhima !=null ">
+        		zhima = #{zhima},
+      		</if>
+      		<if test="zhimaScore !=null">
+        		zhima_score = #{zhimaScore},
+      		</if>
+      		<if test="company !=null">
+        		company = #{company},
+      		</if>
+      		<if test="publicFund !=null and publicFund !=''">
+        		public_fund = #{publicFund},
+      		</if>
+      		<if test="car !=null">
+        		car = #{car},
+      		</if>
+      		<if test="house !=null ">
+        		house = #{house},
+      		</if>
+      		<if test="insurance !=null ">
+        		insurance = #{insurance},
+      		</if>
+      		<if test="getwayIncome !=null ">
+        		getway_income = #{getwayIncome},
+      		</if>
+      		<if test="level !=null ">
+        		level = #{level},
+      		</if>
+      		<if test="createBy !=null and createBy !=''">
+        		create_by = #{createBy},
+      		</if>
+      		<if test="createDate !=null ">
+        		create_date = #{createDate},
+      		</if>
+      		<if test="updateBy !=null and updateBy !=''">
+        		update_by = #{updateBy},
+      		</if>
+      		<if test="updateDate !=null ">
+        		update_date = #{updateDate},
+      		</if>
+      		<if test="occupation !=null ">
+        		occupation = #{occupation},
+      		</if>
+      		<if test="houseState !=null ">
+        		house_state = #{houseState},
+      		</if>
+      		<if test="age !=null ">
+        		age = #{age},
+      		</if>
+      		<if test="gender !=null ">
+        		gender = #{gender},
+      		</if>
+      		<if test="weight !=null ">
+        		weight = #{weight},
+      		</if>
+            <if test="overdue != null">
+                `overdue` = #{overdue},
+            </if>
+            <if test="callTime != null">
+                `call_time` = #{callTime},
+            </if>
+ 		</set>
+ 		where user_id = #{userId,jdbcType=VARCHAR}
+ 	</update>
+ 	
+ 	<insert id="add" parameterType="com.loan.cps.entity.UserAptitudePO">
+    insert into loan_cps.user_aptitude
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="loanAmount != null">
+        loan_amount,
+      </if>
+      <if test="creditCard != null">
+        credit_card,
+      </if>
+      <if test="zhima != null">
+        zhima,
+      </if>
+      <if test="zhimaScore != null">
+        zhima_score,
+      </if>
+      <if test="company != null">
+        company,
+      </if>
+      <if test="publicFund != null">
+        public_fund,
+      </if>
+      <if test="car != null">
+        car,
+      </if>
+      <if test="house != null">
+        house,
+      </if>
+      <if test="houseExtension != null">
+        house_extension,
+      </if>
+      <if test="insurance != null">
+        insurance,
+      </if>
+      <if test="getwayIncome != null">
+        getway_income,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="occupation != null">
+        occupation,
+      </if>
+      <if test="houseState != null">
+        house_state,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="channel != null">
+        channel,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="mobileLocation != null">
+        mobile_location,
+      </if>
+      <if test="ipLocation != null">
+        ip_location,
+      </if>
+      <if test="carPrice != null">
+        car_price,
+      </if>
+      <if test="overdue != null">
+          `overdue`,
+      </if>
+      <if test="callTime != null">
+          `call_time`,
+      </if>
+      <if test="md5 != null">
+          `md5`,
+      </if>
+      <if test="type != null">
+          `type`,
+      </if>
+      <if test="extension != null">
+          `extension`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+         #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="loanAmount != null">
+        #{loanAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCard != null">
+        #{creditCard,jdbcType=INTEGER},
+      </if>
+      <if test="zhima != null">
+        #{zhima,jdbcType=INTEGER},
+      </if>
+      <if test="zhimaScore != null">
+        #{zhimaScore,jdbcType=INTEGER},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=INTEGER},
+      </if>
+      <if test="publicFund != null">
+        #{publicFund,jdbcType=VARCHAR},
+      </if>
+      <if test="car != null">
+        #{car,jdbcType=BIGINT},
+      </if>
+      <if test="house != null">
+        #{house,jdbcType=BIGINT},
+      </if>
+      <if test="houseExtension != null">
+        #{houseExtension,jdbcType=INTEGER},
+      </if>
+      <if test="insurance != null">
+        #{insurance,jdbcType=TIMESTAMP},
+      </if>
+      <if test="getwayIncome != null">
+        #{getwayIncome,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="occupation != null">
+         #{occupation,jdbcType=INTEGER},
+      </if>
+      <if test="houseState != null">
+        #{houseState,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="channel != null">
+        #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mobileLocation != null">
+        #{mobileLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="ipLocation != null">
+        #{ipLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="carPrice != null">
+        #{carPrice},
+      </if>
+      <if test="overdue != null">
+        #{overdue},
+      </if>
+      <if test="callTime != null">
+          #{callTime},
+      </if>
+      <if test="md5 != null">
+          #{md5},
+      </if>
+      <if test="type != null">
+         #{type},
+      </if>
+      <if test="extension != null">
+          #{extension},
+      </if>
+    </trim>
+  </insert>
+ 	
+ 	<select id="selCityChannel" parameterType="com.loan.cps.entity.UserAptitudePO" resultType="com.alibaba.fastjson.JSONObject" >
+ 		select * from loan_menu.media where media =  #{channel,jdbcType=VARCHAR} and city = #{city,jdbcType=VARCHAR}
+ 	</select>
+	
+</mapper>

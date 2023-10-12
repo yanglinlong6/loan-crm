@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.org.dao.OrgRegisterMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.org.model.OrgRegisterPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    `id`, org_id, mobile, create_date
+  </sql>
+
+
+  <select id="selectRegister"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from org_register
+    where org_id = #{orgId,jdbcType=BIGINT} and mobile = #{mobile}
+  </select>
+
+
+  <insert id="insertRegister" parameterType="com.crm.service.org.model.OrgRegisterPO" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+    insert into org_register
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

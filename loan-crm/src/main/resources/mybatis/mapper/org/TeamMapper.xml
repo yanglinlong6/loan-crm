@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.org.dao.TeamPOMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.org.model.TeamPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, org_id, shop_id, name, state, create_by, create_date, update_by, update_date
+  </sql>
+  
+  <select id="selectTeamByPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from org_shop_team
+    where org_id = #{paramObject.orgId}
+      <if test="paramObject != null">
+        <if test="paramObject.shopId != null "> and shop_id = #{paramObject.shopId}</if>
+        <if test="paramObject.name != null "> and name like concat('%',#{paramObject.name},'%')</if>
+      </if>
+    order by create_date desc
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectTeamTotalCountByPage" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from org_shop_team
+    where org_id = #{paramObject.orgId}
+    <if test="paramObject != null">
+      <if test="paramObject.shopId != null "> and shop_id = #{paramObject.shopId}</if>
+      <if test="paramObject.name != null "> and name like concat('%',#{paramObject.name},'%')</if>
+    </if>
+  </select>
+
+  <select id="selectTeamById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from org_shop_team
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectAllTeam" parameterType="com.crm.service.org.model.TeamPO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org_shop_team
+    where org_id = #{orgId}
+      <if test="shopId != null"> and shop_id = #{shopId}</if>
+  </select>
+
+  <select id="selectTeam" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from org_shop_team
+    where org_id = #{orgId} and shop_id=#{shopId} and name = #{teamName}
+    limit 1
+  </select>
+
+  <delete id="delTeamById" parameterType="java.lang.Long">
+    delete from org_shop_team
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+
+  <insert id="insertTeam" parameterType="com.crm.service.org.model.TeamPO" useGeneratedKeys="true" keyProperty="id">
+    insert into org_shop_team
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateTeam" parameterType="com.crm.service.org.model.TeamPO">
+    update org_shop_team
+    <set>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

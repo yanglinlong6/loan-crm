@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.behind.dao.CustomerBehindPOMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.behind.model.CustomerBehindPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="team_id" jdbcType="BIGINT" property="teamId" />
+    <result column="employee_id" property="employeeId"/>
+    <result column="first_employee" property="firstEmployee"/>
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="process" jdbcType="TINYINT" property="process" />
+    <result column="dis_date" jdbcType="TIMESTAMP" property="disDate" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="info" jdbcType="LONGVARCHAR" property="info" />
+    <result column="remark_date" property="remarkDate"></result>
+  </resultMap>
+  
+  <resultMap id="BaseResultMap_BO" type="com.crm.service.behind.model.CustomerBehindBO" extends="BaseResultMap" >
+      <result column="noProcessDay" property="noProcessDay" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    behind.`id`, behind.contract_id,behind.org_id, behind.shop_id, behind.team_id, behind.customer_id, behind.employee_id,behind.first_employee,
+    behind.`process`,behind.`info`, behind.dis_date,behind.remark_date,behind.create_by, behind.create_date, behind.update_by, behind.update_date
+  </sql>
+
+  <select id="getBehindPage" parameterType="com.crm.common.PageBO" resultMap="BaseResultMap_BO">
+      select <include refid="Base_Column_List" />
+              ,
+              TIMESTAMPDIFF(DAY,behind.remark_date,DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%S')) as noProcessDay
+      from customer_behind behind
+          join customer c  on behind.customer_id = c.id
+      where behind.org_id = #{paramObject.orgId} and behind.create_date between #{paramObject.startDate} and #{paramObject.endDate}
+          <if test="paramObject.shopId != null"> and behind.shop_id = #{paramObject.shopId}</if>
+          <if test="paramObject.teamId != null"> and behind.team_id = #{paramObject.teamId}</if>
+          <if test="paramObject.employeeId != null"> and behind.employee_id = #{paramObject.employeeId}</if>
+          <if test="paramObject.process != null"> and behind.`process` = #{paramObject.process}</if>
+          <if test="paramObject.name != null">   and c.`name`  LIKE CONCAT('%', #{paramObject.name},'%')</if>
+          <if test="paramObject.mobile != null"> and c.`mobile` LIKE CONCAT('%',#{paramObject.mobile},'%') </if>
+          <if test="paramObject.noProcessDay > 0"> and TIMESTAMPDIFF(DAY,behind.remark_date,DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%S')) >= #{paramObject.noProcessDay}</if>
+      order by create_date desc
+      limit #{start},#{size}
+  </select>
+
+  <select id="getBehindPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer_behind behind
+    join customer c  on behind.customer_id = c.id
+    where behind.org_id = #{paramObject.orgId} and behind.create_date between #{paramObject.startDate} and #{paramObject.endDate}
+    <if test="paramObject.shopId != null"> and behind.shop_id = #{paramObject.shopId}</if>
+    <if test="paramObject.teamId != null"> and behind.team_id = #{paramObject.teamId}</if>
+    <if test="paramObject.employeeId != null"> and behind.employee_id = #{paramObject.employeeId}</if>
+    <if test="paramObject.process != null"> and behind.`process` = #{paramObject.process}</if>
+    <if test="paramObject.name != null">   and c.`name` = LIKE CONCAT('%', #{paramObject.name},'%')</if>
+    <if test="paramObject.mobile != null"> and c.`mobile` LIKE CONCAT('%',#{paramObject.mobile},'%') </if>
+    <if test="paramObject.noProcessDay > 0"> and TIMESTAMPDIFF(DAY,behind.remark_date,DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%S')) >= #{paramObject.noProcessDay}</if>
+  </select>
+
+
+  <select id="selectById"  resultMap="BaseResultMap_BO">
+      select
+      <include refid="Base_Column_List" />
+      from customer_behind behind
+      where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByCustomerId"  resultMap="BaseResultMap_BO">
+      select
+      <include refid="Base_Column_List" />
+      from customer_behind behind
+      where customer_id = #{customerId,jdbcType=BIGINT}
+  </select>
+
+
+
+  <insert id="insertCustomerBehindPO" parameterType="com.crm.service.behind.model.CustomerBehindPO"
+    useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into customer_behind
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="contractId != null">
+        contract_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="teamId != null">
+        team_id,
+      </if>
+      <if test="employeeId != null">
+        employee_id,
+      </if>
+      <if test="firstEmployee != null">
+        first_employee,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="process != null">
+        process,
+      </if>
+      <if test="info != null">
+        `info`,
+      </if>
+      <if test="disDate != null">
+        dis_date,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="contractId != null">
+        #{contractId},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="teamId != null">
+        #{teamId,jdbcType=BIGINT},
+      </if>
+      <if test="employeeId != null">
+        #{employeeId},
+      </if>
+      <if test="firstEmployee != null">
+        #{firstEmployee},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="process != null">
+        #{process,jdbcType=TINYINT},
+      </if>
+      <if test="info != null">
+        #{info,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="disDate != null">
+        #{disDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateCustomerBehind" parameterType="com.crm.service.behind.model.CustomerBehindPO">
+    update customer_behind
+    <set>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="teamId != null">
+        team_id = #{teamId,jdbcType=BIGINT},
+      </if>
+      <if test="employeeId != null">
+        employee_id = #{employeeId,jdbcType=TINYINT},
+      </if>
+      <if test="firstEmployee != null">
+        first_employee = #{firstEmployee,jdbcType=TINYINT},
+      </if>
+      <if test="process != null">
+        process = #{process,jdbcType=TINYINT},
+      </if>
+      <if test="disDate != null">
+        dis_date = #{disDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarkDate != null">
+        remark_date = #{remarkDate},
+      </if>
+      <if test="info != null">
+        `info` = #{info,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT} or customer_id = #{customerId}
+  </update>
+
+</mapper>

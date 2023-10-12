@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.crm.service.counselor.dao.CounselorMapper">
+  <resultMap id="BaseResultMap" type="com.daofen.crm.service.counselor.model.CompanyCounselorPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="team_id" jdbcType="BIGINT" property="teamId" />
+    <result column="status"  property="status" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="allocation_count" jdbcType="INTEGER" property="allocationCount" />
+    <result column="open"  property="open" />
+    <result column="type"  property="type" />
+    <result column="media"  property="media" />
+    <result column="from_exten" property="fromExten" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <resultMap id="BO_BaseResultMap" type="com.daofen.crm.service.counselor.model.CompanyCounselorBO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="team_id" jdbcType="BIGINT" property="teamId" />
+    <result column="status"  property="status" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="allocation_count" jdbcType="INTEGER" property="allocationCount" />
+    <result column="open"  property="open" />
+    <result column="type"  property="type" />
+    <result column="media"  property="media" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="type"  property="type" />
+    <result column="media" property="media" />
+    <result column="from_exten" property="fromExten" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <association property="role" javaType="com.daofen.crm.service.counselor.model.RoleBO">
+      <id column="rid" property="id"/>
+      <result column="rname" property="name"/>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, mobile, `name`, company_id, shop_id, team_id, status, role_id, allocation_count,
+    `open`, remark,`type`, media,from_exten,create_by, create_date, update_by, update_date
+  </sql>
+  
+  <select id="selectCounselorByShopId" parameterType="java.lang.Long" resultMap="BaseResultMap" >
+     select id, mobile, `name`, company_id, shop_id, team_id, status, role_id, allocation_count,`open`,`type`,media,from_exten
+    from company_counselor
+    where shop_id=#{shopId}
+  </select>
+
+  <select id="selectCounselorByTeamId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, mobile, `name`, company_id, shop_id, team_id, status, role_id, allocation_count,`open`,`type`,media,from_exten
+    from company_counselor
+    where team_id=#{teamId}
+  </select>
+
+  <select id="selectCounselorPage" parameterType="com.daofen.crm.base.PageVO" resultMap="BO_BaseResultMap">
+    select account.*,role.id rid,role.`name` rname
+    from company_counselor account
+    join role role on account.role_id = role.id
+    where account.company_id=#{param.companyId}
+    <if test="param != null">
+      <if test="param.role != null">
+        <if test="param.role.name != null"> and role.`name` like concat('%',#{param.role.name},'%')</if>
+      </if>
+      <if test="param.mobile != null"> and account.mobile = #{param.mobile}</if>
+    </if>
+    order by account.update_date desc
+    limit #{startIndex},#{size}
+  </select>
+
+  <select id="selectCounselorPageCount" parameterType="com.daofen.crm.base.PageVO" resultType="java.lang.Integer">
+    select count(account.id)
+    from company_counselor account
+    join role role on account.role_id = role.id
+    where account.company_id=#{param.companyId}
+    <if test="param != null">
+      <if test="param.role != null">
+        <if test="param.role.name != null"> and role.`name` like concat('%',#{param.role.name},'%')</if>
+      </if>
+      <if test="param.mobile != null"> and account.mobile = #{param.mobile}</if>
+    </if>
+  </select>
+
+
+
+  <select id="selectCounselorById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from company_counselor
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectCounselorMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from company_counselor
+    where mobile = #{mobile,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectCounselorByCompanyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from company_counselor
+    where company_id = #{companyId}
+  </select>
+
+
+  <insert id="insertCounselor" parameterType="com.daofen.crm.service.counselor.model.CompanyCounselorPO">
+    insert into company_counselor
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="teamId != null">
+        team_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="allocationCount != null">
+        allocation_count,
+      </if>
+      <if test="open != null">
+        open,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="media != null">
+        media,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="teamId != null">
+        #{teamId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="allocationCount != null">
+        #{allocationCount,jdbcType=INTEGER},
+      </if>
+      <if test="open != null">
+        #{open,jdbcType=BIT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type},
+      </if>
+      <if test="media != null">
+        #{media},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateCounselor" parameterType="com.daofen.crm.service.counselor.model.CompanyCounselorPO">
+    update company_counselor
+    <set>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="teamId != null">
+        team_id = #{teamId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="allocationCount != null">
+        allocation_count = #{allocationCount,jdbcType=INTEGER},
+      </if>
+      <if test="open != null">
+        open = #{open,jdbcType=BIT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type},
+      </if>
+      <if test="media != null">
+        media = #{media,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <delete id="deleteCounselor" parameterType="java.lang.Long">
+    delete from company_counselor where id=#{id}
+  </delete>
+  
+  <select id="selectAdmin" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    co.id, co.mobile, co.name, co.company_id, co.shop_id, co.team_id, co.status, co.role_id, co.allocation_count, 
+    co.open, co.remark,co.type, co.media,co.create_by, co.create_date, co.update_by, co.update_date
+    FROM company_counselor co LEFT JOIN role ro ON co.role_id = ro.id 
+    WHERE co.company_id = #{id,jdbcType=BIGINT} AND ro.type = 1 
+    LIMIT 1
+  </select>
+  
+</mapper>

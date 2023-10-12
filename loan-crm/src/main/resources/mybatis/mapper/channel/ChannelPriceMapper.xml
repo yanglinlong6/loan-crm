@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.channel.dao.ChannelPriceMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.channel.model.ChannelPricePO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ration_id" jdbcType="BIGINT" property="rationId" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="channel_id" jdbcType="BIGINT" property="channelId" />
+    <result column="media" jdbcType="VARCHAR" property="media" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="input_date" jdbcType="VARCHAR" property="inputDate" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    `id`, ration_id, org_id, channel_id, `media`, `city`, input_date, `price`, create_by, create_date,
+    update_by, update_date
+  </sql>
+  <select id="selectChannelPrice" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from channel_price
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteChannelPrice" parameterType="java.lang.Long">
+    delete from channel_price
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertChannelPrice" parameterType="com.crm.service.channel.model.ChannelPricePO" useGeneratedKeys="true" keyColumn="id">
+    insert into channel_price
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="rationId != null">
+        ration_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="channelId != null">
+        channel_id,
+      </if>
+      <if test="media != null">
+        media,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="inputDate != null">
+        input_date,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="rationId != null">
+        #{rationId,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="channelId != null">
+        #{channelId,jdbcType=BIGINT},
+      </if>
+      <if test="media != null">
+        #{media,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="inputDate != null">
+        #{inputDate,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <select id="selectAllChannelPrice" resultType="com.crm.service.channel.model.ChannelPricePO" resultMap="BaseResultMap">
+    select *
+    from channel_price
+    where org_id = #{orgId} and input_date BETWEEN #{startDate} and #{endDate}
+        <if test="rationId != null"> and ration_id = #{rationId}</if>
+        <if test="channelId != null"> and channel_id = #{channelId}</if>
+        <if test="media != null"> and media = #{media}</if>
+        <if test="city != null"> and `city` = #{city}</if>
+  </select>
+
+
+  <update id="updateChannelPrice" parameterType="com.crm.service.channel.model.ChannelPricePO">
+    update channel_price
+    <set>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <delete id="delChannelPrice" parameterType="java.lang.Long">
+    delete from channel_price where id = #{id}
+  </delete>
+
+
+</mapper>

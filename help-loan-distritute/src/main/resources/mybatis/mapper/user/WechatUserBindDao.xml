@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+        namespace="com.help.loan.distribute.service.user.dao.WechatUserBindDao">
+
+    <resultMap id="user_map" type="com.help.loan.distribute.service.user.model.UserDTO">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="openid" property="openid"/>
+        <result column="unionId" property="unionId"/>
+        <result column="media" property="media"/>
+        <result column="wx_type" property="wxType"/>
+        <result column="state" property="state"/>
+        <result column="type" property="type"/>
+        <result column="follow_time" property="followTime"/>
+        <result column="unfollow_time" property="unfollowTime"/>
+        <result column="sub_count" property="subCount"/>
+        <result column="session_count" property="sessionCount"/>
+        <result column="job_state" property="jobState"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_date" property="updateDate"/>
+    </resultMap>
+
+    <select id="select" parameterType="java.lang.String" resultMap="user_map">
+        SELECT
+        *
+        FROM
+        loan_menu.bind_user
+        WHERE
+        user_id = #{userId}
+    </select>
+	
+	<select id="selectCount" parameterType="com.alibaba.fastjson.JSONObject" resultType="java.lang.Integer" >
+		SELECT count(1) FROM loan_menu.bind_user WHERE create_date BETWEEN #{startDate} AND #{endDate}
+	</select>
+
+</mapper>

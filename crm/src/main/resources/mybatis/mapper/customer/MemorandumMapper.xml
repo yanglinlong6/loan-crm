@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.crm.service.customer.dao.MemorandumMapper">
+
+  <resultMap id="BaseResultMap" type="com.daofen.crm.service.customer.model.MemorandumPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="cust_id" jdbcType="BIGINT" property="custId" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="thing_time" jdbcType="TIMESTAMP" property="thingTime" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, cust_id, state, thing_time,content,create_by, create_date, update_by, update_date
+  </sql>
+
+
+  <select id="get" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from memorandum
+    where 
+    	<![CDATA[
+    	thing_time > now() 
+    	]]>
+    	and 
+    	state = 0  
+    	and 
+    	cust_id = #{id,jdbcType=BIGINT}
+    order by create_date desc
+    limit 1
+  </select>
+  
+  <select id="getList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from memorandum
+    where 
+    	thing_time BETWEEN  now() and date_add(now(), interval 5 minute) and state = 0  
+  </select>
+  
+  <delete id="del" parameterType="java.lang.Long">
+    delete from memorandum
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="add" parameterType="com.daofen.crm.service.customer.model.MemorandumPO">
+    insert into memorandum
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="custId != null">
+        cust_id,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="thingTime != null">
+        thing_time,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="custId != null">
+        #{custId,jdbcType=BIGINT},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="thingTime != null">
+        #{thingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.daofen.crm.service.customer.model.MemorandumPO">
+  	update 
+  		memorandum 
+  	set
+  		state = #{state,jdbcType=INTEGER}
+  	where
+  		id = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

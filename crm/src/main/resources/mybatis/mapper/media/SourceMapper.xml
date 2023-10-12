@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.crm.service.media.dao.SourceMapper">
+
+  <resultMap id="BaseResultMap" type="com.daofen.crm.service.media.model.SourcePO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="media_id" jdbcType="BIGINT" property="mediaId" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="forum_name" jdbcType="VARCHAR" property="forumName" />
+    <result column="source_name" jdbcType="VARCHAR" property="sourceName" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="duan_date" jdbcType="VARCHAR" property="duanDate" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="price" jdbcType="INTEGER" property="price" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="media_name" jdbcType="VARCHAR" property="mediaName" />
+    <result column="media_shorthand" jdbcType="VARCHAR" property="mediaShorthand" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    source.id, source.media_id, source.state, source.forum_name, source.source_name, 
+    source.city, source.num,source.duan_date,source.company_id,source.price,
+    source.create_by, source.create_date, source.update_by, source.update_date
+  </sql>
+
+
+  <select id="getSourceList" parameterType="com.daofen.crm.base.PageVO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />,media.name media_name,media.shorthand media_shorthand
+    from dolphin_source source 
+    	LEFT JOIN
+    	 dolphin_media media 
+    	ON source.media_id = media.id
+    <where>
+    	<if test="param.id != null">
+    		source.id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.companyId != null">
+    		and source.company_id = #{param.companyId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.mediaId != null">
+    		and source.media_id = #{param.mediaId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( source.forum_name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%')
+    			or source.source_name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or media.name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    </where>
+    limit #{startIndex,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getSourceListCount" parameterType="com.daofen.crm.base.PageVO" resultType="java.lang.Integer">
+     select
+    count(1)
+    from dolphin_source source 
+    	LEFT JOIN
+    	 dolphin_media media 
+    	ON source.media_id = media.id
+    <where>
+    	<if test="param.id != null">
+    		source.id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.companyId != null">
+    		and source.company_id = #{param.companyId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.mediaId != null">
+    		and source.media_id = #{param.mediaId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( source.forum_name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%')
+    			or source.source_name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or media.name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    </where>
+  </select>
+  
+  <delete id="delSource" parameterType="java.lang.Long">
+    delete from dolphin_source
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="addSource" parameterType="com.daofen.crm.service.media.model.SourcePO">
+    insert into dolphin_source
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mediaId != null">
+        media_id,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="forumName != null">
+        forum_name,
+      </if>
+      <if test="sourceName != null">
+        source_name,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="num != null">
+        num,
+      </if>
+      <if test="duanDate != null">
+        duan_date,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mediaId != null">
+        #{mediaId,jdbcType=BIGINT},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="forumName != null">
+        #{forumName,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceName != null">
+        #{sourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+         #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null">
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="duanDate != null">
+        #{duanDate,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateSource" parameterType="com.daofen.crm.service.media.model.SourcePO">
+    update dolphin_source
+    <set>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="forumName != null">
+        forum_name = #{forumName,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceName != null">
+        source_name = #{sourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null">
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="duanDate != null">
+        duan_date = #{duanDate,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=INTEGER},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

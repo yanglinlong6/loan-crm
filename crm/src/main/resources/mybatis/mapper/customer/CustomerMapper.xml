@@ -1,0 +1,1000 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.crm.service.customer.dao.CustomerMapper">
+
+  <resultMap id="BaseResultMap" type="com.daofen.crm.service.customer.model.CustomerPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="data_state" jdbcType="INTEGER" property="dataState" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="qualification" jdbcType="VARCHAR" property="qualification" />
+    <result column="loan_type" jdbcType="INTEGER" property="loanType" />
+    <result column="business_id" jdbcType="BIGINT" property="businessId" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="source_id" jdbcType="BIGINT" property="sourceId" />
+    <result column="loan_time" jdbcType="TIMESTAMP" property="loanTime" />
+    <result column="quota" jdbcType="INTEGER" property="quota" />
+    <result column="fund" jdbcType="INTEGER" property="fund" />
+    <result column="car" jdbcType="INTEGER" property="car" />
+    <result column="house" jdbcType="INTEGER" property="house" />
+    <result column="policy" jdbcType="INTEGER" property="policy" />
+    <result column="life_insurance" jdbcType="INTEGER" property="lifeInsurance" />
+    <result column="business_license" jdbcType="INTEGER" property="businessLicense" />
+    <result column="payroll" jdbcType="INTEGER" property="payroll" />
+    <result column="zhima_score" jdbcType="INTEGER" property="zhimaScore" />
+    <result column="weili" jdbcType="INTEGER" property="weili" />
+    <result column="spm_fund" jdbcType="VARCHAR" property="spmFund" />
+    <result column="spm_car" jdbcType="VARCHAR" property="spmCar" />
+    <result column="spm_house" jdbcType="VARCHAR" property="spmHouse" />
+    <result column="spm_policy" jdbcType="VARCHAR" property="spmPolicy" />
+    <result column="spm_life_insurance" jdbcType="VARCHAR" property="spmLifeInsurance" />
+    <result column="spm_business_license" jdbcType="VARCHAR" property="spmBusinessLicense" />
+    <result column="spm_payroll" jdbcType="VARCHAR" property="spmPayroll" />
+    <result column="mobile_md5" jdbcType="VARCHAR" property="mobileMd5" />
+    <result column="mobile_city" jdbcType="VARCHAR" property="mobileCity" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="source_name" jdbcType="VARCHAR" property="sourceName" />
+    <result column="media_name" jdbcType="VARCHAR" property="mediaName" />
+    <result column="counselor_name" jdbcType="VARCHAR" property="counselorName" />
+    <result column="team_name" jdbcType="VARCHAR" property="teamName" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <association property="memorandum" column="id" select="com.daofen.crm.service.customer.dao.MemorandumMapper.get"/>
+    <collection property="circulationLogs" column="id" ofType="com.daofen.crm.service.customer.model.CirculationLogPO" select="com.daofen.crm.service.customer.dao.CirculationLogMapper.getCirculationLog"/>
+  	<collection property="remarks" column="id" ofType="com.daofen.crm.service.customer.model.RemarkPO" select="com.daofen.crm.service.customer.dao.RemarkMapper.getRemark"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    cust.id, cust.name, cust.gender, cust.mobile, cust.city, cust.age, cust.data_state,cust.level,cust.state,cust.qualification,
+    cust.loan_type,cust.business_id,cust.source_id,cust.loan_time,cust.quota,cust.fund,cust.car,cust.house,
+    cust.policy,cust.life_insurance,cust.business_license,cust.payroll,cust.zhima_score,cust.weili,cust.customer_id,
+    cust.spm_fund,cust.spm_car,cust.spm_house,cust.spm_policy,cust.spm_life_insurance,cust.spm_business_license,
+    cust.spm_payroll,cust.mobile_md5,cust.mobile_city,cust.company_id,
+    cust.create_by, cust.create_date, cust.update_by, cust.update_date
+  </sql>
+
+
+  <select id="getCustomerList" parameterType="com.daofen.crm.base.PageVO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />,sour.source_name,media.name media_name,coun.name counselor_name,team.name team_name,shop.name shop_name
+    from dolphin_customer cust
+    	LEFT JOIN dolphin_source sour ON cust.source_id = sour.id
+    	LEFT JOIN dolphin_media media ON media.id = sour.media_id
+    	LEFT JOIN company_counselor coun ON cust.business_id = coun.id
+    	LEFT JOIN company_shop_team team ON coun.team_id = team.id
+    	LEFT JOIN company_shop shop ON coun.shop_id = shop.id
+    <where>
+    	<if test="param.id != null">
+    		and cust.id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.companyId != null">
+    		and cust.company_id in ( SELECT comp.id FROM company comp 
+    									WHERE comp.id = #{param.companyId,jdbcType=BIGINT} 
+    									OR comp.parent_id =#{param.companyId,jdbcType=BIGINT}) 
+    	</if>
+    	<if test="param.businessId != null">
+    		and cust.business_id = #{param.businessId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.dataState != null">
+    		and cust.data_state = #{param.dataState,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.level != null">
+    		and cust.level = #{param.level,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.state != null">
+    		and cust.state = #{param.state,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( cust.name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.mobile like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.id like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test="param.mobileMd5 != null">
+    		and cust.mobile_md5 = #{param.mobileMd5,jdbcType=VARCHAR}
+    	</if>
+    	<if test="param.remarkNum != null">
+    		and EXISTS( select remarks.id from 
+    						dolphin_customer_remarks remarks 
+    					where remarks.customer_id = cust.id
+    	 				group by remarks.customer_id HAVING COUNT(1) = #{param.remarkNum,jdbcType=INTEGER} )
+    	</if>
+    	<if test="param.remark != null">
+    		and EXISTS(
+    			select remarks3.id from dolphin_customer_remarks remarks3 
+    				where remarks3.customer_id = cust.id and remarks3.content like CONCAT('%',#{param.remark,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test=" param.startDate != null and param.endDate != null">
+    		and cust.create_date BETWEEN #{param.startDate,jdbcType=TIMESTAMP} and #{param.endDate,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="param.uncontactedDate != null">
+    		<![CDATA[
+    		and NOT EXISTS(  SELECT * FROM dolphin_customer_remarks rem WHERE rem.customer_id = cust.id  AND  datediff(NOW(),rem.create_date) < #{param.uncontactedDate,jdbcType=INTEGER} ORDER BY rem.create_date DESC LIMIT 1 )
+    		and datediff(NOW(),cust.create_date) >= #{param.uncontactedDate,jdbcType=INTEGER}
+    		]]>
+    	</if>
+    	<if test="param.teamId != null">
+    		and team.id = #{param.teamId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.shopId != null">
+    		and shop.id = #{param.shopId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.mediaId != null">
+    		and media.id = #{param.mediaId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.sourceId != null">
+    		and cust.source_id = #{param.sourceId,jdbcType=INTEGER}
+    	</if>
+    </where>
+    order by cust.create_date desc
+    limit #{startIndex,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getCustomerList1" parameterType="com.daofen.crm.base.PageVO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />,sour.source_name,media.name media_name,coun.name counselor_name,team.name team_name,shop.name shop_name
+    from dolphin_customer cust
+    	LEFT JOIN dolphin_source sour ON cust.source_id = sour.id
+    	LEFT JOIN dolphin_media media ON media.id = sour.media_id
+    	LEFT JOIN company_counselor coun ON cust.business_id = coun.id
+    	LEFT JOIN company_shop_team team ON coun.team_id = team.id
+    	LEFT JOIN company_shop shop ON coun.shop_id = shop.id
+    <where>
+    	<if test="param.id != null">
+    		and cust.id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.companyId != null">
+    		and cust.company_id in ( SELECT comp.id FROM company comp 
+    									WHERE comp.id = #{param.companyId,jdbcType=BIGINT} 
+    									OR comp.parent_id =#{param.companyId,jdbcType=BIGINT}) 
+    	</if>
+    	<if test="param.businessId != null">
+    		and cust.business_id = #{param.businessId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.dataState != null">
+    		and cust.data_state = #{param.dataState,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.level != null">
+    		and cust.level = #{param.level,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.state != null">
+    		and cust.state = #{param.state,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( cust.name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.mobile like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.id like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test="param.mobileMd5 != null">
+    		and cust.mobile_md5 = #{param.mobileMd5,jdbcType=VARCHAR}
+    	</if>
+    	<if test="param.remarkNum != null">
+    		and EXISTS( select remarks.id from 
+    						dolphin_customer_remarks remarks 
+    					where remarks.customer_id = cust.id
+    	 				group by remarks.customer_id HAVING COUNT(1) = #{param.remarkNum,jdbcType=INTEGER} )
+    	</if>
+    	<if test="param.remark != null">
+    		and EXISTS(
+    			select remarks3.id from dolphin_customer_remarks remarks3 
+    				where remarks3.customer_id = cust.id and remarks3.content like CONCAT('%',#{param.remark,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test=" param.startDate != null and param.endDate != null">
+    			and EXISTS( SELECT
+						remarks2.id
+						FROM
+						dolphin_customer_remarks remarks2
+						WHERE remarks2.customer_id = cust.id	AND remarks2.create_date BETWEEN #{param.startDate,jdbcType=TIMESTAMP} AND #{param.endDate,jdbcType=TIMESTAMP} )
+    	</if>
+    	<if test="param.uncontactedDate != null">
+    		<![CDATA[
+    		and NOT EXISTS(  SELECT * FROM dolphin_customer_remarks rem WHERE rem.customer_id = cust.id  AND  datediff(NOW(),rem.create_date) < #{param.uncontactedDate,jdbcType=INTEGER} ORDER BY rem.create_date DESC LIMIT 1 )
+    		and datediff(NOW(),cust.create_date) >= #{param.uncontactedDate,jdbcType=INTEGER}
+    		]]>
+    	</if>
+    	<if test="param.teamId != null">
+    		and team.id = #{param.teamId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.shopId != null">
+    		and shop.id = #{param.shopId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.mediaId != null">
+    		and media.id = #{param.mediaId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.sourceId != null">
+    		and cust.source_id = #{param.sourceId,jdbcType=INTEGER}
+    	</if>
+    </where>
+    order by cust.create_date desc
+    limit #{startIndex,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getCustomerList2" parameterType="com.daofen.crm.base.PageVO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />,sour.source_name,media.name media_name,coun.name counselor_name,team.name team_name,shop.name shop_name
+    from dolphin_customer cust
+    	LEFT JOIN dolphin_source sour ON cust.source_id = sour.id
+    	LEFT JOIN dolphin_media media ON media.id = sour.media_id
+    	LEFT JOIN company_counselor coun ON cust.business_id = coun.id
+    	LEFT JOIN company_shop_team team ON coun.team_id = team.id
+    	LEFT JOIN company_shop shop ON coun.shop_id = shop.id
+    <where>
+    	<if test="param.id != null">
+    		and cust.id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.companyId != null">
+    		and cust.company_id in ( SELECT comp.id FROM company comp 
+    									WHERE comp.id = #{param.companyId,jdbcType=BIGINT} 
+    									OR comp.parent_id =#{param.companyId,jdbcType=BIGINT}) 
+    	</if>
+    	<if test="param.businessId != null">
+    		and cust.business_id = #{param.businessId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.dataState != null">
+    		and cust.data_state = #{param.dataState,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.level != null">
+    		and cust.level = #{param.level,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.state != null">
+    		and cust.state = #{param.state,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( cust.name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.mobile like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.id like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test="param.mobileMd5 != null">
+    		and cust.mobile_md5 = #{param.mobileMd5,jdbcType=VARCHAR}
+    	</if>
+    	<if test="param.remarkNum != null">
+    		and EXISTS( select remarks.id from 
+    						dolphin_customer_remarks remarks 
+    					where remarks.customer_id = cust.id
+    	 				group by remarks.customer_id HAVING COUNT(1) = #{param.remarkNum,jdbcType=INTEGER} )
+    	</if>
+    	<if test="param.remark != null">
+    		and EXISTS(
+    			select remarks3.id from dolphin_customer_remarks remarks3 
+    				where remarks3.customer_id = cust.id and remarks3.content like CONCAT('%',#{param.remark,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test=" param.startDate != null and param.endDate != null">
+    			and EXISTS( SELECT
+						cir.id
+						FROM
+						dolphin_customer_circulation_log cir
+						WHERE cir.customer_id = cust.id	AND cir.create_date BETWEEN #{param.startDate,jdbcType=TIMESTAMP} AND #{param.endDate,jdbcType=TIMESTAMP}  and cir.type =1  )
+    	</if>
+    	<if test="param.uncontactedDate != null">
+    		<![CDATA[
+    		and NOT EXISTS(  SELECT * FROM dolphin_customer_remarks rem WHERE rem.customer_id = cust.id  AND  datediff(NOW(),rem.create_date) < #{param.uncontactedDate,jdbcType=INTEGER} ORDER BY rem.create_date DESC LIMIT 1 )
+    		and datediff(NOW(),cust.create_date) >= #{param.uncontactedDate,jdbcType=INTEGER}
+    		]]>
+    	</if>
+    	<if test="param.teamId != null">
+    		and team.id = #{param.teamId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.shopId != null">
+    		and shop.id = #{param.shopId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.mediaId != null">
+    		and media.id = #{param.mediaId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.sourceId != null">
+    		and cust.source_id = #{param.sourceId,jdbcType=INTEGER}
+    	</if>
+    </where>
+    order by cust.create_date desc
+    limit #{startIndex,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getUncontactedUsersNum" parameterType="java.lang.Long" resultType="com.daofen.crm.service.customer.model.UncontactedVO">
+  	SELECT
+	COUNT(1) unum,utp
+	FROM
+	(	
+		SELECT
+			CASE
+			WHEN LEVEL = 0 AND TIMESTAMPDIFF(HOUR, date, NOW()) >= 6 THEN 1
+		  WHEN (LEVEL = 2 OR LEVEL = 3) AND TIMESTAMPDIFF(DAY, date, NOW()) >= 6 THEN 2
+		  WHEN (LEVEL = 4 OR LEVEL = 5) AND TIMESTAMPDIFF(DAY, date, NOW()) >= 4 THEN 3
+      END utp
+		FROM
+			(
+				SELECT
+					cust.LEVEL,
+					CASE
+					WHEN remark1.create_date IS NULL THEN cust.create_date
+				  ELSE remark1.create_date
+				  END date
+				FROM
+					dolphin_customer cust
+				LEFT JOIN (
+					SELECT
+						*
+					FROM
+						(
+							SELECT
+								*
+							FROM
+								dolphin_customer_remarks remark
+							WHERE
+								remark.business_id = #{id,jdbcType=BIGINT}
+							ORDER BY
+								remark.create_date DESC
+						) cc
+					GROUP BY
+						cc.customer_id
+				) remark1 ON cust.id = remark1.customer_id
+				AND cust.business_id = remark1.business_id
+				WHERE
+					cust.business_id = #{id,jdbcType=BIGINT}
+			) cd
+	) ca
+	WHERE
+		utp > 0
+	GROUP BY
+		utp
+  </select>
+  
+  <select id="getUncontactedTeamUsersNum" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.daofen.crm.service.customer.model.UncontactedVO">
+  	SELECT
+	COUNT(1) unum,utp
+	FROM
+	(	
+		SELECT
+			CASE
+			WHEN LEVEL = 0 AND TIMESTAMPDIFF(HOUR, date, NOW()) >= 6 THEN 1
+		  WHEN (LEVEL = 2 OR LEVEL = 3) AND TIMESTAMPDIFF(DAY, date, NOW()) >= 6 THEN 2
+		  WHEN (LEVEL = 4 OR LEVEL = 5) AND TIMESTAMPDIFF(DAY, date, NOW()) >= 4 THEN 3
+      END utp
+		FROM
+			(
+				SELECT
+					cust.LEVEL,
+					CASE
+					WHEN remark1.create_date IS NULL THEN cust.create_date
+				  ELSE remark1.create_date
+				  END date
+				FROM
+					dolphin_customer cust
+					LEFT JOIN company_counselor coun ON cust.business_id = coun.id
+				LEFT JOIN (
+					SELECT
+						*
+					FROM
+						(
+							SELECT
+								remark.*
+							FROM
+								dolphin_customer_remarks remark	
+							LEFT JOIN company_counselor coun ON remark.business_id = coun.id
+							<where>
+								<if test="teamId != null">
+    								AND coun.team_id = #{teamId,jdbcType=INTEGER}
+    							</if>
+								<if test="companyId != null">
+    								AND coun.company_id = #{companyId,jdbcType=INTEGER}
+    							</if>
+							</where>	
+							ORDER BY
+								remark.create_date DESC
+						) cc
+					GROUP BY
+						cc.customer_id
+				) remark1 ON cust.id = remark1.customer_id
+				AND cust.business_id = remark1.business_id
+				<where>
+					<if test="teamId != null">
+    					AND coun.team_id = #{teamId,jdbcType=INTEGER}
+    				</if>
+					<if test="companyId != null">
+    					AND coun.company_id = #{companyId,jdbcType=INTEGER}
+    				</if>
+    				<if test="cc != null">
+    					AND cust.business_id != 0
+    				</if>
+				</where>
+			) cd
+	) ca
+	WHERE
+		utp > 0
+	GROUP BY
+		utp
+  </select>
+  
+  <select id="getCustomerListCount" parameterType="com.daofen.crm.base.PageVO" resultType="java.lang.Integer">
+    select
+    count(1)
+    from dolphin_customer cust
+    	LEFT JOIN dolphin_source sour ON cust.source_id = sour.id
+    	LEFT JOIN dolphin_media media ON media.id = sour.media_id
+    	LEFT JOIN company_counselor coun ON cust.business_id = coun.id
+    	LEFT JOIN company_shop_team team ON coun.team_id = team.id
+    	LEFT JOIN company_shop shop ON coun.shop_id = shop.id
+    <where>
+    	<if test="param.id != null">
+    		and cust.id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.companyId != null">
+    		and cust.company_id in ( SELECT comp.id FROM company comp 
+    									WHERE comp.id = #{param.companyId,jdbcType=BIGINT} 
+    									OR comp.parent_id =#{param.companyId,jdbcType=BIGINT}) 
+    	</if>
+    	<if test="param.businessId != null">
+    		and cust.business_id = #{param.businessId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.dataState != null">
+    		and cust.data_state = #{param.dataState,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.level != null">
+    		and cust.level = #{param.level,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.state != null">
+    		and cust.state = #{param.state,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( cust.name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.mobile like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.id like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test="param.remarkNum != null">
+    		and EXISTS( select remarks.id from 
+    						dolphin_customer_remarks remarks 
+    					where remarks.customer_id = cust.id
+    	 				group by remarks.customer_id HAVING COUNT(1) = #{param.remarkNum,jdbcType=INTEGER} )
+    	</if>
+    	<if test="param.remark != null">
+    		and EXISTS(
+    			select remarks3.id from dolphin_customer_remarks remarks3 
+    				where remarks3.customer_id = cust.id and remarks3.content like CONCAT('%',#{param.remark,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test=" param.startDate != null and param.endDate != null">
+    		and cust.create_date BETWEEN #{param.startDate,jdbcType=TIMESTAMP} and #{param.endDate,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="param.uncontactedDate != null">
+    		<![CDATA[
+    		and NOT EXISTS(  SELECT * FROM dolphin_customer_remarks rem WHERE rem.customer_id = cust.id  AND  datediff(NOW(),rem.create_date) < #{param.uncontactedDate,jdbcType=INTEGER} ORDER BY rem.create_date DESC LIMIT 1 )
+    		and datediff(NOW(),cust.create_date) >= #{param.uncontactedDate,jdbcType=INTEGER}
+    		]]>
+    	</if>
+    	<if test="param.teamId != null">
+    		and team.id = #{param.teamId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.shopId != null">
+    		and shop.id = #{param.shopId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.mediaId != null">
+    		and media.id = #{param.mediaId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.sourceId != null">
+    		and cust.source_id = #{param.sourceId,jdbcType=INTEGER}
+    	</if>
+    </where>
+  </select>
+  
+  <select id="getCustomerListCount1" parameterType="com.daofen.crm.base.PageVO" resultType="java.lang.Integer">
+    select
+    count(1)
+    from dolphin_customer cust
+    	LEFT JOIN dolphin_source sour ON cust.source_id = sour.id
+    	LEFT JOIN dolphin_media media ON media.id = sour.media_id
+    	LEFT JOIN company_counselor coun ON cust.business_id = coun.id
+    	LEFT JOIN company_shop_team team ON coun.team_id = team.id
+    	LEFT JOIN company_shop shop ON coun.shop_id = shop.id
+    <where>
+    	<if test="param.id != null">
+    		and cust.id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.companyId != null">
+    		and cust.company_id in ( SELECT comp.id FROM company comp 
+    									WHERE comp.id = #{param.companyId,jdbcType=BIGINT} 
+    									OR comp.parent_id =#{param.companyId,jdbcType=BIGINT}) 
+    	</if>
+    	<if test="param.businessId != null">
+    		and cust.business_id = #{param.businessId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.dataState != null">
+    		and cust.data_state = #{param.dataState,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.level != null">
+    		and cust.level = #{param.level,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.state != null">
+    		and cust.state = #{param.state,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( cust.name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.mobile like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.id like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test="param.remarkNum != null">
+    		and EXISTS( select remarks.id from 
+    						dolphin_customer_remarks remarks 
+    					where remarks.customer_id = cust.id
+    	 				group by remarks.customer_id HAVING COUNT(1) = #{param.remarkNum,jdbcType=INTEGER} )
+    	</if>
+    	<if test="param.remark != null">
+    		and EXISTS(
+    			select remarks3.id from dolphin_customer_remarks remarks3 
+    				where remarks3.customer_id = cust.id and remarks3.content like CONCAT('%',#{param.remark,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test=" param.startDate != null and param.endDate != null">
+    		and EXISTS( SELECT
+						remarks2.id
+						FROM
+						dolphin_customer_remarks remarks2
+						WHERE remarks2.customer_id = cust.id	AND remarks2.create_date BETWEEN #{param.startDate,jdbcType=TIMESTAMP} AND #{param.endDate,jdbcType=TIMESTAMP} )
+    	</if>
+    	<if test="param.uncontactedDate != null">
+    		<![CDATA[
+    		and NOT EXISTS(  SELECT * FROM dolphin_customer_remarks rem WHERE rem.customer_id = cust.id  AND  datediff(NOW(),rem.create_date) < #{param.uncontactedDate,jdbcType=INTEGER} ORDER BY rem.create_date DESC LIMIT 1 )
+    		and datediff(NOW(),cust.create_date) >= #{param.uncontactedDate,jdbcType=INTEGER}
+    		]]>
+    	</if>
+    	<if test="param.teamId != null">
+    		and team.id = #{param.teamId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.shopId != null">
+    		and shop.id = #{param.shopId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.mediaId != null">
+    		and media.id = #{param.mediaId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.sourceId != null">
+    		and cust.source_id = #{param.sourceId,jdbcType=INTEGER}
+    	</if>
+    </where>
+  </select>
+  
+  <select id="getCustomerListCount2" parameterType="com.daofen.crm.base.PageVO" resultType="java.lang.Integer">
+    select
+    count(1)
+    from dolphin_customer cust
+    	LEFT JOIN dolphin_source sour ON cust.source_id = sour.id
+    	LEFT JOIN dolphin_media media ON media.id = sour.media_id
+    	LEFT JOIN company_counselor coun ON cust.business_id = coun.id
+    	LEFT JOIN company_shop_team team ON coun.team_id = team.id
+    	LEFT JOIN company_shop shop ON coun.shop_id = shop.id
+    <where>
+    	<if test="param.id != null">
+    		and cust.id = #{param.id,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.companyId != null">
+    		and cust.company_id in ( SELECT comp.id FROM company comp 
+    									WHERE comp.id = #{param.companyId,jdbcType=BIGINT} 
+    									OR comp.parent_id =#{param.companyId,jdbcType=BIGINT}) 
+    	</if>
+    	<if test="param.businessId != null">
+    		and cust.business_id = #{param.businessId,jdbcType=BIGINT}
+    	</if>
+    	<if test="param.dataState != null">
+    		and cust.data_state = #{param.dataState,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.level != null">
+    		and cust.level = #{param.level,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.state != null">
+    		and cust.state = #{param.state,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.searchWord != null">
+    		and ( cust.name like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.mobile like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') 
+    			or cust.id like CONCAT('%',#{param.searchWord,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test="param.remarkNum != null">
+    		and EXISTS( select remarks.id from 
+    						dolphin_customer_remarks remarks 
+    					where remarks.customer_id = cust.id
+    	 				group by remarks.customer_id HAVING COUNT(1) = #{param.remarkNum,jdbcType=INTEGER} )
+    	</if>
+    	<if test="param.remark != null">
+    		and EXISTS(
+    			select remarks3.id from dolphin_customer_remarks remarks3 
+    				where remarks3.customer_id = cust.id and remarks3.content like CONCAT('%',#{param.remark,jdbcType=VARCHAR},'%') )
+    	</if>
+    	<if test=" param.startDate != null and param.endDate != null">
+    		and EXISTS( SELECT
+						cir.id
+						FROM
+						dolphin_customer_circulation_log cir
+						WHERE cir.customer_id = cust.id	AND cir.create_date BETWEEN #{param.startDate,jdbcType=TIMESTAMP} AND #{param.endDate,jdbcType=TIMESTAMP}  and cir.type =1  )
+    	</if>
+    	<if test="param.uncontactedDate != null">
+    		<![CDATA[
+    		and NOT EXISTS(  SELECT * FROM dolphin_customer_remarks rem WHERE rem.customer_id = cust.id  AND  datediff(NOW(),rem.create_date) < #{param.uncontactedDate,jdbcType=INTEGER} ORDER BY rem.create_date DESC LIMIT 1 )
+    		and datediff(NOW(),cust.create_date) >= #{param.uncontactedDate,jdbcType=INTEGER}
+    		]]>
+    	</if>
+    	<if test="param.teamId != null">
+    		and team.id = #{param.teamId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.shopId != null">
+    		and shop.id = #{param.shopId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.mediaId != null">
+    		and media.id = #{param.mediaId,jdbcType=INTEGER}
+    	</if>
+    	<if test="param.sourceId != null">
+    		and cust.source_id = #{param.sourceId,jdbcType=INTEGER}
+    	</if>
+    </where>
+  </select>
+  
+  <delete id="delCustomer" parameterType="java.lang.Long">
+    delete from dolphin_customer
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="addCustomer" parameterType="com.daofen.crm.service.customer.model.CustomerPO">
+    insert into dolphin_customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="dataState != null">
+        data_state,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="qualification != null">
+        qualification,
+      </if>
+      <if test="loanType != null">
+        loan_type,
+      </if>
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="sourceId != null">
+        source_id,
+      </if>
+      <if test="loanTime != null">
+        loan_time,
+      </if>
+      <if test="quota != null">
+        quota,
+      </if>
+      <if test="fund != null">
+        fund,
+      </if>
+      <if test="car != null">
+        car,
+      </if>
+      <if test="house != null">
+        house,
+      </if>
+      <if test="policy != null">
+        policy,
+      </if>
+      <if test="lifeInsurance != null">
+        life_insurance,
+      </if>
+      <if test="businessLicense != null">
+        business_license,
+      </if>
+      <if test="payroll != null">
+        payroll,
+      </if>
+      <if test="zhimaScore != null">
+        zhima_score,
+      </if>
+      <if test="weili != null">
+        weili,
+      </if>
+      <if test="spmFund != null">
+        spm_fund,
+      </if>
+      <if test="spmCar != null">
+        spm_car,
+      </if>
+      <if test="spmHouse != null">
+        spm_house,
+      </if>
+      <if test="spmPolicy != null">
+        spm_policy,
+      </if>
+      <if test="spmLifeInsurance != null">
+        spm_life_insurance,
+      </if>
+      <if test="spmBusinessLicense != null">
+        spm_business_license,
+      </if>
+      <if test="spmPayroll != null">
+        spm_payroll,
+      </if>
+      <if test="mobileMd5 != null">
+        mobile_md5,
+      </if>
+      <if test="mobileCity != null">
+        mobile_city,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+         #{age,jdbcType=INTEGER},
+      </if>
+      <if test="dataState != null">
+        #{dataState,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="qualification != null">
+        #{qualification,jdbcType=VARCHAR},
+      </if>
+      <if test="loanType != null">
+        #{loan_type,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null">
+        #{businessId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="sourceId != null">
+        #{sourceId,jdbcType=BIGINT},
+      </if>
+      <if test="loanTime != null">
+        #{loanTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="quota != null">
+        #{quota,jdbcType=INTEGER},
+      </if>
+      <if test="fund != null">
+        #{fund,jdbcType=INTEGER},
+      </if>
+      <if test="car != null">
+         #{car,jdbcType=INTEGER},
+      </if>
+      <if test="house != null">
+        #{house,jdbcType=INTEGER},
+      </if>
+      <if test="policy != null">
+        #{policy,jdbcType=INTEGER},
+      </if>
+      <if test="lifeInsurance != null">
+        #{lifeInsurance,jdbcType=INTEGER},
+      </if>
+      <if test="businessLicense != null">
+        #{businessLicense,jdbcType=INTEGER},
+      </if>
+      <if test="payroll != null">
+        #{payroll,jdbcType=INTEGER},
+      </if>
+      <if test="zhimaScore != null">
+        #{zhimaScore,jdbcType=INTEGER},
+      </if>
+      <if test="weili != null">
+        #{weili,jdbcType=INTEGER},
+      </if>
+      <if test="spmFund != null">
+        #{spmFund,jdbcType=VARCHAR},
+      </if>
+      <if test="spmCar != null">
+        #{spmCar,jdbcType=VARCHAR},
+      </if>
+      <if test="spmHouse != null">
+        #{spmHouse,jdbcType=VARCHAR},
+      </if>
+      <if test="spmPolicy != null">
+         #{spmPolicy,jdbcType=VARCHAR},
+      </if>
+      <if test="spmLifeInsurance != null">
+        #{spmLifeInsurance,jdbcType=VARCHAR},
+      </if>
+      <if test="spmBusinessLicense != null">
+        #{spmBusinessLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="spmPayroll != null">
+        #{spmPayroll,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileMd5 != null">
+        #{mobileMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileCity != null">
+        #{mobileCity,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateCustomer" parameterType="com.daofen.crm.service.customer.model.CustomerPO">
+    update dolphin_customer
+    <set>
+      <if test="dataState != null">
+        data_state = #{dataState,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="qualification != null">
+        qualification = #{qualification,jdbcType=VARCHAR},
+      </if>
+      <if test="loanType != null">
+        loan_type = #{loanType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selMediaReport" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.alibaba.fastjson.JSONObject">
+  	select cust.level,count(cust.level) num,sour.media_id mediaId,cust.source_id sourceId,media.name,sour.forum_name forumName,sour.city,sour.source_name sourceName,COUNT(order1.id) orderNum  from
+  		dolphin_source sour
+		LEFT JOIN dolphin_customer cust ON cust.source_id = sour.id
+		LEFT JOIN dolphin_media media ON media.id = sour.media_id 
+  		LEFT JOIN dolphin_customer_examine_order order1 ON cust.id = order1.customer_id	
+  	<where>
+  		<if test="mediaId != null and mediaId != ''">
+  			and sour.media_id = #{mediaId,jdbcType=INTEGER}
+  		</if>
+  		<if test="sourceId != null and sourceId != ''">
+  			and cust.source_id = #{sourceId,jdbcType=INTEGER}
+  		</if>
+  		<if test="startDate != null and endDate != null">
+  			and unix_timestamp(cust.create_date)*1000 BETWEEN #{startDate,jdbcType=TIMESTAMP} and #{endDate,jdbcType=TIMESTAMP}
+  		</if>
+  		<if test="companyId != null and companyId != '' ">
+    		and cust.company_id in ( SELECT comp.id FROM company comp 
+    									WHERE comp.id = #{companyId,jdbcType=BIGINT} 
+    									OR comp.parent_id =#{companyId,jdbcType=BIGINT}) 
+    	</if>
+  	</where>
+  	group by sour.media_id,cust.source_id,cust.level
+  </select>
+  
+  <select id="selCustReport" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.alibaba.fastjson.JSONObject">
+  	select cust.level,count(cust.level) num,COUNT(ord.id) orderNum,COUNT(cal.id) callNum,com.name companyName,shop.name shopName,team.name teamName,coun.name from dolphin_customer_circulation_log cir
+  		left join dolphin_customer cust on cir.customer_id = cust.id
+  		left join dolphin_customer_examine_order ord on cir.customer_id = ord.customer_id
+  		left join (select ca.* from dolphin_customer_call_log ca where ca.type = 2 ) cal on cal.customer_id = cir.customer_id
+  		left join company_counselor coun on coun.id = cir.business_id
+  		left join company com on com.id = coun.company_id
+  		left join company_shop shop on coun.shop_id = shop.id
+  		left join company_shop_team team on coun.team_id = team.id
+  	<where>
+  		cir.type = 1
+  		<if test="startDate != null and endDate != null">
+  			and unix_timestamp(cust.create_date)*1000 BETWEEN #{startDate,jdbcType=TIMESTAMP} and #{endDate,jdbcType=TIMESTAMP}
+  		</if>
+  		<if test="companyId != null and companyId != ''">
+    		and cust.company_id in ( SELECT comp.id FROM company comp 
+    									WHERE comp.id = #{companyId,jdbcType=BIGINT} 
+    									OR comp.parent_id =#{companyId,jdbcType=BIGINT}) 
+    	</if>
+    	<if test="shopId != null and shopId != ''">
+    		and  coun.shop_id = #{shopId,jdbcType=BIGINT}
+    	</if>
+    	<if test="teamId != null and teamId != ''">
+    		and  coun.team_id = #{teamId,jdbcType=BIGINT}
+    	</if>
+    	<if test="businessId != null and businessId != ''">
+    		and  cir.business_id = #{businessId,jdbcType=BIGINT}
+    	</if>
+  	</where>
+  	group by 
+    		coun.company_id,
+    		coun.shop_id,
+    		coun.team_id,
+    		coun.id,cust.level
+  </select>
+  
+  <select id="getMatrix" resultType="com.alibaba.fastjson.JSONObject" >
+  	select * from aptitude_judgment_matrix 
+  </select>
+  
+  <select id="getMatrixAssets" resultType="com.alibaba.fastjson.JSONObject" >
+  	select * from assets_aptitude_judgment_matrix 
+  </select>
+  
+  <select id="getMatrixBusiness" resultType="com.alibaba.fastjson.JSONObject" >
+  	select * from business_aptitude_judgment_matrix 
+  </select>
+  
+  <select id="getMatrixOffice" resultType="com.alibaba.fastjson.JSONObject" >
+  	select * from office_aptitude_judgment_matrix 
+  </select>
+  
+  <select id="getMatrixNew" parameterType="com.alibaba.fastjson.JSONObject" resultType="com.alibaba.fastjson.JSONObject" >
+  	select * from judgment_matrix
+  </select>
+  
+  <select id="selSocketCust" parameterType="java.lang.String" resultMap="BaseResultMap" >
+  	SELECT
+	*
+	FROM
+	(
+		SELECT
+			<include refid="Base_Column_List" />,sour.source_name,media.name media_name,coun.name counselor_name,team.name team_name,shop.name shop_name
+		FROM
+			crm.dolphin_customer cust
+		LEFT JOIN crm.dolphin_source sour ON cust.source_id = sour.id
+    	LEFT JOIN crm.dolphin_media media ON media.id = sour.media_id
+    	LEFT JOIN crm.company_counselor coun ON cust.business_id = coun.id
+    	LEFT JOIN crm.company_shop_team team ON coun.team_id = team.id
+    	LEFT JOIN crm.company_shop shop ON coun.shop_id = shop.id
+		LEFT JOIN loan_cps.user_aptitude ua ON cust.mobile = ua.mobile
+		WHERE
+			ua.user_id = #{user}
+		ORDER BY
+			cust.create_date DESC
+	) aa
+	GROUP BY
+		mobile
+	limit 1
+  </select>
+  
+</mapper>

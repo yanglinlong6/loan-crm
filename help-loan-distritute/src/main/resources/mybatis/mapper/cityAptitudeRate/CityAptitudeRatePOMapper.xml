@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.help.loan.distribute.service.cityAptitude.dao.CityAptitudeRatePOMapper">
+  <resultMap id="BaseResultMap" type="com.help.loan.distribute.service.cityAptitude.model.CityAptitudeRatePO">
+      <id column="id" jdbcType="BIGINT" property="id" />
+      <result column="current_date" jdbcType="VARCHAR" property="currentDate" />
+      <result column="city" jdbcType="VARCHAR" property="city" />
+      <result column="public_fund" jdbcType="DOUBLE" property="publicFund" />
+      <result column="house" jdbcType="DOUBLE" property="house" />
+      <result column="car" jdbcType="DOUBLE" property="car" />
+      <result column="income" jdbcType="DOUBLE" property="income" />
+      <result column="insurance" jdbcType="DOUBLE" property="insurance" />
+      <result column="company" jdbcType="DOUBLE" property="company" />
+      <result column="no_aptitude" jdbcType="DOUBLE" property="noAptitude" />
+      <result column="public_fund_income" jdbcType="DOUBLE" property="publicFundIncome" />
+      <result column="ordinary" jdbcType="DOUBLE" property="ordinary" />
+      <result column="well" jdbcType="DOUBLE" property="well" />
+      <result column="excellent" jdbcType="DOUBLE" property="excellent" />
+      <result column="importance" jdbcType="DOUBLE" property="importance" />
+      <result column="totalSucCount"  property="totalSucCount" />
+      <result column="highScoreCustomerCount"  property="highScoreCustomerCount" />
+      <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+      <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+
+
+    <sql id="Base_Column_List">
+        id, `current_date`, city, public_fund, house,insurance, car, income, company, no_aptitude,public_fund_income,ordinary,well,excellent,importance
+  </sql>
+  
+  <select id="selectCurrentCityAptitudeRate" resultMap="BaseResultMap">
+      select
+          #{dateString} `current_date`,
+          tmp.city,
+          ROUND(tmp.有公积金数量/tmp.城市获客数量*100,2)     public_fund,
+          ROUND(tmp.有房数量/tmp.城市获客数量*100,2)         house,
+          ROUND(tmp.有车数量/tmp.城市获客数量*100,2) 	    car,
+          ROUND(tmp.有银行代发数量/tmp.城市获客数量*100,2)   income,
+          ROUND(tmp.有保险数量/tmp.城市获客数量*100,2)       insurance,
+          ROUND(tmp.有公司数量/tmp.城市获客数量*100,2) 	    company,
+          ROUND(tmp.有公积金且工资/tmp.城市获客数量*100,2)    public_fund_income,
+          ROUND(tmp.无可贷点数量/tmp.城市获客数量*100,2)	    no_aptitude,
+          ROUND(tmp.一般客户/tmp.城市获客数量*100,2)	        ordinary,
+          ROUND(tmp.良好客户/tmp.城市获客数量*100,2)	        well,
+          ROUND(tmp.优秀客户/tmp.城市获客数量*100,2)	        excellent,
+          ROUND(tmp.重要客户/tmp.城市获客数量*100,2)	        importance
+      from (
+        select
+            uapt.city,count(1) 城市获客数量,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.public_fund like '有，%') 有公积金数量,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.house in(1,2)) 有房数量,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.house in(1,2) and uapt2.public_fund like '有，%') 有房且有公积金数量,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.car in(1,2)) 有车数量,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.insurance in(1,2)) 有保险数量,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.getway_income in(1,2)) 有银行代发数量,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.company in(1)) 有公司数量,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.public_fund like '有，%' and uapt2.getway_income in(1,2)) 有公积金且工资,
+            (
+            select count(1) from user_aptitude uapt2
+            where uapt2.create_date between #{startDate} and #{endDate}
+                and uapt2.city = uapt.city and uapt2.public_fund ='没有公积金'
+                and uapt2.house not in(1,2)  and uapt2.car not in(1,2)
+                and uapt2.getway_income not in(1,2) and uapt2.company != 1
+            ) 无可贷点数量,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and uapt2.weight >= 0 and uapt2.weight <![CDATA[ <= ]]> 0.05 ) 一般客户,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.weight >0.05 and uapt2.weight <![CDATA[ < ]]> 0.103) 良好客户,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.weight BETWEEN 0.103 and 0.144) 优秀客户,
+            (select count(1) from user_aptitude uapt2 where uapt2.create_date between #{startDate} and #{endDate} and uapt2.city = uapt.city and  uapt2.weight >= 0.144) 重要客户
+        from user_aptitude uapt
+        where uapt.create_date between #{startDate} and #{endDate}
+            and uapt.city in(select oapt.city from org org left join org_aptitude oapt on org.org_id = oapt.org_id where org.state=1 and oapt.org_id not in(11,12) and  oapt.limit_count >0 GROUP BY oapt.city)
+        group by uapt.city
+      ) tmp
+  </select>
+
+  <select id="selectCityAptitudeRatePO" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from city_aptitude_rate
+    where `current_date`=#{dateString} and city=#{city}
+  </select>
+  
+  <insert id="insertCityAptitudeRate" parameterType="com.help.loan.distribute.service.cityAptitude.model.CityAptitudeRatePO">
+      insert into city_aptitude_rate
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+          <if test="currentDate != null">
+              `current_date`,
+          </if>
+          <if test="city != null">
+              city,
+          </if>
+          <if test="publicFund != null">
+              public_fund,
+          </if>
+          <if test="house != null">
+              house,
+          </if>
+          <if test="insurance != null">
+              insurance,
+          </if>
+          <if test="car != null">
+              car,
+          </if>
+          <if test="income != null">
+              income,
+          </if>
+          <if test="company != null">
+              company,
+          </if>
+          <if test="noAptitude != null">
+              no_aptitude,
+          </if>
+          <if test="publicFundIncome != null">
+              public_fund_income,
+          </if>
+          <if test="ordinary != null">
+              ordinary,
+          </if>
+          <if test="well != null">
+              well,
+          </if>
+          <if test="excellent != null">
+              excellent,
+          </if>
+          <if test="importance != null">
+              importance,
+          </if>
+          <if test="createDate != null">
+              create_date,
+          </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+          <if test="currentDate != null">
+              #{currentDate,jdbcType=VARCHAR},
+          </if>
+          <if test="city != null">
+              #{city,jdbcType=VARCHAR},
+          </if>
+          <if test="publicFund != null">
+              #{publicFund,jdbcType=DOUBLE},
+          </if>
+          <if test="house != null">
+              #{house,jdbcType=DOUBLE},
+          </if>
+          <if test="insurance != null">
+              #{insurance,jdbcType=DOUBLE},
+          </if>
+          <if test="car != null">
+              #{car,jdbcType=DOUBLE},
+          </if>
+          <if test="income != null">
+              #{income,jdbcType=DOUBLE},
+          </if>
+          <if test="company != null">
+              #{company,jdbcType=DOUBLE},
+          </if>
+          <if test="noAptitude != null">
+              #{noAptitude,jdbcType=DOUBLE},
+          </if>
+          <if test="publicFundIncome != null">
+              #{publicFundIncome,jdbcType=DOUBLE},
+          </if>
+          <if test="ordinary != null">
+              #{ordinary,jdbcType=DOUBLE},
+          </if>
+          <if test="well != null">
+              #{well,jdbcType=DOUBLE},
+          </if>
+          <if test="excellent != null">
+              #{excellent,jdbcType=DOUBLE},
+          </if>
+          <if test="importance != null">
+              #{importance,jdbcType=DOUBLE},
+          </if>
+          <if test="createDate != null">
+              #{createDate,jdbcType=TIMESTAMP},
+          </if>
+      </trim>
+  </insert>
+
+  <update id="updateCityAptitudeRate" parameterType="com.help.loan.distribute.service.cityAptitude.model.CityAptitudeRatePO">
+      update city_aptitude_rate
+      <set>
+          <if test="publicFund != null">
+              public_fund = #{publicFund,jdbcType=DOUBLE},
+          </if>
+          <if test="house != null">
+              house = #{house,jdbcType=DOUBLE},
+          </if>
+          <if test="insurance != null">
+              insurance = #{insurance,jdbcType=DOUBLE},
+          </if>
+          <if test="car != null">
+              car = #{car,jdbcType=DOUBLE},
+          </if>
+          <if test="income != null">
+              income = #{income,jdbcType=DOUBLE},
+          </if>
+          <if test="company != null">
+              company = #{company,jdbcType=DOUBLE},
+          </if>
+          <if test="noAptitude != null">
+              no_aptitude = #{noAptitude,jdbcType=DOUBLE},
+          </if>
+          <if test="ordinary != null">
+              ordinary = #{ordinary,jdbcType=DOUBLE},
+          </if>
+          <if test="well != null">
+              well = #{well,jdbcType=DOUBLE},
+          </if>
+          <if test="excellent != null">
+              excellent = #{excellent,jdbcType=DOUBLE},
+          </if>
+          <if test="importance != null">
+              importance = #{importance,jdbcType=DOUBLE},
+          </if>
+          <if test="updateDate != null">
+              update_date = #{updateDate,jdbcType=TIMESTAMP},
+          </if>
+      </set>
+        where city = #{city,jdbcType=VARCHAR} and `current_date` = #{currentDate,jdbcType=VARCHAR}
+  </update>
+
+
+    <select id="selectOrgCityNoAptitudeRate" resultType="java.util.Map">
+        select
+            ROUND(tmp2.无可贷点数量/总分发数量*100,2) noAptitudeRate
+        from (
+            select tmp.org_id,org.org_name,tmp.city,tmp.总分发数量,
+                (
+                    select count(1) from user_aptitude uapt
+                    where uapt.create_date between #{startDate} and #{endDate} and uapt.city =tmp.city
+                        and uapt.house not in(1,2) and uapt.public_fund like '没有%' and uapt.car not in(1,2) and uapt.insurance not in(1,2) and uapt.getway_income not in(1,2)
+                        and EXISTS(select 1 from org_dispatche_rec orec where uapt.id = orec.customer_id and orec.org_id=tmp.org_id and orec.dispatch_status=1 and orec.create_date between #{startDate} and #{endDate})
+                ) 无可贷点数量
+            from (
+                select orec.org_id,uapt.city,count(1) 总分发数量
+                from user_aptitude uapt
+                    join org_dispatche_rec orec on uapt.id = orec.customer_id and orec.org_id=#{orgId} and orec.dispatch_status=1 and orec.create_date between #{startDate} and #{endDate}
+                where uapt.create_date between #{startDate} and #{endDate} and uapt.city=#{city}
+                group by orec.org_id,uapt.city
+            ) tmp
+                join org org on tmp.org_id = org.org_id
+        ) tmp2
+    </select>
+
+    <select id="selectOrgCityAptitudeRate" resultMap="BaseResultMap">
+        select
+            tmp2.city,
+            tmp2.总分发数量 totalSucCount,
+            tmp2.高分客户 highScoreCustomerCount,
+            <!--
+            ROUND(tmp2.公积金数量/总分发数量*100,2)               public_fund,
+            ROUND(tmp2.有房数量/总分发数量*100,2)                 house,
+            ROUND(tmp2.有车数量/总分发数量*100,2) 	             car,
+            ROUND(tmp2.有保险数量/总分发数量*100,2)               insurance,
+            ROUND(tmp2.有银行代发数量/总分发数量*100,2)           income,
+            ROUND(tmp2.有公司数量/总分发数量*100,2)               company,
+            ROUND(tmp2.有公积金且有银行待发/总分发数量*100,2)      public_fund_income,
+            ROUND(tmp2.无可贷点数量/总分发数量*100,2)             no_aptitude,
+            -->
+            ROUND(tmp2.一般客户/总分发数量*100,2)             	 ordinary,
+			ROUND(tmp2.良好客户/总分发数量*100,2)             	 well,
+			ROUND(tmp2.优秀客户/总分发数量*100,2)             	 excellent,
+			ROUND(tmp2.重要客户/总分发数量*100,2)             	 importance
+        from (
+            select
+                tmp.city,
+                tmp.总分发数量,
+            <!--
+                (
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city =#{city} and uapt.public_fund like '有，%'
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 公积金数量,
+                (
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city =#{city} and uapt.house in(1,2)
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 有房数量,
+                (
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city =#{city} and uapt.car in(1,2)
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 有车数量,
+                (
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city =#{city} and uapt.getway_income in(1,2)
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 有银行代发数量,
+                (
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city =#{city} and uapt.insurance in(1,2)
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 有保险数量,
+                (
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city =#{city} and uapt.company in(1)
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 有公司数量,
+                (
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city =#{city} and uapt.public_fund like '有，%' and uapt.getway_income in(1,2)
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 有公积金且有银行待发,
+                (
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city =#{city}
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                            and uapt.house not in(1,2) and uapt.public_fund like '没有%' and uapt.car not in(1,2) and uapt.insurance not in(1,2) and uapt.getway_income not in(1,2)
+                ) 无可贷点数量,
+                -->
+				(
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city =#{city} and uapt.weight >= 0 and uapt.weight <![CDATA[ <= ]]>  0.05
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 一般客户,
+				(
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city =#{city} and uapt.weight > 0.05 and  uapt.weight <![CDATA[ < ]]> 0.103
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 良好客户,
+				(
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city =#{city} and uapt.weight BETWEEN 0.103 and 0.144
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 优秀客户,
+				(
+                    select count(1)
+                    from org_dispatche_rec orec
+                        join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city = #{city} and uapt.weight >= 0.144
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 重要客户,
+                (
+                    select count(1)
+                    from org_dispatche_rec orec
+                    join user_aptitude uapt on orec.customer_id=uapt.id and uapt.city = #{city} and uapt.weight >= 0.093
+                    where orec.org_id=#{orgId}  and orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1
+                ) 高分客户
+            from (
+                select uapt.city,count(1) 总分发数量
+                from org_dispatche_rec orec
+                    join user_aptitude uapt on orec.customer_id = uapt.id and uapt.city  = #{city}
+                where orec.create_date between #{startDate} and #{endDate} and orec.dispatch_status=1 and orec.org_id not in(11,12)
+            ) tmp
+        ) tmp2
+    </select>
+</mapper>

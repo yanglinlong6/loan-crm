@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.help.loan.distribute.service.billRec.dao.BillRecMapper">
+  <resultMap id="BaseResultMap" type="com.help.loan.distribute.service.billRec.model.BillRecPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <id column="bill_date" jdbcType="VARCHAR" property="billDate" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    `id`, `bill_date`, `status`
+  </sql>
+
+  <select id="selectBillRecByBillDate" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bill_rec
+    where  `bill_date` = #{billDate,jdbcType=VARCHAR}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.help.loan.distribute.service.billRec.model.BillRecPO"
+      useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    insert into bill_rec
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="billDate != null">
+        bill_date,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="billDate != null">
+        #{billDate,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.help.loan.distribute.service.billRec.model.BillRecPO">
+    update bill_rec
+    <set>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    where bill_date = #{billDate,jdbcType=VARCHAR}
+  </update>
+
+
+</mapper>

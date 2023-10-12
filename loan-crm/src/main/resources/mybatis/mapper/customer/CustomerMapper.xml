@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.service.customer.dao.CustomerMapper">
+  <resultMap id="BaseResultMap" type="com.crm.service.customer.model.CustomerPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="team_id" jdbcType="BIGINT" property="teamId" />
+    <result column="channel" jdbcType="BIGINT" property="channel" />
+    <result column="media" jdbcType="VARCHAR" property="media" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="mobile_md5" jdbcType="VARCHAR" property="mobileMd5" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="call" jdbcType="TINYINT" property="call" />
+    <result column="fit" jdbcType="TINYINT" property="fit" />
+    <result column="need" jdbcType="VARCHAR" property="need" />
+    <result column="progress" jdbcType="TINYINT" property="progress" />
+    <result column="field_1" jdbcType="VARCHAR" property="field1" />
+    <result column="field_2" jdbcType="VARCHAR" property="field2" />
+    <result column="field_3" jdbcType="VARCHAR" property="field3" />
+    <result column="field_4" jdbcType="VARCHAR" property="field4" />
+    <result column="field_5" jdbcType="VARCHAR" property="field5" />
+    <result column="field_6" jdbcType="VARCHAR" property="field6" />
+    <result column="field_7" jdbcType="VARCHAR" property="field7" />
+    <result column="field_8" jdbcType="VARCHAR" property="field8" />
+    <result column="field_9" jdbcType="VARCHAR" property="field9" />
+    <result column="field_10" jdbcType="VARCHAR" property="field10" />
+    <result column="field_11" jdbcType="VARCHAR" property="field11" />
+    <result column="employee_id" jdbcType="BIGINT" property="employeeId" />
+    <result column="distribute_date" jdbcType="TIMESTAMP" property="distributeDate" />
+    <result column="again_distribute" jdbcType="TINYINT" property="againDistribute" />
+    <result column="again_employee_id" jdbcType="BIGINT" property="againEmployeeId" />
+    <result column="again_distribute_date" jdbcType="TIMESTAMP" property="againDistributeDate" />
+    <result column="help_employee_id" jdbcType="BIGINT" property="helpEmployeeId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="remark_date" jdbcType="TIMESTAMP" property="remarkDate" />
+    <result column="public_pool" jdbcType="TINYINT" property="publicPool" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="appointment_date" jdbcType="TIMESTAMP" property="appointmentDate"/>
+    <result column="zijian" property="zijian" />
+    <result column="first_employee" property="firstEmployee"/>
+    <result column="idcard_front" property="idcardFront"/>
+    <result column="idcard_back" property="idcardBack"/>
+    <result column="authorize_file" property="authorizeFile"/>
+    <result column="credit_file" property="creditFile"/>
+    <result column="thirdparty" property="thirdparty"></result>
+    <result column="thirdparty_org_id" property="thirdpartyOrgId"></result>
+    <result column="label" property="label"></result>
+    <result column="old_id" jdbcType="BIGINT" property="oldId" />
+    <result column="old_org_id" jdbcType="BIGINT" property="oldOrgId" />
+  </resultMap>
+
+  <resultMap id="BOResultMap" type="com.crm.service.customer.model.CustomerBO" extends="BaseResultMap">
+    <result column="employeeName" property="employeeName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, org_id,shop_id,team_id,`channel`, `media`, `city`, `name`, `mobile`, mobile_md5, `sex`, `age`, `level`, `call`,
+    `fit`,`need`,`progress`, field_1, field_2, field_3, field_4, field_5, field_6, field_7, field_8,
+    field_9, field_10, field_11,employee_id, distribute_date, again_distribute, again_employee_id,
+    again_distribute_date,help_employee_id, `remark`,appointment_date, remark_date, public_pool,create_by, create_date, update_by, update_date,zijian,
+    first_employee,idcard_front,idcard_back,authorize_file,credit_file,thirdparty,thirdparty_org_id,`label`,old_id,old_org_id
+  </sql>
+
+  <!-- 客户资料字段映射配置 -->
+  <resultMap id="CustomerZiliaoMap" type="com.crm.service.customer.model.CustomerZiliaoPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="employee_id" jdbcType="BIGINT" property="employeeId" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="status" property="status" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="CustomerZiliao_Column_List">
+    id, customer_id, org_id, employee_id, image,`status`, create_by, create_date, update_by, update_date
+  </sql>
+
+  <select id="selectCustomerZiliaoList" resultMap="CustomerZiliaoMap">
+    select <include refid="CustomerZiliao_Column_List"/>
+    from customer_ziliao
+    where customer_id = #{customerId} and `status` = 1
+      <if test="orgId != null and orgId > 0 "> and org_id=#{orgId}</if>
+      <if test="employeeId != null and employeeId > 0"> and employee_id=#{employeeId}</if>
+  </select>
+
+  <select id="selectCustomerZiliaoByZiliao" resultMap="CustomerZiliaoMap">
+    select <include refid="CustomerZiliao_Column_List"/>
+    from customer_ziliao
+    where customer_id = #{customerId} and `status` = 1 and `image` = #{ziliao}
+    limit 1
+  </select>
+
+  <select id="selectCustomerZiliaoByCustomerId" resultMap="CustomerZiliaoMap">
+    select <include refid="CustomerZiliao_Column_List"/>
+    from customer_ziliao
+    where customer_id = #{customerId} and `status` = 1
+  </select>
+
+  <insert id="insertCustomerZiliao" parameterType="com.crm.service.customer.model.CustomerZiliaoPO">
+    insert into customer_ziliao
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="employeeId != null">
+        employee_id,
+      </if>
+      <if test="image != null">
+        image,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="employeeId != null">
+        #{employeeId,jdbcType=BIGINT},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+
+  
+  <select id="selectCustomerPage" parameterType="com.crm.common.PageBO" resultMap="BOResultMap">
+    select <include refid="Base_Column_List" />
+    from customer
+    where
+      <if test="paramObject.orgId != null">  org_id=#{paramObject.orgId} </if>
+      <if test="paramObject.oldOrgId != null">  old_org_id=#{paramObject.oldOrgId} </if>
+      <if test="paramObject.startDate != null and paramObject.endDate != null">
+        <if test="paramObject.againDistribute != null and paramObject.againDistribute == 1"> and again_distribute_date BETWEEN #{paramObject.startDate} and #{paramObject.endDate}</if>
+        <if test="paramObject.againDistribute == null or paramObject.againDistribute != 1"> and create_date BETWEEN #{paramObject.startDate} and #{paramObject.endDate}</if>
+      </if>
+      <if test="paramObject.shopId != null"> and `shop_id` = #{paramObject.shopId} </if>
+      <if test="paramObject.teamId != null"> and `team_id` = #{paramObject.teamId} </if>
+      <if test="paramObject.channel != null"> and `channel` = #{paramObject.channel} </if>
+      <if test="paramObject.media != null"> and `media` = #{paramObject.media} </if>
+      <if test="paramObject.city != null"> and `city` like concat('%', #{paramObject.city},'%') </if>
+      <if test="paramObject.name != null"> and `name` like concat('%',#{paramObject.name},'%') </if>
+      <if test="paramObject.mobile != null"> and `mobile` like concat('%', #{paramObject.mobile},'%') </if>
+      <if test="paramObject.level != null"> and `level` = #{paramObject.level} </if>
+      <if test="paramObject.call != null"> and `call` = #{paramObject.call} </if>
+      <if test="paramObject.fit != null"> and `fit` = #{paramObject.fit} </if>
+      <if test="paramObject.progress != null"> and `progress` = #{paramObject.progress} </if>
+      <if test="paramObject.employeeId != null and paramObject.all != 1"> and employee_id = #{paramObject.employeeId} </if>
+      <if test="paramObject.againDistribute != null"> and again_distribute = #{paramObject.againDistribute} </if>
+      <if test="paramObject.againEmployeeId != null and paramObject.all != 1"> and again_employee_id = #{paramObject.againEmployeeId} </if>
+      <if test="paramObject.helpEmployeeId != null"> and help_employee_id = #{paramObject.helpEmployeeId} </if>
+      <if test="paramObject.all == 1">
+          and
+          (
+            (employee_id=#{paramObject.employeeId} and again_distribute = 0)
+            or
+            (again_distribute=1 and again_employee_id=#{paramObject.againEmployeeId})
+          )
+      </if>
+      <if test="paramObject.publicPool != null "> and `public_pool` = #{paramObject.publicPool} </if>
+      <if test="paramObject.field1 != null"> and field_1 = #{paramObject.field1} </if>
+      <if test="paramObject.field2 != null"> and field_2 = #{paramObject.field2} </if>
+      <if test="paramObject.field3 != null"> and field_3 = #{paramObject.field3} </if>
+      <if test="paramObject.field4 != null"> and field_4 = #{paramObject.field4} </if>
+      <if test="paramObject.field5 != null"> and field_5 = #{paramObject.field5} </if>
+      <if test="paramObject.field6 != null"> and field_6 = #{paramObject.field6} </if>
+      <if test="paramObject.field7 != null"> and field_7 = #{paramObject.field7} </if>
+      <if test="paramObject.field8 != null"> and field_8 = #{paramObject.field8} </if>
+      <if test="paramObject.field9 != null"> and field_9 = #{paramObject.field9} </if>
+      <if test="paramObject.field10 != null"> and field_10 = #{paramObject.field10} </if>
+      <if test="paramObject.field11 != null"> and field_11 = #{paramObject.field11} </if>
+      <choose>
+        <when test="paramObject.thirdparty == null"> and thirdparty = 0 </when>
+        <otherwise>
+          and thirdparty = #{paramObject.thirdparty}
+        </otherwise>
+      </choose>
+    <if test="paramObject.queryThirdParty == false"> AND (thirdparty_org_id IS NULL or thirdparty_org_id=0) </if>
+      <if test="paramObject.labels != null">
+        and (
+        <foreach collection="paramObject.labels" index="index" item="item">
+          <choose>
+            <when test="index == 0"> label like concat('%',#{item},'%') </when>
+            <otherwise> or label like concat('%',#{item},'%')</otherwise>
+          </choose>
+        </foreach>
+        )
+      </if>
+      <if test="paramObject.zijian != null"> and `zijian` = #{paramObject.zijian}</if>
+      <if test="paramObject.followDayCount > 0"> and TIMESTAMPDIFF(DAY,remark_date,DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%S')) >= #{paramObject.followDayCount}</if>
+    order by create_date desc
+    limit #{start},#{size}
+  </select>
+
+  <select id="selectCustomerPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    select count(1)
+    from customer
+    where
+      <if test="paramObject.orgId != null">  org_id=#{paramObject.orgId} </if>
+      <if test="paramObject.oldOrgId != null">  old_org_id=#{paramObject.oldOrgId} </if>
+      <if test="paramObject.startDate != null and paramObject.endDate != null">
+        <if test="paramObject.againDistribute != null and paramObject.againDistribute == 1"> and again_distribute_date BETWEEN #{paramObject.startDate} and #{paramObject.endDate}</if>
+        <if test="paramObject.againDistribute == null or paramObject.againDistribute != 1"> and create_date BETWEEN #{paramObject.startDate} and #{paramObject.endDate}</if>
+      </if>
+      <if test="paramObject.shopId != null"> and `shop_id` = #{paramObject.shopId} </if>
+      <if test="paramObject.teamId != null"> and `team_id` = #{paramObject.teamId} </if>
+      <if test="paramObject.channel != null"> and `channel` = #{paramObject.channel} </if>
+      <if test="paramObject.media != null"> and `media` = #{paramObject.media} </if>
+      <if test="paramObject.city != null"> and `city` like concat('%', #{paramObject.city},'%') </if>
+      <if test="paramObject.name != null"> and `name` like concat('%',#{paramObject.name},'%') </if>
+      <if test="paramObject.mobile != null"> and `mobile` like concat('%', #{paramObject.mobile},'%') </if>
+      <if test="paramObject.level != null"> and `level` = #{paramObject.level} </if>
+      <if test="paramObject.call != null"> and `call` = #{paramObject.call} </if>
+      <if test="paramObject.fit != null"> and `fit` = #{paramObject.fit} </if>
+      <if test="paramObject.progress != null"> and `progress` = #{paramObject.progress} </if>
+      <if test="paramObject.employeeId != null and paramObject.all != 1"> and employee_id = #{paramObject.employeeId} </if>
+      <if test="paramObject.againDistribute != null"> and again_distribute = #{paramObject.againDistribute} </if>
+      <if test="paramObject.againEmployeeId != null and paramObject.all != 1"> and again_employee_id = #{paramObject.againEmployeeId} </if>
+      <if test="paramObject.helpEmployeeId != null"> and help_employee_id = #{paramObject.helpEmployeeId} </if>
+      <if test="paramObject.all == 1"> and ((employee_id=#{paramObject.employeeId} and again_distribute = 0) or (again_distribute=1 and again_employee_id=#{paramObject.againEmployeeId}))</if>
+      <if test="paramObject.publicPool != null "> and `public_pool` = #{paramObject.publicPool} </if>
+      <if test="paramObject.field1 != null"> and field_1 = #{paramObject.field1} </if>
+      <if test="paramObject.field2 != null"> and field_2 = #{paramObject.field2} </if>
+      <if test="paramObject.field3 != null"> and field_3 = #{paramObject.field3} </if>
+      <if test="paramObject.field4 != null"> and field_4 = #{paramObject.field4} </if>
+      <if test="paramObject.field5 != null"> and field_5 = #{paramObject.field5} </if>
+      <if test="paramObject.field6 != null"> and field_6 = #{paramObject.field6} </if>
+      <if test="paramObject.field7 != null"> and field_7 = #{paramObject.field7} </if>
+      <if test="paramObject.field8 != null"> and field_8 = #{paramObject.field8} </if>
+      <if test="paramObject.field9 != null"> and field_9 = #{paramObject.field9} </if>
+      <if test="paramObject.field10 != null"> and field_10 = #{paramObject.field10} </if>
+      <if test="paramObject.field11 != null"> and field_11 = #{paramObject.field11} </if>
+      <choose>
+        <when test="paramObject.thirdparty == null or paramObject.thirdparty == 0"> and thirdparty = 0 </when>
+        <otherwise>
+          and thirdparty = #{paramObject.thirdparty} and ( thirdparty_org_id is null or thirdparty_org_id = 0 )
+        </otherwise>
+      </choose>
+      <if test="paramObject.queryThirdParty == false"> AND (thirdparty_org_id IS NULL or thirdparty_org_id=0) </if>
+      <if test="paramObject.labels != null">
+        and (
+        <foreach collection="paramObject.labels" index="index" item="item">
+          <choose>
+            <when test="index == 0"> label like concat('%',#{item},'%') </when>
+            <otherwise> or label like concat('%',#{item},'%')</otherwise>
+          </choose>
+        </foreach>
+        )
+      </if>
+      <if test="paramObject.zijian != null"> and `zijian` = #{paramObject.zijian}</if>
+      <if test="paramObject.followDayCount > 0"> and TIMESTAMPDIFF(DAY,remark_date,DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%S')) >= #{paramObject.followDayCount}</if>
+  </select>
+
+  <select id="selectCustomerById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from customer
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectMyAllCustomer" parameterType="com.crm.service.customer.model.CustomerBO" resultMap="BOResultMap">
+    select <include refid="Base_Column_List" />
+    from customer
+    where org_id=#{orgId}
+      <if test="employeeId != null"> and ((employee_id=#{employeeId} and again_distribute = 0) or (again_distribute=1 and again_employee_id=#{employeeId})) </if>
+      <if test="name != null and name != '' "> and (`name` like concat('%',#{name},'%') or `mobile` like concat('%',#{mobile},'%') )</if>
+  </select>
+
+
+  <select id="selectCustomerByMd5"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from customer
+    where  org_id=#{orgId} and mobile_md5 = #{mobileMd5}
+    limit 1
+  </select>
+
+  <select id="selectChannelNewCustomerCount"  resultType="java.lang.Integer">
+    select count(1)
+    from customer
+    where  org_id=#{orgId} and `channel` = #{channelId} and `city` = #{city} and `media` = #{media} and create_date <![CDATA[ >= ]]> #{startDate}
+  </select>
+
+  <select id="selectEmployeeDistributeCount"  resultType="java.lang.Integer">
+    select count(1)
+    from customer_distribute_rec
+    where  employee_id=#{employeeId} and `status` = #{disStatus}  and create_date <![CDATA[ >= ]]> #{startDate}
+  </select>
+
+
+  <select id="selectOrgNewCustomer" parameterType="java.lang.Long" resultMap="BOResultMap">
+    select *
+    from customer
+    where org_id=#{orgId} and progress = 0
+      and  (employee_id IS NULL or employee_id <![CDATA[ <= ]]> 0)
+      and (again_employee_id IS NULL or again_employee_id <![CDATA[ <= ]]> 0 )
+    limit 100
+  </select>
+  
+  <delete id="deleteCustomer" parameterType="java.lang.Long">
+    delete from customer where id=#{id}
+  </delete>
+
+
+  <insert id="insertCustomer" parameterType="com.crm.service.customer.model.CustomerPO" useGeneratedKeys="true" keyProperty="id" >
+    insert into customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="teamId != null">
+        team_id,
+      </if>
+      <if test="channel != null">
+        `channel`,
+      </if>
+      <if test="media != null">
+        `media`,
+      </if>
+      <if test="city != null">
+        `city`,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="mobile != null">
+        `mobile`,
+      </if>
+      <if test="mobileMd5 != null">
+        mobile_md5,
+      </if>
+      <if test="sex != null">
+        `sex`,
+      </if>
+      <if test="age != null">
+        `age`,
+      </if>
+      <if test="level != null">
+        `level`,
+      </if>
+      <if test="call != null">
+        `call`,
+      </if>
+      <if test="fit != null">
+        `fit`,
+      </if>
+      <if test="progress != null">
+        `progress`,
+      </if>
+      <if test="field1 != null">
+        field_1,
+      </if>
+      <if test="field2 != null">
+        field_2,
+      </if>
+      <if test="field3 != null">
+        field_3,
+      </if>
+      <if test="field4 != null">
+        field_4,
+      </if>
+      <if test="field5 != null">
+        field_5,
+      </if>
+      <if test="field6 != null">
+        field_6,
+      </if>
+      <if test="field7 != null">
+        field_7,
+      </if>
+      <if test="field8 != null">
+        field_8,
+      </if>
+      <if test="field9 != null">
+        field_9,
+      </if>
+      <if test="field10 != null">
+        field_10,
+      </if>
+      <if test="field11 != null">
+        field_11,
+      </if>
+      <if test="currentEmployee != null">
+        current_employee,
+      </if>
+      <if test="employeeId != null">
+        employee_id,
+      </if>
+      <if test="distributeDate != null">
+        distribute_date,
+      </if>
+      <if test="againDistribute != null">
+        again_distribute,
+      </if>
+      <if test="againEmployeeId != null">
+        again_employee_id,
+      </if>
+      <if test="againDistributeDate != null">
+        again_distribute_date,
+      </if>
+      <if test="helpEmployeeId != null">
+        help_employee_id,
+      </if>
+      <if test="remark != null">
+        `remark`,
+      </if>
+      <if test="appointmentDate">
+        appointment_date,
+      </if>
+      <if test="remarkDate != null">
+        remark_date,
+      </if>
+      <if test="publicPool != null">
+        public_pool,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="zijian != null">
+        zijian,
+      </if>
+      <if test="firstEmployee != null">
+        first_employee,
+      </if>
+      <if test="thirdparty != null">
+        thirdparty,
+      </if>
+      <if test="thirdpartyOrgId">
+        thirdparty_org_id,
+      </if>
+      <if test="oldId != null">
+        old_id,
+      </if>
+      <if test="oldOrgId != null">
+        old_org_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orgId != null">
+        #{orgId},
+      </if>
+      <if test="shopId != null">
+        #{shopId},
+      </if>
+      <if test="teamId != null">
+        #{teamId},
+      </if>
+      <if test="channel != null">
+        #{channel,jdbcType=BIGINT},
+      </if>
+      <if test="media != null">
+        #{media},
+      </if>
+      <if test="city != null">
+        #{city},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileMd5 != null">
+        #{mobileMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="call != null">
+        #{call,jdbcType=TINYINT},
+      </if>
+      <if test="fit != null">
+        #{fit,jdbcType=TINYINT},
+      </if>
+      <if test="progress != null">
+        #{progress,jdbcType=TINYINT},
+      </if>
+      <if test="field1 != null">
+        #{field1,jdbcType=VARCHAR},
+      </if>
+      <if test="field2 != null">
+        #{field2,jdbcType=VARCHAR},
+      </if>
+      <if test="field3 != null">
+        #{field3,jdbcType=VARCHAR},
+      </if>
+      <if test="field4 != null">
+        #{field4,jdbcType=VARCHAR},
+      </if>
+      <if test="field5 != null">
+        #{field5,jdbcType=VARCHAR},
+      </if>
+      <if test="field6 != null">
+        #{field6,jdbcType=VARCHAR},
+      </if>
+      <if test="field7 != null">
+        #{field7,jdbcType=VARCHAR},
+      </if>
+      <if test="field8 != null">
+        #{field8,jdbcType=VARCHAR},
+      </if>
+      <if test="field9 != null">
+        #{field9,jdbcType=VARCHAR},
+      </if>
+      <if test="field10 != null">
+        #{field10,jdbcType=VARCHAR},
+      </if>
+      <if test="field11 != null">
+        #{field11,jdbcType=VARCHAR},
+      </if>
+      <if test="currentEmployee != null">
+        #{currentEmployee},
+      </if>
+      <if test="employeeId != null">
+        #{employeeId,jdbcType=BIGINT},
+      </if>
+      <if test="distributeDate != null">
+        #{distributeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="againDistribute != null">
+        #{againDistribute,jdbcType=TINYINT},
+      </if>
+      <if test="againEmployeeId != null">
+        #{againEmployeeId,jdbcType=BIGINT},
+      </if>
+      <if test="againDistributeDate != null">
+        #{againDistributeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="helpEmployeeId != null">
+        #{helpEmployeeId},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="publicPool != null">
+        #{publicPool},
+      </if>
+      <if test="appointmentDate">
+        #{appointmentDate},
+      </if>
+      <if test="remarkDate != null">
+        #{remarkDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="zijian != null">
+        #{zijian},
+      </if>
+      <if test="firstEmployee != null">
+        #{firstEmployee},
+      </if>
+      <if test="thirdparty != null">
+        #{thirdparty},
+      </if>
+      <if test="thirdpartyOrgId">
+        #{thirdpartyOrgId},
+      </if>
+      <if test="oldId != null">
+        #{oldId},
+      </if>
+      <if test="oldOrgId != null">
+        #{oldOrgId},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateCustomerShopTeamByEmployee" parameterType="com.crm.service.employee.model.OrgEmployeePO">
+    update customer
+    set `shop_id` = #{shopId},`team_id` = #{teamId},`public_pool` = 1 ,employee_id = 0
+    where org_id = #{orgId} and employee_id = #{id}
+  </update>
+
+
+  <update id="updateCustomer" parameterType="com.crm.service.customer.model.CustomerPO">
+    update customer
+    <set>
+      <if test="shopId != null">
+        `shop_id` = #{shopId},
+      </if>
+      <if test="teamId != null">
+        `team_id` = #{teamId},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileMd5 != null">
+        mobile_md5 = #{mobileMd5,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        `sex` = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="age != null">
+        `age` = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        `level` = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="call != null">
+        `call` = #{call,jdbcType=TINYINT},
+      </if>
+      <if test="fit != null">
+        `fit` = #{fit,jdbcType=TINYINT},
+      </if>
+      <if test="progress != null">
+        `progress` = #{progress,jdbcType=TINYINT},
+      </if>
+      <if test="field1 != null">
+        `field_1` = #{field1,jdbcType=VARCHAR},
+      </if>
+      <if test="field2 != null">
+        `field_2` = #{field2,jdbcType=VARCHAR},
+      </if>
+      <if test="field3 != null">
+        `field_3` = #{field3,jdbcType=VARCHAR},
+      </if>
+      <if test="field4 != null">
+        `field_4` = #{field4,jdbcType=VARCHAR},
+      </if>
+      <if test="field5 != null">
+        `field_5` = #{field5,jdbcType=VARCHAR},
+      </if>
+      <if test="field6 != null">
+        `field_6` = #{field6,jdbcType=VARCHAR},
+      </if>
+      <if test="field7 != null">
+        `field_7` = #{field7,jdbcType=VARCHAR},
+      </if>
+      <if test="field8 != null">
+        `field_8` = #{field8,jdbcType=VARCHAR},
+      </if>
+      <if test="field9 != null">
+        `field_9` = #{field9,jdbcType=VARCHAR},
+      </if>
+      <if test="field10 != null">
+        `field_10` = #{field10,jdbcType=VARCHAR},
+      </if>
+      <if test="field11 != null">
+        `field_11` = #{field11,jdbcType=VARCHAR},
+      </if>
+      <if test="currentEmployee != null">
+        current_employee = #{currentEmployee},
+      </if>
+      <if test="employeeId != null">
+        employee_id = #{employeeId,jdbcType=BIGINT},
+      </if>
+      <if test="distributeDate != null">
+        distribute_date = #{distributeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="againDistribute != null">
+        again_distribute = #{againDistribute,jdbcType=TINYINT},
+      </if>
+      <if test="againEmployeeId != null">
+        again_employee_id = #{againEmployeeId,jdbcType=BIGINT},
+      </if>
+      <if test="againDistributeDate != null">
+        again_distribute_date = #{againDistributeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="helpEmployeeId != null">
+        help_employee_id=#{helpEmployeeId},
+      </if>
+      <if test="remark != null">
+        `remark` = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="appointmentDate">
+        appointment_date =#{appointmentDate},
+      </if>
+      <if test="publicPool != null">
+        public_pool =#{publicPool},
+      </if>
+      <if test="remarkDate != null">
+        remark_date = #{remarkDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="firstEmployee != null">
+        first_employee = #{firstEmployee},
+      </if>
+      <if test="idcardFront != null and idcardFront != ''">
+        idcard_front = #{idcardFront},
+      </if>
+      <if test="idcardBack != null and idcardBack != ''">
+        idcard_back = #{idcardBack},
+      </if>
+      <if test="authorizeFile != null and authorizeFile != ''">
+        authorize_file = #{authorizeFile},
+      </if>
+      <if test="creditFile != null and creditFile != ''">
+        credit_file = #{creditFile},
+      </if>
+      <if test="thirdparty != null">
+        thirdparty = #{thirdparty},
+      </if>
+      <if test="thirdpartyOrgId">
+        thirdparty_org_id = #{thirdpartyOrgId},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId},
+      </if>
+      <if test="label != null">
+        `label` = #{label},
+      </if>
+      <if test="oldId != null">
+        old_id=#{oldOrgId},
+      </if>
+      <if test="oldOrgId != null">
+        old_org_id=#{oldOrgId},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <insert id="insertCustomerDistributeRec" useGeneratedKeys="true" keyColumn="id">
+    insert into customer_distribute_rec(customer_id,employee_id,`status`,create_by) values(#{customerId},#{employeeId},#{status},#{createBy})
+  </insert>
+
+  <!--分页查询进件客户列表-->
+  <select id="selectImportCustomerPage" parameterType="com.crm.common.PageBO" resultMap="BOResultMap">
+    SELECT
+      c.id,
+      c.`name`,
+      c.mobile,
+      c.city,
+      c.sex,
+      c.age,
+      c.employee_id,
+      c.progress,
+      oe.`name` as employeeName
+    from customer c
+    join org_employee oe on c.employee_id = oe.id
+      <if test="paramObject.employeeName != null and paramObject.employeeName != ''">  and oe.`name` like CONCAT('%',#{paramObject.employeeName},'%') </if>
+    where c.org_id = #{paramObject.orgId}
+      <if test="paramObject.shopId != null">  and c.shop_id = #{paramObject.shopId} </if>
+      <if test="paramObject.teamId != null">  and c.team_id = #{paramObject.teamId} </if>
+    and EXISTS(
+        select 1 from customer_import ci where c.id = ci.customer_id and ci.`state` = 1
+          <if test="paramObject.startDate != null and paramObject.endDate !=null"> and ci.create_date BETWEEN #{paramObject.startDate} and #{paramObject.endDate} </if>
+        )
+  </select>
+  <select id="selectImportCustomerPageCount" parameterType="com.crm.common.PageBO" resultType="java.lang.Integer">
+    SELECT count(1)
+    from customer c
+    join org_employee oe on c.employee_id = oe.id
+    <if test="paramObject.employeeName != null and paramObject.employeeName != ''">  and oe.`name` like CONCAT('%',#{paramObject.employeeName},'%') </if>
+    where c.org_id = #{paramObject.orgId}
+    <if test="paramObject.shopId != null">  and c.shop_id = #{paramObject.shopId} </if>
+    <if test="paramObject.teamId != null">  and c.team_id = #{paramObject.teamId} </if>
+    <if test="paramObject.startDate != null and paramObject.endDate !=null">  and c.create_date BETWEEN #{paramObject.startDate} and #{paramObject.endDate} </if>
+    and EXISTS(
+        select 1 from customer_import ci where c.id = ci.customer_id and ci.`state` = 1
+          <if test="paramObject.startDate != null and paramObject.endDate !=null"> and ci.create_date BETWEEN #{paramObject.startDate} and #{paramObject.endDate} </if>
+      )
+  </select>
+
+</mapper>
