@@ -22,7 +22,7 @@ import java.util.*;
  * OrgService接口实现类
  */
 @Service
-public class OrgServiceImpl implements  OrgService{
+public class OrgServiceImpl implements OrgService {
 
     private static final Logger log = LoggerFactory.getLogger(OrgServiceImpl.class);
 
@@ -47,66 +47,70 @@ public class OrgServiceImpl implements  OrgService{
 
     @Override
     public void addOrg(OrgPO orgPO) {
-        if(null == orgPO || StringUtils.isBlank(orgPO.getOrgName()) || StringUtils.isBlank(orgPO.getOrgNickname())){
-            throw new AdminException(ResultCode.FAID,"新增机构信息：参数错误");
+        if (null == orgPO || StringUtils.isBlank(orgPO.getOrgName()) || StringUtils.isBlank(orgPO.getOrgNickname())) {
+            throw new AdminException(ResultCode.FAID, "新增机构信息：参数错误");
         }
-        synchronized (this){
+        synchronized (this) {
             OrgPO oldOrg = orgDao.selectOrgByName(orgPO);
-            if(null != oldOrg ){
-                throw new AdminException(ResultCode.FAID,"机构名称已存在");
+            if (null != oldOrg) {
+                throw new AdminException(ResultCode.FAID, "机构名称已存在");
             }
             // 将最新的机构id+1，做为新机构的机构id
             Long maxOrgId = orgDao.selectMaxOrg();
-            orgPO.setOrgId(maxOrgId+1);
+            if (Objects.isNull(maxOrgId)) {
+                orgPO.setOrgId(1L);
+            } else {
+                orgPO.setOrgId(maxOrgId + 1);
+            }
             orgDao.insertOrg(orgPO);
         }
     }
 
     @Override
     public void updateOrg(OrgPO orgPO) {
-        if(null == orgPO || null == orgPO.getOrgId() || StringUtils.isBlank(orgPO.getOrgName()) || StringUtils.isBlank(orgPO.getOrgNickname())){
-            throw new AdminException(ResultCode.FAID,"修改机构信息：参数错误");
+        if (null == orgPO || null == orgPO.getOrgId() || StringUtils.isBlank(orgPO.getOrgName()) || StringUtils.isBlank(orgPO.getOrgNickname())) {
+            throw new AdminException(ResultCode.FAID, "修改机构信息：参数错误");
         }
-        synchronized (this){
+        synchronized (this) {
             OrgPO oldOrg = orgDao.selectOrgByName(orgPO);
-            if(null == oldOrg){
+            if (null == oldOrg) {
                 orgDao.updateOrg(orgPO);
-            }else{
-                if(oldOrg.getOrgId().longValue() == orgPO.getOrgId().longValue()){
+            } else {
+                if (oldOrg.getOrgId().longValue() == orgPO.getOrgId().longValue()) {
                     orgDao.updateOrg(orgPO);
-                }else
-                    throw new AdminException(ResultCode.FAID,"机构名称已存在");
+                } else
+                    throw new AdminException(ResultCode.FAID, "机构名称已存在");
             }
         }
     }
 
     @Override
     public OrgPO getOrg(Long orgId) {
-        if(null == orgId)
+        if (null == orgId)
             return null;
         return orgDao.selectOrgByOrgId(orgId);
     }
 
     @Override
     public List<CityNeedPO> getCityNeed(String startDate, String endDate) {
-        if(StringUtils.isBlank(startDate) || StringUtils.isBlank(endDate))
+        if (StringUtils.isBlank(startDate) || StringUtils.isBlank(endDate))
             return null;
-        List<CityNeedPO> all = orgDao.selectCityNeed(startDate,endDate);
-        if(CollectionUtil.isEmpty(all))
+        List<CityNeedPO> all = orgDao.selectCityNeed(startDate, endDate);
+        if (CollectionUtil.isEmpty(all))
             return null;
-        Map<String,CityNeedPO> map = new LinkedHashMap<>();
-        for(CityNeedPO cityNeed : all){
-            if(map.containsKey(cityNeed.getCity())){
+        Map<String, CityNeedPO> map = new LinkedHashMap<>();
+        for (CityNeedPO cityNeed : all) {
+            if (map.containsKey(cityNeed.getCity())) {
                 CityNeedPO po = map.get(cityNeed.getCity());
-                po.setLimitCount(po.getLimitCount()+cityNeed.getLimitCount());
-                po.setSendCount(po.getSendCount()+cityNeed.getSendCount());
-            }else{
-                map.put(cityNeed.getCity(),cityNeed);
+                po.setLimitCount(po.getLimitCount() + cityNeed.getLimitCount());
+                po.setSendCount(po.getSendCount() + cityNeed.getSendCount());
+            } else {
+                map.put(cityNeed.getCity(), cityNeed);
             }
         }
         all.clear();
         Set<String> set = map.keySet();
-        for(String key : set){
+        for (String key : set) {
             all.add(map.get(key));
         }
         return all;
@@ -116,24 +120,24 @@ public class OrgServiceImpl implements  OrgService{
     public void orgAptitudePage(PageVO<OrgAptitudePO> page) {
         page.setData(orgDao.selectOrgAptitudePage(page));
         page.setTotalCount(orgDao.selectOrgAptitudePageCount(page));
-        log.info("机构配量分页列表总页数：{}",page.getTotalPage());
+        log.info("机构配量分页列表总页数：{}", page.getTotalPage());
     }
 
     @Override
-    public void  addOrgAptitude(OrgAptitudePO orgAptitudePO) {
-        if(null == orgAptitudePO)
-            throw new AdminException(ResultCode.FAID,"机构城市配量参数对象是空的。");
+    public void addOrgAptitude(OrgAptitudePO orgAptitudePO) {
+        if (null == orgAptitudePO)
+            throw new AdminException(ResultCode.FAID, "机构城市配量参数对象是空的。");
         //验证参数
         orgAptitudePO.checkWeek().checkLimitTime().checkLimitCount().checkSingleIncome().checkOrgId(orgDao).checkCity(cityService);
-        synchronized (this){
+        synchronized (this) {
             List<OrgAptitudePO> orgAptitudePOList = orgDao.selectOrgAptitudeByOrgId(orgAptitudePO.getOrgId());
-            if(!CollectionUtil.isEmpty(orgAptitudePOList)){
-                for(OrgAptitudePO po : orgAptitudePOList){
-                    if(po.getCity().equals(orgAptitudePO.getCity()))
-                        throw new AdminException(ResultCode.FAID,"机构城市["+orgAptitudePO.getCity()+"]已配置，请勿重新配置");
+            if (!CollectionUtil.isEmpty(orgAptitudePOList)) {
+                for (OrgAptitudePO po : orgAptitudePOList) {
+                    if (po.getCity().equals(orgAptitudePO.getCity()))
+                        throw new AdminException(ResultCode.FAID, "机构城市[" + orgAptitudePO.getCity() + "]已配置，请勿重新配置");
                 }
             }
-            int weight = 1200000/orgAptitudePO.getLimitCount()/orgAptitudePO.getSingleIncome().intValue();
+            int weight = 1200000 / orgAptitudePO.getLimitCount() / orgAptitudePO.getSingleIncome().intValue();
             orgAptitudePO.setWeight(weight);
             orgAptitudePO.setCreateBy(LoginUtil.getLoginCache().getUsername());
             orgDao.insertOrgAptitude(orgAptitudePO);
@@ -141,19 +145,18 @@ public class OrgServiceImpl implements  OrgService{
     }
 
 
-
     @Override
     public void updateOrgAptitude(OrgAptitudePO orgAptitudePO) {
-        if(null == orgAptitudePO || null == orgAptitudePO.getOrgId() || StringUtils.isBlank(orgAptitudePO.getCity())){
-            throw new AdminException(ResultCode.FAID,"更新机构配量参数错误");
+        if (null == orgAptitudePO || null == orgAptitudePO.getOrgId() || StringUtils.isBlank(orgAptitudePO.getCity())) {
+            throw new AdminException(ResultCode.FAID, "更新机构配量参数错误");
         }
         //验证参数
         orgAptitudePO.checkWeek().checkLimitTime().checkLimitCount().checkSingleIncome().checkOrgId(orgDao).checkCity(cityService);
-        synchronized (this){
-            if(0 == orgAptitudePO.getLimitCount() || orgAptitudePO.getSingleIncome().intValue() == 0){
+        synchronized (this) {
+            if (0 == orgAptitudePO.getLimitCount() || orgAptitudePO.getSingleIncome().intValue() == 0) {
                 orgAptitudePO.setWeight(0);
-            }else
-                orgAptitudePO.setWeight(1300000/orgAptitudePO.getLimitCount()/orgAptitudePO.getSingleIncome().intValue());
+            } else
+                orgAptitudePO.setWeight(1300000 / orgAptitudePO.getLimitCount() / orgAptitudePO.getSingleIncome().intValue());
             orgAptitudePO.setOrgName(null);
             orgDao.updateOrgAptitude(orgAptitudePO);
         }
