@@ -202,6 +202,7 @@ public class OrgBO extends OrgPO {
         int start = Integer.valueOf(array[0]).intValue();
         int end = Integer.valueOf(array[1]).intValue() - 1;
         int distributeTime = Integer.valueOf(DateUtil.formatToString(new Date(), "HH")).intValue();
+        // 校验投放时间
         if((distributeTime >= start) && (distributeTime <= end)) {
             this.setCheckPass(true);
             return this;
