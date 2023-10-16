@@ -82,6 +82,7 @@ public class ZiruiInformationForTangshanApi implements ApiSender {
         String result = HttpUtil.postFormForObject(url, data);
         log.info("[唐山籽瑞信息服务有限公司]推送结果:{}", result);
         if ("n".equals(result)) {
+            dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 2, "[唐山籽瑞信息服务有限公司]推送失败:" + result));
             return new SendResult(false, "[唐山籽瑞信息服务有限公司]推送失败,不再接收数据：" + result);
         } else if (Long.parseLong(result) > 80000) {
             dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 1, "[唐山籽瑞信息服务有限公司]推送成功:" + result));
