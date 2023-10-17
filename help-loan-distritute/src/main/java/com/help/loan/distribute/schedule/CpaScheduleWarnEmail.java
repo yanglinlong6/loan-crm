@@ -28,7 +28,7 @@ public class CpaScheduleWarnEmail {
 
     private static final Logger log = LoggerFactory.getLogger(CpaScheduleWarnEmail.class);
 
-    private static final String emailAddress = "wangping@bangzheng100.com,panlikun@bangzheng100.com,wanglijing@bangzheng100.com,814481025@qq.com";
+    private static final String emailAddress = "wangping@bangzheng100.com,panlikun@bangzheng100.com,840086058@qq.com,814481025@qq.com";
 
     @Scheduled(cron = "0 0/20 7-23 * * ?")
     public void sendWarnEmail() {
