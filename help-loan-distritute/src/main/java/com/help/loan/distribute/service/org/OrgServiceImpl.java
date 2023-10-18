@@ -231,7 +231,7 @@ public class OrgServiceImpl implements OrgService {
             log.error("分发业务,选择机构机构[列表是空的]");
             return null;
         }
-        log.info("orgBOList==" + JSONUtil.toJsonString(orgBOList));
+//        log.info("orgBOList==" + JSONUtil.toJsonString(orgBOList));
         List<OrgBO> newList = new ArrayList<>();
         List<OrgBO> lastList = new ArrayList<>();
         // 如果不是专属机构则走分发逻辑选择机构
