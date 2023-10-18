@@ -81,7 +81,7 @@ public class CpaScheduleApi implements CpaSchedule {
 //    }
 
 
-    //    @Scheduled(cron = "0/30 * * * * ?")
+    @Scheduled(cron = "0/30 * * * * ?")
     @Override
     public void send() {
         try {
