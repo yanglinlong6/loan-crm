@@ -205,7 +205,7 @@ public class OrgBillsServiceImpl implements OrgBillsService {
             orgAccountContent.append(orgBillsContent);
         }
         try{
-            String email = orgAccount.getEmail()+",wangping@bangzheng100.com,840086058@qq.com";
+            String email = orgAccount.getEmail()+",wangping@bangzheng100.com,wangyang@bangzheng100.com";
             EmailService.sendMessage(new EmailBO(subject,orgAccountContent.toString(),email));
             return true;
         }catch (Exception e){
