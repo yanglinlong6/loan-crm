@@ -10,4 +10,12 @@
         (#{orgId},#{customerId},#{dispatchStatus},#{dispatchResult},#{createDate},#{updateDate})
     </insert>
 
+    <select id="countReDispatcheNum" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM org_dispatche_rec
+        WHERE dispatch_status = 0
+          AND org_id = #{orgId}
+          AND DATE_FORMAT(create_date, '%Y-%m-%d') = DATE_FORMAT(sysdate(), '%Y-%m-%d');
+    </select>
+
 </mapper>

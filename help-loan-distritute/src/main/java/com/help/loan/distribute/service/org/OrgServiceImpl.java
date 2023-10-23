@@ -6,6 +6,7 @@ import com.help.loan.distribute.common.utils.JSONUtil;
 import com.help.loan.distribute.config.AppContextUtil;
 import com.help.loan.distribute.service.api.ApiSender;
 import com.help.loan.distribute.service.api.SendResult;
+import com.help.loan.distribute.service.api.dao.DispatcheRecDao;
 import com.help.loan.distribute.service.api.utils.JudgeUtil;
 import com.help.loan.distribute.service.api.utils.MainCity;
 import com.help.loan.distribute.service.api.utils.TouTiaoChannel;
@@ -27,10 +28,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.math.RoundingMode;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -61,6 +60,9 @@ public class OrgServiceImpl implements OrgService {
 
     @Autowired
     private CityAptitudeService cityAptitudeService;
+
+    @Autowired
+    private DispatcheRecDao dispatcheRecDao;
 
 
     @Override
@@ -313,6 +315,17 @@ public class OrgServiceImpl implements OrgService {
                     userAptitude.getName(), userAptitude.getMobile(),
                     value);
         }
+        // 用当前权重除以重复分发的次数得到一个新的权重 重复分发的次数越少 新权重越大
+        // 获取当天重发次数
+        Integer weight3 = dispatcheRecDao.countReDispatcheNum(org.getOrgId());
+        log.info("orgId==" + org.getOrgId() + ";weight3==" + weight3);
+        if (Objects.nonNull(weight3) && !weight3.equals(0)) {
+            value = value.divide(BigDecimal.valueOf(weight3), 3, RoundingMode.HALF_UP);
+            log.info("机构验证通过：{}-{}，用户:{}-{},{},第三次根据发送客户重复率计算权重:{}",
+                    org.getOrgId(), org.getOrgName(),
+                    userAptitude.getName(), userAptitude.getMobile(),
+                    value);
+        }
         org.setWeight(value.intValue());
         Double score;
         Integer highScoreCustomerCount = 0;
@@ -325,7 +338,7 @@ public class OrgServiceImpl implements OrgService {
             if (null == highScoreCustomerCount || highScoreCustomerCount <= 0 || (null == total || total <= 0)) {
                 score = 0d;
             } else {
-                score = new BigDecimal(highScoreCustomerCount).divide(new BigDecimal(total), 3, BigDecimal.ROUND_HALF_UP).doubleValue();
+                score = new BigDecimal(highScoreCustomerCount).divide(new BigDecimal(total), 3, RoundingMode.HALF_UP).doubleValue();
             }
         }
         Double newScore = new BigDecimal(score).subtract(org.getOrgAptitude().getAmountRate()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
