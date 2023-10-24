@@ -310,7 +310,7 @@ public class OrgServiceImpl implements OrgService {
                 value);
         if (null != org.getWeight2() && org.getWeight2() > 0) {
             value = value.multiply(BigDecimal.valueOf(org.getWeight2()));
-            log.info("机构验证通过：{}-{}，用户:{}-{},{},第二次权重:{}",
+            log.info("机构验证通过：{}-{}，用户:{}-{},第二次权重:{}",
                     org.getOrgId(), org.getOrgName(),
                     userAptitude.getName(), userAptitude.getMobile(),
                     value);
@@ -321,7 +321,7 @@ public class OrgServiceImpl implements OrgService {
         log.info("orgId==" + org.getOrgId() + ";weight3==" + weight3);
         if (Objects.nonNull(weight3) && !weight3.equals(0)) {
             value = value.divide(BigDecimal.valueOf(weight3), 3, RoundingMode.HALF_UP);
-            log.info("机构验证通过：{}-{}，用户:{}-{},{},第三次根据发送客户重复率计算权重:{}",
+            log.info("机构验证通过：{}-{}，用户:{}-{},第三次根据发送客户重复率计算权重:{}",
                     org.getOrgId(), org.getOrgName(),
                     userAptitude.getName(), userAptitude.getMobile(),
                     value);
