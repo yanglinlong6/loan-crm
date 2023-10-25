@@ -15,6 +15,7 @@ import com.help.loan.distribute.service.api.dao.DispatcheRecDao;
 import com.help.loan.distribute.service.api.utils.JudgeUtil;
 import com.help.loan.distribute.service.user.model.UserAptitudePO;
 import com.help.loan.distribute.service.user.model.UserDTO;
+import com.help.loan.distribute.util.LoadBalanceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +64,8 @@ public class QiChuBusinessForWuhanApi implements ApiSender {
         isHaveAptitude(po);
         Config.initConfig(corpid, appid, appSecret);
         AddCustomerVo dto = new AddCustomerVo();
-        int i = new Random(0).nextInt(4);
-        long userId = list.get(i);
+        long userId = LoadBalanceUtil.doSelect2ForInt(list);
+        log.info("userId===" + userId);
         dto.setOptUserId(userId);
 
         List<CustomerDetail> list = new ArrayList<>();
