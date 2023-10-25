@@ -35,7 +35,7 @@ public class QiChuBusinessForWuhanApi implements ApiSender {
 
     private static final Logger log = LoggerFactory.getLogger(QiChuBusinessForWuhanApi.class);
 
-    private List<Integer> list = Lists.newArrayList(14851822, 18872440, 19518988, 16386287, 18594574);
+    private List<Integer> list = Lists.newArrayList(14851822, 18872440, 16386287, 18594574);
 
     private static final String appid = "678639157425209344";
 
