@@ -35,9 +35,9 @@ public class ShouShangInformationForNanjingApi implements ApiSender {
         try {
             return sendResultForJinan(po, select);
         } catch (Exception e) {
-            log.error("[武汉启楚商务咨询有限公司]推送异常:{}", e.getMessage(), e);
-            dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 2, "[武汉启楚商务咨询有限公司]推送异常:" + e.getMessage()));
-            return new SendResult(false, "[武汉启楚商务咨询有限公司]推送异常:" + e.getMessage());
+            log.error("[南京首商信息科技有限公司]推送异常:{}", e.getMessage(), e);
+            dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 2, "[南京首商信息科技有限公司]推送异常:" + e.getMessage()));
+            return new SendResult(false, "[南京首商信息科技有限公司]推送异常:" + e.getMessage());
         }
 
     }
@@ -54,10 +54,10 @@ public class ShouShangInformationForNanjingApi implements ApiSender {
         checkData.put("mobile", MD5Util.getMd5String(po.getMobile()));
         String checkURL = "http://47.96.87.61/api/customer/check_mobile";
         String checkResult = HttpUtil.postForJSON(checkURL, checkData);
-        log.info("[武汉启楚商务咨询有限公司]撞库结果:{}", checkResult);
+        log.info("[南京首商信息科技有限公司]撞库结果:{}", checkResult);
         if (JSONUtil.toJSON(checkResult).getIntValue("code") != 0) {
-            dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 0, "[武汉启楚商务咨询有限公司]推送重复:" + checkResult));
-            return new SendResult(false, "[武汉启楚商务咨询有限公司]撞库重复:" + checkResult);
+            dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 0, "[南京首商信息科技有限公司]推送重复:" + checkResult));
+            return new SendResult(false, "[南京首商信息科技有限公司]撞库重复:" + checkResult);
         }
 
         isHaveAptitude(po);
@@ -82,16 +82,16 @@ public class ShouShangInformationForNanjingApi implements ApiSender {
         System.out.println(data.toJSONString());
         String url = "http://47.96.87.61/api/customer/import_data";
         String result = restTemplate.postForObject(url, data, String.class);
-        log.info("[武汉启楚商务咨询有限公司]推送结果:{}", result);
+        log.info("[南京首商信息科技有限公司]推送结果:{}", result);
         JSONObject jsonObject = JSONUtil.toJSON(result);
         int code = jsonObject.getIntValue("code");
         if (0 == code) {
-            dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 1, "[武汉启楚商务咨询有限公司]推送成功:" + result));
-            return new SendResult(true, "[武汉启楚商务咨询有限公司]推送成功:" + result);
+            dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 1, "[南京首商信息科技有限公司]推送成功:" + result));
+            return new SendResult(true, "[南京首商信息科技有限公司]推送成功:" + result);
         } else {
-            dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 2, "[武汉启楚商务咨询有限公司]推送失败:" + result));
+            dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 2, "[南京首商信息科技有限公司]推送失败:" + result));
         }
-        return new SendResult(false, "[武汉启楚商务咨询有限公司]推送失败:" + result);
+        return new SendResult(false, "[南京首商信息科技有限公司]推送失败:" + result);
     }
 
     public static void main(String[] args) {
