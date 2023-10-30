@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -63,7 +64,7 @@ public class ShouShangInformationForNanjingApi implements ApiSender {
         isHaveAptitude(po);
         JSONObject data = new JSONObject();
         data.put("file_id", 22);
-        data.put("name", po.getName());
+        data.put("name", StringUtils.isEmpty(po.getName()) ? "" : po.getName().concat("-zxf"));
         data.put("mobile", po.getMobile());
         data.put("age", po.getAge());
         data.put("sex", po.getGender());
