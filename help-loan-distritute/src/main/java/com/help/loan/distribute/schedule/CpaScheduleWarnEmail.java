@@ -352,6 +352,7 @@ public class CpaScheduleWarnEmail {
      */
     private String jointOfflineOrgSummarizingDifferentiateCity(String startDate, String endDate) {
         StringBuffer content = new StringBuffer();
+        content.append("----------------------------------当天各机构分发汇总----------------------------------").append("</br>");
         //线下分发分城市统计
         List<OrgDistributeStatisticsBO> statisticsList = orgService.getOrgDistributeStatistics(startDate, endDate);
         if (CollectionUtil.isEmpty(statisticsList)) {
@@ -392,6 +393,7 @@ public class CpaScheduleWarnEmail {
      */
     private String jointOfflineOrgSummarizingAcquireCustomerCity(String startDate, String endDate) {
         StringBuffer content = new StringBuffer();
+        content.append("----------------------------------当天各城市获客汇总----------------------------------").append("</br>");
         //线下获客分城市统计
         List<OrgAcquireCustomerStatisticsBO> statisticsList = orgService.getOrgAcquireCustomerStatistics(startDate, endDate);
         if (CollectionUtil.isEmpty(statisticsList)) {
