@@ -53,7 +53,7 @@ public class CpaScheduleWarnEmail {
         }
     }
 
-    @Scheduled(cron = "0 58 23 * * ?")
+    @Scheduled(cron = "20 59 23 * * ?")
     public void sendWarnEmailEveryEnd() {
         try {
             log.info("每天最后统计机构分发统计提醒邮件开始：{}", DateUtil.formatToString(new Date(), "yyyy-MM-dd HH:mm:ss"));
