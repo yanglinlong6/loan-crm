@@ -410,7 +410,8 @@ public class CpaScheduleWarnEmail {
             content.append("<tr>")
                     .append("<td>").append(statistics.getAcquireDate()).append("</td>")
                     .append("<td>").append(statistics.getAcquireCity()).append("</td>")
-                    .append("<td>").append(statistics.getAcquireNum()).append("</td>");
+                    .append("<td>").append(statistics.getAcquireNum()).append("</td>")
+                    .append("</tr>");
         }
         content.append("</table>").append("</br>");
         content.append("------------------------------------------------------------").append("</br>");
