@@ -44,8 +44,8 @@ public class CpaScheduleWarnEmail {
             List<Map<String, Object>> offlineOrgSummations = orgService.getOrgDistributeCountSummation(startDate, endDate);
             content.append(joiontChannelQuality(startDate, endDate, offlineOrgSummations));
             content.append(jointOfflineOrgSummarizing(startDate, endDate, offlineOrgSummations));
-            content.append(jointOfflineOrgSummarizingAcquireCustomerCity(startDate, endDate));
-            content.append(jointOfflineOrgSummarizingDifferentiateCity(startDate, endDate));
+//            content.append(jointOfflineOrgSummarizingAcquireCustomerCity(startDate, endDate));
+//            content.append(jointOfflineOrgSummarizingDifferentiateCity(startDate, endDate));
             EmailBO email = new EmailBO(date + "邦正提醒邮件", content.toString(), emailAddress);
             EmailService.sendMessage(email);
             log.info("机构分发统计提醒邮件成功：{}", DateUtil.formatToString(new Date(), DateUtil.yyyyMMddHHmmss2));
