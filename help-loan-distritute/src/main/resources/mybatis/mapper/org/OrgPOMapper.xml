@@ -311,7 +311,7 @@
             where rec.create_date BETWEEN #{startDate} and #{endDate} and rec.dispatch_status = 1
             group by rec.org_id,user_a.city
             order by rec.org_id
-        ) temp
+        ) temp ORDER BY city
 
     </select>
 
