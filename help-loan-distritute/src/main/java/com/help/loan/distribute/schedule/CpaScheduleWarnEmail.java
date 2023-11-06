@@ -8,8 +8,8 @@ import com.help.loan.distribute.common.utils.DateUtil;
 import com.help.loan.distribute.schedule.model.CitySummarizingBO;
 import com.help.loan.distribute.service.api.utils.JudgeUtil;
 import com.help.loan.distribute.service.org.OrgService;
+import com.help.loan.distribute.service.org.model.OrgAcquireCustomerStatisticsBO;
 import com.help.loan.distribute.service.org.model.OrgDistributeStatisticsBO;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,8 @@ public class CpaScheduleWarnEmail {
             List<Map<String, Object>> offlineOrgSummations = orgService.getOrgDistributeCountSummation(startDate, endDate);
             content.append(joiontChannelQuality(startDate, endDate, offlineOrgSummations));
             content.append(jointOfflineOrgSummarizing(startDate, endDate, offlineOrgSummations));
-//            content.append(jointOfflineOrgSummarizingDifferentiateCity(startDate,endDate));
+            content.append(jointOfflineOrgSummarizingAcquireCustomerCity(startDate, endDate));
+            content.append(jointOfflineOrgSummarizingDifferentiateCity(startDate, endDate));
             EmailBO email = new EmailBO(date + "邦正提醒邮件", content.toString(), emailAddress);
             EmailService.sendMessage(email);
             log.info("机构分发统计提醒邮件成功：{}", DateUtil.formatToString(new Date(), DateUtil.yyyyMMddHHmmss2));
@@ -67,7 +68,8 @@ public class CpaScheduleWarnEmail {
             List<Map<String, Object>> offlineOrgSummations = orgService.getOrgDistributeCountSummation(startDate, endDate);
             content.append(joiontChannelQuality(startDate, endDate, offlineOrgSummations));
             content.append(jointOfflineOrgSummarizing(startDate, endDate, offlineOrgSummations));
-//            content.append(jointOfflineOrgSummarizingDifferentiateCity(startDate,endDate));
+            content.append(jointOfflineOrgSummarizingAcquireCustomerCity(startDate, endDate));
+            content.append(jointOfflineOrgSummarizingDifferentiateCity(startDate, endDate));
             EmailBO email = new EmailBO(date + "邦正提醒邮件", content.toString(), emailAddress);
             EmailService.sendMessage(email);
             log.info("每天最后统计机构分发统计提醒邮件成功：{}", DateUtil.formatToString(new Date(), DateUtil.yyyyMMddHHmmss2));
@@ -385,4 +387,32 @@ public class CpaScheduleWarnEmail {
         return content.toString();
     }
 
+    /**
+     * 线下获客统计分城市
+     */
+    private String jointOfflineOrgSummarizingAcquireCustomerCity(String startDate, String endDate) {
+        StringBuffer content = new StringBuffer();
+        //线下获客分城市统计
+        List<OrgAcquireCustomerStatisticsBO> statisticsList = orgService.getOrgAcquireCustomerStatistics(startDate, endDate);
+        if (CollectionUtil.isEmpty(statisticsList)) {
+            log.info("暂时还没有获客成功的数据");
+            return content.toString();
+        }
+        content.append("<table border='1' cellspacing='0'>");
+        content.append("<tr>")
+                .append("<td>").append("日期").append("</td>")
+                .append("<td>").append("城市").append("</td>")
+                .append("<td>").append("获客数量").append("</td>")
+                .append("</tr>");
+        for (OrgAcquireCustomerStatisticsBO statistics : statisticsList) {
+            content.append("<tr>")
+                    .append("<td>").append(statistics.getAcquireDate()).append("</td>")
+                    .append("<td>").append(statistics.getAcquireCity()).append("</td>")
+                    .append("<td>").append(statistics.getAcquireNum()).append("</td>");
+        }
+        content.append("</table>").append("</br>");
+        content.append("------------------------------------------------------------").append("</br>");
+        content.append("------------------------------------------------------------").append("</br>");
+        return content.toString();
+    }
 }

@@ -1,5 +1,6 @@
 package com.help.loan.distribute.service.org.dao;
 
+import com.help.loan.distribute.service.org.model.OrgAcquireCustomerStatisticsBO;
 import com.help.loan.distribute.service.org.model.OrgAptitudePO;
 import com.help.loan.distribute.service.org.model.OrgDistributeStatisticsBO;
 import com.help.loan.distribute.service.org.model.OrgPO;
@@ -70,15 +71,14 @@ public interface OrgDao {
      */
     List<OrgAptitudePO> selectOrgAptitude(@Param("orgId") Long orgId);
 
-    List<OrgAptitudePO> selectOrgAptitudeByType(@Param("type")String type);
+    List<OrgAptitudePO> selectOrgAptitudeByType(@Param("type") String type);
 
     /**
-     *
-     * @param week 星期几
+     * @param week          星期几
      * @param excludeOrgIds 多个机构id以,号分隔
      * @return List<String> 返回当前主要的分发城市
      */
-    List<String> getOrgCityList(@Param("week")String week,@Param("excludeOrgIds")String excludeOrgIds);
+    List<String> getOrgCityList(@Param("week") String week, @Param("excludeOrgIds") String excludeOrgIds);
 
     /**
      * @param orgId     机构id
@@ -109,35 +109,45 @@ public interface OrgDao {
 
     /**
      * 有公积金且房在机构城市分发成功中的数量占比
-     * @param orgId 机构id
-     * @param city 城市
+     *
+     * @param orgId     机构id
+     * @param city      城市
      * @param startDate 开始日期：例如：2020-04-01 00:00:00
-     * @param endDate 结束日期 例如：2020-04-01 23:59:59
+     * @param endDate   结束日期 例如：2020-04-01 23:59:59
      * @return 公积金和房在机构城市分发成功中的数量占比
      */
     Integer selectTodayHouseAndPublicFundCountInDistributeSuccess(@Param("orgId") Long orgId,
-                                                                 @Param("city") String city,
-                                                                 @Param("startDate") String startDate,
-                                                                 @Param("endDate") String endDate);
+                                                                  @Param("city") String city,
+                                                                  @Param("startDate") String startDate,
+                                                                  @Param("endDate") String endDate);
 
 
     List<OrgDistributeStatisticsBO> selectOrgDistributeCount(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
-    List<Map<String,Object>> selectOrgDistributeCountSummation(@Param("startDate") String startDate, @Param("endDate") String endDate);
+    List<Map<String, Object>> selectOrgDistributeCountSummation(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
-    Integer selectDistributeSuccessNotNameCounts(@Param("startDate") String startDate, @Param("endDate") String endDate,@Param("orgId")Long orgId);
+    Integer selectDistributeSuccessNotNameCounts(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("orgId") Long orgId);
 
-    List<Map<String,Object>> selectChannelQualityForAverage(@Param("startDate") String startDate, @Param("endDate") String endDate,@Param("mainCityList") String mainCityList);
+    List<Map<String, Object>> selectChannelQualityForAverage(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("mainCityList") String mainCityList);
 
-    List<Map<String,Object>> selectChannelQuality(@Param("startDate") String startDate, @Param("endDate") String endDate,@Param("mainCityList") String mainCityList);
+    List<Map<String, Object>> selectChannelQuality(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("mainCityList") String mainCityList);
 
-    List<Map<String,Object>> selectonlineLenderCountSummation(@Param("startDate") String startDate, @Param("endDate") String endDate);
+    List<Map<String, Object>> selectonlineLenderCountSummation(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
     /**
      * 多个机构id，以，号隔开
+     *
      * @param orgIds 多个机构id，以，号隔开
      * @return List<UserAptitudePO>
      */
-    List<UserAptitudePO> selectOrgDistributeSuccessUser(@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("orgIds")String orgIds);
+    List<UserAptitudePO> selectOrgDistributeSuccessUser(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("orgIds") String orgIds);
 
+    /**
+     * 获取获客城市统计
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    List<OrgAcquireCustomerStatisticsBO> getOrgAcquireCustomerStatistics(@Param("startDate") String startDate, @Param("endDate") String endDate);
 }

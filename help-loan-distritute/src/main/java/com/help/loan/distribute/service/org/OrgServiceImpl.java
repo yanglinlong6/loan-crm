@@ -13,10 +13,7 @@ import com.help.loan.distribute.service.api.utils.TouTiaoChannel;
 import com.help.loan.distribute.service.cityAptitude.CityAptitudeService;
 import com.help.loan.distribute.service.cityAptitude.dao.CityAptitudeRatePOMapper;
 import com.help.loan.distribute.service.org.dao.OrgDao;
-import com.help.loan.distribute.service.org.model.OrgAptitudePO;
-import com.help.loan.distribute.service.org.model.OrgBO;
-import com.help.loan.distribute.service.org.model.OrgDistributeStatisticsBO;
-import com.help.loan.distribute.service.org.model.OrgPO;
+import com.help.loan.distribute.service.org.model.*;
 import com.help.loan.distribute.service.user.dao.UserAptitudeDao;
 import com.help.loan.distribute.service.user.model.UserAptitudePO;
 import com.help.loan.distribute.service.user.model.UserDTO;
@@ -556,6 +553,11 @@ public class OrgServiceImpl implements OrgService {
     @Override
     public List<Map<String, String>> getWechatChannelConversion(String startDate, String endDate) {
         return null;
+    }
+
+    @Override
+    public List<OrgAcquireCustomerStatisticsBO> getOrgAcquireCustomerStatistics(String startDate, String endDate) {
+        return orgDao.getOrgAcquireCustomerStatistics(startDate, endDate);
     }
 
 

@@ -1,9 +1,11 @@
 package com.help.loan.distribute.service.org;
 
+import com.help.loan.distribute.service.org.model.OrgAcquireCustomerStatisticsBO;
 import com.help.loan.distribute.service.org.model.OrgBO;
 import com.help.loan.distribute.service.org.model.OrgDistributeStatisticsBO;
 import com.help.loan.distribute.service.user.model.UserAptitudePO;
 import com.help.loan.distribute.service.user.model.UserDTO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -77,34 +79,46 @@ public interface OrgService {
      */
     List<OrgDistributeStatisticsBO> getOrgDistributeStatistics(String startDate, String endDate);
 
-    /**机构分发汇总*/
-    List<Map<String,Object>> getOrgDistributeCountSummation(String startDate, String endDate);
+    /**
+     * 机构分发汇总
+     */
+    List<Map<String, Object>> getOrgDistributeCountSummation(String startDate, String endDate);
 
     /**
      * 获取机构分发成功，没有姓名的占比
+     *
      * @param startDate 开始日期
-     * @param endDate 结束日期
-     * @param orgId 机构id
+     * @param endDate   结束日期
+     * @param orgId     机构id
      * @return Integer
      */
     @Deprecated
-    Integer getDistributeSuccessNotNameCounts(String startDate, String endDate,Long orgId);
+    Integer getDistributeSuccessNotNameCounts(String startDate, String endDate, Long orgId);
 
-    List<Map<String,Object>> getChannelQualityForAverage(String startDate, String endDate);
+    List<Map<String, Object>> getChannelQualityForAverage(String startDate, String endDate);
 
-    List<Map<String,Object>> getChannelQuality(String startDate, String endDate);
+    List<Map<String, Object>> getChannelQuality(String startDate, String endDate);
 
-    List<Map<String,Object>> getlineLenderCountSummation(String startDate, String endDate);
+    List<Map<String, Object>> getlineLenderCountSummation(String startDate, String endDate);
 
 
     /**
      * 查询机构列表发送成功的用户
+     *
      * @param orgIdArray 数组，机构id数组
      * @return List<UserAptitudePO>
      */
-    List<UserAptitudePO> getOrgDistributeSuccessUser(String startDate,String endDate,String...orgIdArray);
+    List<UserAptitudePO> getOrgDistributeSuccessUser(String startDate, String endDate, String... orgIdArray);
 
 
-    List<Map<String,String>> getWechatChannelConversion(String startDate,String endDate);
+    List<Map<String, String>> getWechatChannelConversion(String startDate, String endDate);
 
+    /**
+     * 获取获客城市统计
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    List<OrgAcquireCustomerStatisticsBO> getOrgAcquireCustomerStatistics(String startDate, String endDate);
 }

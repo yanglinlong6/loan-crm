@@ -426,7 +426,7 @@
             order by org.org_id asc
         ) temp2
     </select>
-    
+
     <select id="selectDistributeSuccessNotNameCounts" resultType="java.lang.Integer" >
         select count(*)
         from (
@@ -437,7 +437,7 @@
         group by aptitude.mobile
         )tmp
     </select>
-    
+
     <select id="selectChannelQualityForAverage" resultType="java.util.Map">
         select
             tmp.city 城市,
@@ -462,7 +462,7 @@
             group by uapt.city
         ) tmp;
     </select>
-    
+
     <select id="selectChannelQuality" resultType="java.util.Map">
         select
 	        tmp.*,
@@ -545,6 +545,13 @@
         )
     </select>
 
+    <select id="getOrgAcquireCustomerStatistics"
+            resultType="com.help.loan.distribute.service.org.model.OrgAcquireCustomerStatisticsBO">
+        SELECT LEFT(create_date,10) AS acquireDate ,city AS acquireCity, count(1) AS acquireNum
+        FROM user_aptitude
+        WHERE create_date BETWEEN #{startDate} and #{endDate}
+        GROUP BY LEFT(create_date,10),city ORDER BY LEFT(create_date,10),city;
+    </select>
 
 
 </mapper>
