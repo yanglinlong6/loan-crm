@@ -51,7 +51,7 @@
         from org
         where org_id = #{orgId,jdbcType=BIGINT}
     </select>
-    
+
     <select id="selectOrgByName" parameterType="com.daofen.admin.service.org.model.OrgPO" resultMap="Org_BaseResultMap">
         select
         <include refid="Org_Base_Column_List"/>
@@ -59,7 +59,7 @@
         where org_name = #{orgName} or org_nickname = #{orgNickname}
         limit 1
     </select>
-    
+
     <select id="selectMaxOrg" resultType="java.lang.Long">
         select org_id
         from org
@@ -136,7 +136,7 @@
             </if>
         </trim>
     </insert>
-    
+
     <select id="selectCityNeed" resultType="com.daofen.admin.service.org.model.CityNeedPO">
         SELECT
             CONCAT(orgApt.city,'-',
@@ -203,6 +203,7 @@
         <result column="channel" property="channel" />
         <result column="amount_rate" property="amountRate"/>
         <result column="loan_amount" property="loanAmount"/>
+        <result column="status" property="status"/>
         <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
         <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
         <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
@@ -211,10 +212,10 @@
 
     <sql id="OrgAptitudePO_Base_Column_List">
         id, org_id,org_name, province, city,week, limit_time, limit_count, single_income,wechat,channel,api,
-        weight,amount_rate,loan_amount,create_by, create_date,
+        weight,amount_rate,loan_amount,status,create_by, create_date,
         update_by, update_date
     </sql>
-    
+
     <select id="selectOrgAptitudePage" parameterType="com.daofen.admin.basic.PageVO" resultMap="OrgAptitudePO_BaseResultMap">
         select <include refid="OrgAptitudePO_Base_Column_List" />
         from org_aptitude

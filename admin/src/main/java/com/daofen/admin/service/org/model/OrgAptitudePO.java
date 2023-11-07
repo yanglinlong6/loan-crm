@@ -45,76 +45,85 @@ public class OrgAptitudePO extends BasePO {
 
     private String channel;
 
-    public OrgAptitudePO checkSingleIncome(){
-        if(null == singleIncome || singleIncome.intValue() <=0)
-            throw new AdminException(ResultCode.FAID,"新增机构配量参数错误:单价参数不合法");
+    /**
+     * 规则状态 0：正常 -1：暂停
+     */
+    private Integer status;
+
+    public OrgAptitudePO checkSingleIncome() {
+        if (null == singleIncome || singleIncome.intValue() <= 0)
+            throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:单价参数不合法");
         return this;
     }
 
-    public OrgAptitudePO checkLimitCount(){
-        if(null == limitCount || limitCount <0)
-            throw new AdminException(ResultCode.FAID,"新增机构配量参数错误:每日限制数量参数不合法");
+    public OrgAptitudePO checkLimitCount() {
+        if (null == limitCount || limitCount < 0)
+            throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:每日限制数量参数不合法");
         return this;
     }
 
-    public OrgAptitudePO checkLimitTime(){
-        if(StringUtils.isBlank(limitTime))
-            throw new AdminException(ResultCode.FAID,"新增机构配量参数错误:时间限制参数不合法");
+    public OrgAptitudePO checkLimitTime() {
+        if (StringUtils.isBlank(limitTime))
+            throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:时间限制参数不合法");
 
         String[] array = limitTime.split("-");
-        if(array.length != 2)
-            throw new AdminException(ResultCode.FAID,"新增机构配量参数错误:时间限制参数不合法");
+        if (array.length != 2)
+            throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:时间限制参数不合法");
 
         int start = Integer.valueOf(array[0]);
         int end = Integer.valueOf(array[1]);
-        if(start >= end)
-            throw new AdminException(ResultCode.FAID,"新增机构配量参数错误:时间限制参数不合法");
+        if (start >= end)
+            throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:时间限制参数不合法");
         return this;
     }
 
     /**
      * 验证机构参数
+     *
      * @param orgDao OrgDao
      * @return OrgAptitudePO
      */
-    public OrgAptitudePO checkOrgId(OrgDao orgDao){
-        if(null == orgDao || null == orgId){
-            throw new AdminException(ResultCode.FAID,"新增机构配量参数错误:机构参数不合法");
+    public OrgAptitudePO checkOrgId(OrgDao orgDao) {
+        if (null == orgDao || null == orgId) {
+            throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:机构参数不合法");
         }
         OrgPO orgPO = orgDao.selectOrgByOrgId(orgId);
-        if(null == orgPO)
-            throw new AdminException(ResultCode.FAID,"新增机构配量参数错误:机构参数不合法");
+        if (null == orgPO)
+            throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:机构参数不合法");
         this.setOrgName(orgPO.getOrgName());
         return this;
     }
 
     private static final String weeks = "星期一,星期二,星期三,星期四,星期五,星期六,星期日";
-    /**判断是否是合法的星期日期*/
-    public OrgAptitudePO checkWeek(){
-        if(StringUtils.isBlank(week))
+
+    /**
+     * 判断是否是合法的星期日期
+     */
+    public OrgAptitudePO checkWeek() {
+        if (StringUtils.isBlank(week))
             return this;
         String[] array = week.split(",");
-        for(String str : array){
-            if(!weeks.contains(str)){
-                throw new AdminException(ResultCode.FAID,"新增机构配量参数错误:星期限制参数不合法");
+        for (String str : array) {
+            if (!weeks.contains(str)) {
+                throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:星期限制参数不合法");
             }
         }
         return this;
     }
 
-    /**验证城市*/
-    public OrgAptitudePO checkCity(CityService cityService){
-        if(null == cityService || StringUtils.isBlank(this.getCity())){
-            throw new AdminException(ResultCode.FAID,"新增机构配量参数错误:城市参数不合法");
+    /**
+     * 验证城市
+     */
+    public OrgAptitudePO checkCity(CityService cityService) {
+        if (null == cityService || StringUtils.isBlank(this.getCity())) {
+            throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:城市参数不合法");
         }
         CityPO cityPO = cityService.getCityPO(this.getCity());
-        if(null == cityPO){
-            throw new AdminException(ResultCode.FAID,"新增机构配量参数错误:城市参数不合法");
+        if (null == cityPO) {
+            throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:城市参数不合法");
         }
         return this;
     }
-
-
 
 
     @Override
