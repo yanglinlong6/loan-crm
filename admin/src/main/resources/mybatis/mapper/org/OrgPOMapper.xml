@@ -224,6 +224,7 @@
                 <if test="param.city != null"> and city like CONCAT('%',#{param.city},'%') </if>
                 <if test="param.orgName != null"> and org_name like CONCAT('%',#{param.orgName},'%') </if>
                 <if test="param.orgId != null"> and org_id=#{param.orgId} </if>
+                <if test="param.status != null"> and status=#{param.status} </if>
             </where>
         </if>
         order by org_id asc
@@ -238,6 +239,7 @@
                 <if test="param.city != null"> and city like CONCAT('%',#{param.city},'%') </if>
                 <if test="param.orgName != null"> and org_name like CONCAT('%',#{param.orgName},'%') </if>
                 <if test="param.orgId != null"> and org_id=#{param.orgId} </if>
+                <if test="param.status != null"> and status=#{param.status} </if>
             </where>
         </if>
     </select>
@@ -362,6 +364,12 @@
             </if>
         </set>
         where id=#{id}
+    </update>
+
+    <update id="changeStatus">
+        update org_aptitude
+        set status = #{status}
+        where id = #{id}
     </update>
 
     <select id="getOrgCityList" resultType="java.lang.String">

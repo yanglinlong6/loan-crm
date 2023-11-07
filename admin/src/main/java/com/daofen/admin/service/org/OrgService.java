@@ -54,4 +54,5 @@ public interface OrgService {
      */
     void updateOrgAptitude(OrgAptitudePO orgAptitudePO);
 
+    void changeStatus(OrgAptitudePO orgAptitudePO);
 }

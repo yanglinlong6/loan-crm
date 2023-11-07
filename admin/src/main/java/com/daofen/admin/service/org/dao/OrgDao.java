@@ -21,13 +21,15 @@ public interface OrgDao {
 
     /**
      * 根据机构名称查询机构信息对象
+     *
      * @param orgName 机构名称
      * @return OrgPO
      */
     OrgPO selectOrgByName(OrgPO orgName);
 
     /**
-     *  根据机构id查询机构对象信息
+     * 根据机构id查询机构对象信息
+     *
      * @param orgId
      * @return OrgPO
      */
@@ -41,7 +43,7 @@ public interface OrgDao {
 
     void updateOrg(OrgPO orgPO);
 
-    List<CityNeedPO> selectCityNeed(@Param("startDate")String startDate, @Param("endDate")String endDate);
+    List<CityNeedPO> selectCityNeed(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
 
     List<OrgAptitudePO> selectOrgAptitudePage(PageVO<OrgAptitudePO> pageVO);
@@ -54,4 +56,5 @@ public interface OrgDao {
 
     void updateOrgAptitude(OrgAptitudePO orgAptitudePO);
 
+    void changeStatus(@Param("id") Long id, @Param("status") Integer status);
 }

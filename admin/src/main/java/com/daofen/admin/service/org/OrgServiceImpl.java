@@ -162,4 +162,9 @@ public class OrgServiceImpl implements OrgService {
         }
 
     }
+
+    @Override
+    public void changeStatus(OrgAptitudePO orgAptitudePO) {
+        orgDao.changeStatus(orgAptitudePO.getId(), orgAptitudePO.getStatus());
+    }
 }
