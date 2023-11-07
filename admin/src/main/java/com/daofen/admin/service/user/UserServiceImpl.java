@@ -1,5 +1,6 @@
 package com.daofen.admin.service.user;
 
+import com.daofen.admin.basic.PageVO;
 import com.daofen.admin.service.user.dao.UserDao;
 import com.daofen.admin.service.user.model.UserBO;
 import com.daofen.admin.service.user.model.UserPO;
@@ -23,16 +24,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserBO getUserBOByUsername(String username) {
-        if(StringUtils.isBlank(username)){
-            log.info("用户：【{}】不能为空",username);
+        if (StringUtils.isBlank(username)) {
+            log.info("用户：【{}】不能为空", username);
             return null;
         }
         UserPO userPO = userDao.selectUserByUsername(username);
-        if(null == userPO){
-            log.info("用户：【{}】不存在",username);
+        if (null == userPO) {
+            log.info("用户：【{}】不存在", username);
             return null;
         }
-        log.info("用户【{}】获取用户:{}",username,userPO);
-        return JSONUtil.toJavaBean(userPO.toString(),UserBO.class);
+        log.info("用户【{}】获取用户:{}", username, userPO);
+        return JSONUtil.toJavaBean(userPO.toString(), UserBO.class);
+    }
+
+    @Override
+    public void getList(PageVO<UserPO> page) {
+        Integer count = userDao.selectUserListCountByPage(page);
+        page.setData(userDao.selectUserListByPage(page));
+        page.setTotalCount(count);
     }
 }

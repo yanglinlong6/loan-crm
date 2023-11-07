@@ -23,5 +23,27 @@
         where username=#{username}
     </select>
 
+    <select id="selectUserListCountByPage" resultType="java.lang.Integer">
+        select count(1)
+        from daofen_admin.`user`
+        <where>
+            <if test="param != null">
+                <if test="param.username !=null and param.username!=''"> and username like concat('%', #{param.username},'%') </if>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectUserListByPage" resultMap="BaseResultMap">
+        select
+        id,`name`,username,create_by,create_date,update_by,update_date
+        from daofen_admin.`user`
+        <where>
+            <if test="param != null">
+                <if test="param.username !=null and param.username!=''"> and username like concat('%', #{param.username},'%') </if>
+            </if>
+        </where>
+        limit #{startIndex},#{size}
+    </select>
+
 
 </mapper>
