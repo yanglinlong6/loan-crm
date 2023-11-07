@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -37,5 +39,13 @@ public class UserServiceImplTest {
         linkOrgVO.setOrgIds(Lists.newArrayList(1, 2, 3, 4));
         linkOrgVO.setUserId(1);
         userService.linkOrg(linkOrgVO);
+    }
+
+    @Test
+    public void getBindLinkOrg() {
+        LinkOrgVO linkOrgVO = new LinkOrgVO();
+        linkOrgVO.setUserId(1);
+        List<Integer> bindLinkOrg = userService.getBindLinkOrg(linkOrgVO);
+        System.out.println("bindLinkOrg = " + JSONUtil.toString(bindLinkOrg));
     }
 }
