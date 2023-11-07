@@ -27,4 +27,14 @@ public interface UserDao {
      * @return
      */
     List<UserPO> selectUserListByPage(PageVO<UserPO> page);
+
+    void saveUser(UserPO userPO);
+
+    void updateUser(UserPO userPO);
+
+    void deleteUser(UserPO userPO);
+
+    void findOneUser(UserPO userPO);
+
+    void resetPassword(UserPO userPO);
 }

@@ -30,4 +30,39 @@ public class UserController extends AbstractController {
         userService.getList(pageVO);
         return this.success(ResultCode.SUC, pageVO);
     }
+
+    @PostMapping("/user/save")
+    @ResponseBody
+    public ResultVO saveUser(@RequestBody() UserPO userPO) {
+        userService.saveUser(userPO);
+        return this.success(ResultCode.SUC, "新增用户成功");
+    }
+
+    @PostMapping("/user/update")
+    @ResponseBody
+    public ResultVO updateUser(@RequestBody() UserPO userPO) {
+        userService.updateUser(userPO);
+        return this.success(ResultCode.SUC, "修改用户成功");
+    }
+
+    @PostMapping("/user/delete")
+    @ResponseBody
+    public ResultVO deleteUser(@RequestBody() UserPO userPO) {
+        userService.deleteUser(userPO);
+        return this.success(ResultCode.SUC, "删除用户成功");
+    }
+
+    @PostMapping("/user/findOne")
+    @ResponseBody
+    public ResultVO findOneUser(@RequestBody() UserPO userPO) {
+        userService.findOneUser(userPO);
+        return this.success(ResultCode.SUC, "详情查询成功");
+    }
+
+    @PostMapping("/user/resetPassword")
+    @ResponseBody
+    public ResultVO resetPassword(@RequestBody() UserPO userPO) {
+        userService.resetPassword(userPO);
+        return this.success(ResultCode.SUC, "重置密码成功");
+    }
 }

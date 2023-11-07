@@ -11,6 +11,7 @@ public interface UserService {
 
     /**
      * 获取用户业务对象
+     *
      * @param username 用户账户名
      * @return UserBO
      */
@@ -18,4 +19,14 @@ public interface UserService {
 
 
     void getList(PageVO<UserPO> pageVO);
+
+    void saveUser(UserPO userPO);
+
+    void updateUser(UserPO userPO);
+
+    void deleteUser(UserPO userPO);
+
+    void findOneUser(UserPO userPO);
+
+    void resetPassword(UserPO userPO);
 }

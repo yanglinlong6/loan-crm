@@ -16,6 +16,85 @@
         id,`name`,username,password,create_by,create_date,update_by,update_date
     </sql>
 
+    <insert id="saveUser">
+        insert into daofen_admin.`user`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name !=''">
+                name,
+            </if>
+            <if test="username != null and username !=''">
+                username,
+            </if>
+            <if test="password != null and password !=''">
+                password,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name !=''">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null and username !=''">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null and password !=''">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateUser">
+        update daofen_admin.`user`
+        <set>
+            <if test="name != null and name !=''">
+                name,
+            </if>
+            <if test="username != null and username !=''">
+                username,
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="resetPassword">
+        update daofen_admin.`user`
+        <set>
+            <if test="password != null and password !=''">
+                password,
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteUser">
+        delete
+        from daofen_admin.`user`
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
     <select id="selectUserByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -43,6 +122,18 @@
             </if>
         </where>
         limit #{startIndex},#{size}
+    </select>
+
+    <select id="findOneUser" resultMap="BaseResultMap">
+        select id,
+               `name`,
+               username,
+               create_by,
+               create_date,
+               update_by,
+               update_date
+        from daofen_admin.`user`
+        where id = #{id,jdbcType=BIGINT}
     </select>
 
 
