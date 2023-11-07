@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * 用户管理模块
  *
@@ -72,5 +74,12 @@ public class UserController extends AbstractController {
     public ResultVO linkOrg(@RequestBody() LinkOrgVO linkOrgVO) {
         userService.linkOrg(linkOrgVO);
         return this.success(ResultCode.SUC, "用户指定组织成功");
+    }
+
+    @PostMapping("/user/getBindLinkOrg")
+    @ResponseBody
+    public ResultVO getBindLinkOrg(@RequestBody() LinkOrgVO linkOrgVO) {
+        List<Integer> orgIdList = userService.getBindLinkOrg(linkOrgVO);
+        return this.success(ResultCode.SUC, orgIdList);
     }
 }

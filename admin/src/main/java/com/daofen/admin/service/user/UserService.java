@@ -5,6 +5,8 @@ import com.daofen.admin.service.user.model.LinkOrgVO;
 import com.daofen.admin.service.user.model.UserBO;
 import com.daofen.admin.service.user.model.UserPO;
 
+import java.util.List;
+
 /**
  * 用户service接口
  */
@@ -32,4 +34,6 @@ public interface UserService {
     void resetPassword(UserPO userPO);
 
     void linkOrg(LinkOrgVO linkOrgVO);
+
+    List<Integer> getBindLinkOrg(LinkOrgVO linkOrgVO);
 }

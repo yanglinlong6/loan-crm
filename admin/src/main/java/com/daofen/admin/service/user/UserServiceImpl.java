@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户service实现类：UserServiceImpl
@@ -100,5 +101,10 @@ public class UserServiceImpl implements UserService {
                 userOrgRelDao.saveUserOrgRel(userOrgRelPO);
             });
         }
+    }
+
+    @Override
+    public List<Integer> getBindLinkOrg(LinkOrgVO linkOrgVO) {
+        return userOrgRelDao.getBindLinkOrg(linkOrgVO);
     }
 }

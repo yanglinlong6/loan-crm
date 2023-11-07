@@ -61,5 +61,12 @@
         where user_id = #{userId}
     </update>
 
+    <select id="getBindLinkOrg" resultType="java.lang.Integer">
+        select org_id
+        from daofen_admin.`t_user_org_rel`
+        where user_id = #{userId}
+          and del_flag = 0
+    </select>
+
 
 </mapper>
