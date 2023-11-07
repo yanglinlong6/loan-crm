@@ -158,7 +158,7 @@
         select
         <include refid="OrgAptitudePO_Base_Column_List"/>
         from org_aptitude
-        where org_id = #{orgId,jdbcType=BIGINT} and limit_count > 0
+        where org_id = #{orgId,jdbcType=BIGINT} and limit_count > 0 and status = 0
     </select>
 
     <select id="selectOrgAptitudeByType" parameterType="java.lang.String"  resultMap="OrgAptitudePO_BaseResultMap">
