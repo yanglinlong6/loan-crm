@@ -140,6 +140,8 @@ public class OrgServiceImpl implements OrgService {
             int weight = 1200000 / orgAptitudePO.getLimitCount() / orgAptitudePO.getSingleIncome().intValue();
             orgAptitudePO.setWeight(weight);
             orgAptitudePO.setCreateBy(LoginUtil.getLoginCache().getUsername());
+            // 默认为正常状态
+            orgAptitudePO.setStatus(0);
             orgDao.insertOrgAptitude(orgAptitudePO);
         }
     }

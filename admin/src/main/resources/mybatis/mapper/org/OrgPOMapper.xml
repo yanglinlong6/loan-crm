@@ -285,6 +285,9 @@
             <if test="channel != null">
                 channel,
             </if>
+            <if test="status != null">
+                status,
+            </if>
             <if test="createBy != null">
                 create_by,
             </if>
@@ -319,6 +322,9 @@
             </if>
             <if test="channel != null">
                 #{channel},
+            </if>
+            <if test="status != null">
+                #{status},
             </if>
             <if test="createBy != null">
                 #{createBy,jdbcType=VARCHAR},
