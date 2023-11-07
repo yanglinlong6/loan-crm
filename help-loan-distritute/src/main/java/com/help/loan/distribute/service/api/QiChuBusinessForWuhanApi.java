@@ -1,14 +1,10 @@
 package com.help.loan.distribute.service.api;
 
 import com.ec.v2.config.Config;
-import com.ec.v2.entity.config.ConfigCrmGroupTagResp;
-import com.ec.v2.entity.config.ConfigResponse;
-import com.ec.v2.entity.customer.*;
-import com.ec.v2.entity.organization.FindUserInfoVO;
-import com.ec.v2.entity.organization.OrganizationResponse;
-import com.ec.v2.entity.organization.UserInfoDTO;
+import com.ec.v2.entity.customer.AddCustomerResp;
+import com.ec.v2.entity.customer.AddCustomerVo;
+import com.ec.v2.entity.customer.CustomerDetail;
 import com.ec.v2.service.Customer;
-import com.ec.v2.service.Organization;
 import com.google.common.collect.Lists;
 import com.help.loan.distribute.common.utils.JSONUtil;
 import com.help.loan.distribute.service.api.dao.DispatcheRecDao;
@@ -25,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 /*
  *  武汉启楚商务咨询有限公司 20143
@@ -36,7 +31,7 @@ public class QiChuBusinessForWuhanApi implements ApiSender {
     private static final Logger log = LoggerFactory.getLogger(QiChuBusinessForWuhanApi.class);
 
     //  14851822, 18872440, 16386287, 18594574, 19518988
-    private List<Integer> list = Lists.newArrayList(14851822, 18872440, 18594574, 19518988);
+    private List<Integer> list = Lists.newArrayList(14851822, 18872440, 18594574, 19518988, 16386287);
 
     private static final String appid = "678639157425209344";
 
