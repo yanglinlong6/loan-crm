@@ -1,6 +1,7 @@
 package com.daofen.admin.service.user;
 
 import com.daofen.admin.basic.PageVO;
+import com.daofen.admin.service.user.model.LinkOrgVO;
 import com.daofen.admin.service.user.model.UserBO;
 import com.daofen.admin.service.user.model.UserPO;
 
@@ -29,4 +30,6 @@ public interface UserService {
     void findOneUser(UserPO userPO);
 
     void resetPassword(UserPO userPO);
+
+    void linkOrg(LinkOrgVO linkOrgVO);
 }
