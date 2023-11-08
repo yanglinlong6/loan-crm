@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daofen.admin.service.user.dao.UserOrgRelDao">
+    <resultMap id="BaseResultMap" type="com.daofen.admin.service.user.model.UserOrgRelPO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="org_id" property="orgId"/>
+        <result column="del_flag" property="delFlag"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_date" property="updateDate"/>
+    </resultMap>
+    <!-- , create_by, create_date, update_by, update_date -->
+    <sql id="Base_Column_List">
+        id
+        ,user_id,org_id,del_flag,create_by,create_date,update_by,update_date
+    </sql>
+
+    <insert id="saveUserOrgRel">
+        insert into daofen_admin.`t_user_org_rel`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="orgId != null ">
+                org_id,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="deleteUserOrgRelByUserId">
+        update daofen_admin.`t_user_org_rel`
+        set del_flag = -1
+        where user_id = #{userId}
+    </update>
+
+    <select id="getBindLinkOrg" resultType="java.lang.Integer">
+        select org_id
+        from daofen_admin.`t_user_org_rel`
+        where user_id = #{userId}
+          and del_flag = 0
+    </select>
+
+
+</mapper>
