@@ -137,7 +137,12 @@ public class OrgServiceImpl implements OrgService {
                         throw new AdminException(ResultCode.FAID, "机构城市[" + orgAptitudePO.getCity() + "]已配置，请勿重新配置");
                 }
             }
-            int weight = 1200000 / orgAptitudePO.getLimitCount() / orgAptitudePO.getSingleIncome().intValue();
+            int weight = 0;
+            if (0 == orgAptitudePO.getLimitCount() || orgAptitudePO.getSingleIncome().intValue() == 0) {
+                weight = 0;
+            } else {
+                weight = 1200000 / orgAptitudePO.getLimitCount() / orgAptitudePO.getSingleIncome().intValue();
+            }
             orgAptitudePO.setWeight(weight);
             orgAptitudePO.setCreateBy(LoginUtil.getLoginCache().getUsername());
             // 默认为正常状态
