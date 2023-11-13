@@ -1,2 +1,12 @@
 /.idea
 /.vscode  
+crm/.classpath
+crm/.project
+help-loan-distritute/.classpath
+help-loan-distritute/.project
+help-loan-distritute/.settings/org.eclipse.jdt.apt.core.prefs
+help-loan-distritute/.settings/org.eclipse.jdt.core.prefs
+loan-cps/.classpath
+loan-cps/.project
+loan-cps/.settings/org.eclipse.jdt.apt.core.prefs
+loan-cps/.settings/org.eclipse.jdt.core.prefs
