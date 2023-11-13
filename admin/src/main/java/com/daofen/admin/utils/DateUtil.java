@@ -69,6 +69,10 @@ public class DateUtil {
         return Integer.valueOf(currentTime.toString().substring(0, 10));
     }
 
+    public static int convertToMinutes(int hour, int minute) {
+        int totalMinutes = hour * 60 + minute;
+        return totalMinutes;
+    }
 
     public static void main(String[] args){
         Calendar calendar = Calendar.getInstance();
