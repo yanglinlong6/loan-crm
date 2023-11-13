@@ -7,6 +7,8 @@ import com.daofen.admin.basic.ResultCode;
 import com.daofen.admin.service.city.CityService;
 import com.daofen.admin.service.city.model.CityPO;
 import com.daofen.admin.service.org.dao.OrgDao;
+import com.daofen.admin.utils.DateUtil;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -70,9 +72,32 @@ public class OrgAptitudePO extends BasePO {
         if (array.length != 2)
             throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:时间限制参数不合法");
 
-        int start = Integer.valueOf(array[0]);
-        int end = Integer.valueOf(array[1]);
-        if (start >= end)
+        int startMinutes = 0;
+        int endMinutes = 0;
+        if (array[0].split("[:：]").length != 2) {
+            int start_hour = Integer.valueOf(array[0].split("[:：]")[0]);
+            int start_minute = 0;
+            startMinutes = DateUtil.convertToMinutes(start_hour, start_minute);
+        } else {
+            int start_hour = Integer.valueOf(array[0].split("[:：]")[0]);
+            int start_minute = Integer.valueOf(array[0].split("[:：]")[1]);
+            startMinutes = DateUtil.convertToMinutes(start_hour, start_minute);
+        }
+
+        if (array[1].split("[:：]").length != 2) {
+            int end_hour = Integer.valueOf(array[1].split("[:：]")[0]);
+            int end_minute = 0;
+            endMinutes = DateUtil.convertToMinutes(end_hour, end_minute);
+        } else {
+            int end_hour = Integer.valueOf(array[1].split("[:：]")[0]);
+            int end_minute = Integer.valueOf(array[1].split("[:：]")[1]);
+            endMinutes = DateUtil.convertToMinutes(end_hour, end_minute);
+        }
+      
+        // int start = Integer.valueOf(array[0]);
+        // int end = Integer.valueOf(array[1]);
+        // if (start >= end)
+        if (startMinutes >= endMinutes)
             throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:时间限制参数不合法");
         return this;
     }

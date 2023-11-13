@@ -199,16 +199,42 @@ public class OrgBO extends OrgPO {
             log.debug("机构机构:{}-{},城市:{},时间配置:{}[时间段配置错误]", new Object[]{getOrgId(), getOrgName(), getOrgAptitude().getCity(), limitTime});
             return this;
         }
-        int start = Integer.valueOf(array[0]).intValue();
-        int end = Integer.valueOf(array[1]).intValue() - 1;
-        int distributeTime = Integer.valueOf(DateUtil.formatToString(new Date(), "HH")).intValue();
+
+        int startMinutes = 0;
+        int endMinutes = 0;
+        if (array[0].split("[:：]").length != 2) {
+            int start_hour = Integer.valueOf(array[0].split("[:：]")[0]);
+            int start_minute = 0;
+            startMinutes = DateUtil.convertToMinutes(start_hour, start_minute);
+        } else {
+            int start_hour = Integer.valueOf(array[0].split("[:：]")[0]);
+            int start_minute = Integer.valueOf(array[0].split("[:：]")[1]);
+            startMinutes = DateUtil.convertToMinutes(start_hour, start_minute);
+        }
+
+        if (array[1].split("[:：]").length != 2) {
+            int end_hour = Integer.valueOf(array[1].split("[:：]")[0]);
+            int end_minute = 0;
+            endMinutes = DateUtil.convertToMinutes(end_hour, end_minute);
+        } else {
+            int end_hour = Integer.valueOf(array[1].split("[:：]")[0]);
+            int end_minute = Integer.valueOf(array[1].split("[:：]")[1]);
+            endMinutes = DateUtil.convertToMinutes(end_hour, end_minute);
+        }
+        
+        int distributeTimeHour = Integer.valueOf(DateUtil.formatToString(new Date(), "HH")).intValue();
+        int distributeTimeMinute = Integer.valueOf(DateUtil.formatToString(new Date(), "mm")).intValue();
+        int distributeTimeMinutes = DateUtil.convertToMinutes(distributeTimeHour, distributeTimeMinute);
         // 校验投放时间
-        if((distributeTime >= start) && (distributeTime <= end)) {
+        if((distributeTimeMinutes >= startMinutes) && (distributeTimeMinutes <= endMinutes)) {
+            log.info("机构:{}-{},城市:{},时间段:{},现在:{}:{}-[时间段匹配]", new Object[] { getOrgId(), getOrgName(),
+                    getOrgAptitude().getCity(), limitTime, distributeTimeHour, distributeTimeMinute });
             this.setCheckPass(true);
             return this;
         }
         setCheckPass(Boolean.valueOf(false));
-        log.debug("机构:{}-{},城市:{},时间段:{},现在:{}-[时间段不匹配]", new Object[]{getOrgId(), getOrgName(), getOrgAptitude().getCity(), limitTime, Integer.valueOf(distributeTime)});
+        log.debug("机构:{}-{},城市:{},时间段:{},现在:{}:{}-[时间段不匹配]", new Object[] { getOrgId(), getOrgName(),
+                getOrgAptitude().getCity(), limitTime, distributeTimeHour, distributeTimeMinute });
         return this;
     }
 
