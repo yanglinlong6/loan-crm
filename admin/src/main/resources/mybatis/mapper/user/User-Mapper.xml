@@ -74,7 +74,7 @@
 		update daofen_admin.`user`
 		<set>
 			<if test="password != null and password !=''">
-				password = #{password,jdbcType=VARCHAR},,
+				password = #{password,jdbcType=VARCHAR},
 			</if>
 			<if test="updateBy != null">
 				update_by = #{updateBy,jdbcType=VARCHAR},
@@ -130,5 +130,56 @@
 		update_date
 		from daofen_admin.`user`
 		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<!-- getHandOutUserList -->
+	<select id="getHandOutUserList" resultType="com.daofen.admin.service.user.model.HandOutUserVO">
+		SELECT
+		ua.id AS uid ,
+		ua.username ,
+		ua.mobile  ,
+		ua.	city ,
+		ua.loan_amount AS loanAmount,
+		ua.create_date AS createDate,
+		ua.update_date AS updateDate,
+		odr.dispatch_status AS dispatchStatus,
+		odr.dispatch_result AS dispatchResult,
+		o.org_name AS orgName
+		FROM
+		user_aptitude ua
+		LEFT JOIN org_dispatche_rec odr ON
+		odr.customer_id = ua.id
+		LEFT JOIN org o ON
+		o.org_id = odr.org_id
+		<where>
+			<if test="param != null">
+				<if test="param.username !=null and param.username!=''">
+					and ua.username like concat('%', #{param.username},'%')
+				</if>
+				<if test="param.phoneNumber !=null and param.phoneNumber!=''">
+					and ua,mobile like concat('%', #{param.phoneNumber},'%')
+				</if>
+			</if>
+		</where>
+	</select>
+	<!-- getHandOutUserListCountByPage -->
+	<select id="getHandOutUserListCountByPage" resultType="java.lang.Integer">
+		SELECT
+		count(1)
+		FROM
+		user_aptitude ua
+		LEFT JOIN org_dispatche_rec odr ON
+		odr.customer_id = ua.id
+		LEFT JOIN org o ON
+		o.org_id = odr.org_id
+		<where>
+			<if test="param != null">
+				<if test="param.username !=null and param.username!=''">
+					and ua.username like concat('%', #{param.username},'%')
+				</if>
+				<if test="param.phoneNumber !=null and param.phoneNumber!=''">
+					and ua,mobile like concat('%', #{param.phoneNumber},'%')
+				</if>
+			</if>
+		</where>
 	</select>
 </mapper>

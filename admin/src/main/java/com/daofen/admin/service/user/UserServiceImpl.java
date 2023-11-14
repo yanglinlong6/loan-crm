@@ -3,6 +3,8 @@ package com.daofen.admin.service.user;
 import com.daofen.admin.basic.PageVO;
 import com.daofen.admin.service.user.dao.UserDao;
 import com.daofen.admin.service.user.dao.UserOrgRelDao;
+import com.daofen.admin.service.user.model.HandOutUserPO;
+import com.daofen.admin.service.user.model.HandOutUserPO;
 import com.daofen.admin.service.user.model.LinkOrgVO;
 import com.daofen.admin.service.user.model.UserBO;
 import com.daofen.admin.service.user.model.UserOrgRelPO;
@@ -89,7 +91,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void linkOrg(LinkOrgVO linkOrgVO) {
-        //删除之前已经关联的
+        // 删除之前已经关联的
         userOrgRelDao.deleteUserOrgRelByUserId(linkOrgVO.getUserId());
         // 重新关联新的组织ID
         if (CollectionUtils.isNotEmpty(linkOrgVO.getOrgIds())) {
@@ -107,4 +109,15 @@ public class UserServiceImpl implements UserService {
     public List<Integer> getBindLinkOrg(LinkOrgVO linkOrgVO) {
         return userOrgRelDao.getBindLinkOrg(linkOrgVO);
     }
+
+    /**
+     * 查询用户分发机构
+     */
+    @Override
+    public void getHandOutUserList(PageVO<HandOutUserPO> page) {
+        Integer count = userDao.getHandOutUserListCountByPage(page);
+        page.setData(userDao.getHandOutUserList(page));
+        page.setTotalCount(count);
+    }
+
 }
