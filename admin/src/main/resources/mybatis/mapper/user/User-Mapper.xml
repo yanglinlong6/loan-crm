@@ -1,140 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.daofen.admin.service.user.dao.UserDao">
-    <resultMap id="BaseResultMap" type="com.daofen.admin.service.user.model.UserPO">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="name" property="name"/>
-        <result column="username" property="username"/>
-        <result column="password" property="password"/>
-        <result column="create_by" property="createBy"/>
-        <result column="create_date" property="createDate"/>
-        <result column="update_by" property="updateBy"/>
-        <result column="update_date" property="updateDate"/>
-    </resultMap>
-    <!-- , create_by, create_date, update_by, update_date -->
-    <sql id="Base_Column_List">
-        id,`name`,username,password,create_by,create_date,update_by,update_date
-    </sql>
-
-    <insert id="saveUser">
-        insert into daofen_admin.`user`
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="name != null and name !=''">
-                name,
-            </if>
-            <if test="username != null and username !=''">
-                username,
-            </if>
-            <if test="password != null and password !=''">
-                password,
-            </if>
-            <if test="createBy != null">
-                create_by,
-            </if>
-            <if test="createDate != null">
-                create_date,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="name != null and name !=''">
-                #{name,jdbcType=VARCHAR},
-            </if>
-            <if test="username != null and username !=''">
-                #{username,jdbcType=VARCHAR},
-            </if>
-            <if test="password != null and password !=''">
-                #{password,jdbcType=VARCHAR},
-            </if>
-            <if test="createBy != null">
-                #{createBy,jdbcType=VARCHAR},
-            </if>
-            <if test="createDate != null">
-                #{createDate,jdbcType=TIMESTAMP},
-            </if>
-        </trim>
-    </insert>
-
-    <update id="updateUser">
-        update daofen_admin.`user`
-        <set>
-            <if test="name != null and name !=''">
-                name,
-            </if>
-            <if test="username != null and username !=''">
-                username,
-            </if>
-            <if test="updateBy != null">
-                update_by = #{updateBy,jdbcType=VARCHAR},
-            </if>
-            <if test="updateDate != null">
-                #{updateDate,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
-
-    <update id="resetPassword">
-        update daofen_admin.`user`
-        <set>
-            <if test="password != null and password !=''">
-                password,
-            </if>
-            <if test="updateBy != null">
-                update_by = #{updateBy,jdbcType=VARCHAR},
-            </if>
-            <if test="updateDate != null">
-                #{updateDate,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
-
-    <delete id="deleteUser">
-        delete
-        from daofen_admin.`user`
-        where id = #{id,jdbcType=BIGINT}
-    </delete>
-
-    <select id="selectUserByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from daofen_admin.`user`
-        where username=#{username}
-    </select>
-
-    <select id="selectUserListCountByPage" resultType="java.lang.Integer">
-        select count(1)
-        from daofen_admin.`user`
-        <where>
-            <if test="param != null">
-                <if test="param.username !=null and param.username!=''"> and username like concat('%', #{param.username},'%') </if>
-            </if>
-        </where>
-    </select>
-
-    <select id="selectUserListByPage" resultMap="BaseResultMap">
-        select
-        id,`name`,username,create_by,create_date,update_by,update_date
-        from daofen_admin.`user`
-        <where>
-            <if test="param != null">
-                <if test="param.username !=null and param.username!=''"> and username like concat('%', #{param.username},'%') </if>
-            </if>
-        </where>
-        limit #{startIndex},#{size}
-    </select>
-
-    <select id="findOneUser" resultMap="BaseResultMap">
-        select id,
-               `name`,
-               username,
-               create_by,
-               create_date,
-               update_by,
-               update_date
-        from daofen_admin.`user`
-        where id = #{id,jdbcType=BIGINT}
-    </select>
-
-
+	<resultMap id="BaseResultMap" type="com.daofen.admin.service.user.model.UserPO">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="name" property="name" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="create_by" property="createBy" />
+		<result column="create_date" property="createDate" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_date" property="updateDate" />
+	</resultMap>
+	<!-- , create_by, create_date, update_by, update_date -->
+	<sql id="Base_Column_List">
+		id,`name`,username,password,create_by,create_date,update_by,update_date
+	</sql>
+	<insert id="saveUser">
+		insert into daofen_admin.`user`
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null and name !=''">
+				name,
+			</if>
+			<if test="username != null and username !=''">
+				username,
+			</if>
+			<if test="password != null and password !=''">
+				password,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createDate != null">
+				create_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null and name !=''">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="username != null and username !=''">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null and password !=''">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				#{createDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateUser">
+		update daofen_admin.`user`
+		<set>
+			<if test="name != null and name !=''">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="username != null and username !=''">
+				username = #{username,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="resetPassword">
+		update daofen_admin.`user`
+		<set>
+			<if test="password != null and password !=''">
+				password = #{password,jdbcType=VARCHAR},,
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteUser">
+		delete
+		from daofen_admin.`user`
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<select id="selectUserByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from daofen_admin.`user`
+		where username=#{username}
+	</select>
+	<select id="selectUserListCountByPage" resultType="java.lang.Integer">
+		select count(1)
+		from daofen_admin.`user`
+		<where>
+			<if test="param != null">
+				<if test="param.username !=null and param.username!=''">
+					and username like concat('%', #{param.username},'%')
+				</if>
+			</if>
+		</where>
+	</select>
+	<select id="selectUserListByPage" resultMap="BaseResultMap">
+		select
+		id,`name`,username,create_by,create_date,update_by,update_date
+		from daofen_admin.`user`
+		<where>
+			<if test="param != null">
+				<if test="param.username !=null and param.username!=''">
+					and username like concat('%', #{param.username},'%')
+				</if>
+			</if>
+		</where>
+		limit #{startIndex},#{size}
+	</select>
+	<select id="findOneUser" resultMap="BaseResultMap">
+		select id,
+		`name`,
+		username,
+		create_by,
+		create_date,
+		update_by,
+		update_date
+		from daofen_admin.`user`
+		where id = #{id,jdbcType=BIGINT}
+	</select>
 </mapper>
