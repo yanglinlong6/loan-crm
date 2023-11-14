@@ -132,7 +132,7 @@
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 	<!-- getHandOutUserList -->
-	<select id="getHandOutUserList" resultType="com.daofen.admin.service.user.model.HandOutUserVO">
+	<select id="getHandOutUserList" resultType="com.daofen.admin.service.user.model.HandOutUserPO">
 		SELECT
 		ua.id AS uid ,
 		ua.username ,
@@ -155,8 +155,8 @@
 				<if test="param.username !=null and param.username!=''">
 					and ua.username like concat('%', #{param.username},'%')
 				</if>
-				<if test="param.phoneNumber !=null and param.phoneNumber!=''">
-					and ua,mobile like concat('%', #{param.phoneNumber},'%')
+				<if test="param.mobile !=null and param.mobile!=''">
+					and ua.mobile like concat('%', #{param.mobile},'%')
 				</if>
 			</if>
 		</where>
