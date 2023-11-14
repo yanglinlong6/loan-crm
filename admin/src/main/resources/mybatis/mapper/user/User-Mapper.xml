@@ -135,7 +135,7 @@
 	<select id="getHandOutUserList" resultType="com.daofen.admin.service.user.model.HandOutUserPO">
 		SELECT
 		ua.id AS uid ,
-		ua.username ,
+		ua.name AS username,
 		ua.mobile  ,
 		ua.	city ,
 		ua.loan_amount AS loanAmount,
@@ -153,13 +153,18 @@
 		<where>
 			<if test="param != null">
 				<if test="param.username !=null and param.username!=''">
-					and ua.username like concat('%', #{param.username},'%')
+					and ua.name like concat('%', #{param.username},'%')
 				</if>
 				<if test="param.mobile !=null and param.mobile!=''">
 					and ua.mobile like concat('%', #{param.mobile},'%')
 				</if>
+				<if test="param.dispatchStatus !=null">
+					and odr.dispatch_status = #{param.dispatchStatus}
+				</if>
 			</if>
 		</where>
+		order by odr.id desc
+		limit #{startIndex},#{size}
 	</select>
 	<!-- getHandOutUserListCountByPage -->
 	<select id="getHandOutUserListCountByPage" resultType="java.lang.Integer">
@@ -174,10 +179,13 @@
 		<where>
 			<if test="param != null">
 				<if test="param.username !=null and param.username!=''">
-					and ua.username like concat('%', #{param.username},'%')
+					and ua.name like concat('%', #{param.username},'%')
 				</if>
-				<if test="param.phoneNumber !=null and param.phoneNumber!=''">
-					and ua,mobile like concat('%', #{param.phoneNumber},'%')
+				<if test="param.mobile !=null and param.mobile!=''">
+					and ua.mobile like concat('%', #{param.mobile},'%')
+				</if>
+				<if test="param.dispatchStatus !=null">
+					and odr.dispatch_status = #{param.dispatchStatus}
 				</if>
 			</if>
 		</where>
