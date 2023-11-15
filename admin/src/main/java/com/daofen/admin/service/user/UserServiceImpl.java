@@ -3,9 +3,11 @@ package com.daofen.admin.service.user;
 import com.daofen.admin.basic.PageVO;
 import com.daofen.admin.service.user.dao.UserDao;
 import com.daofen.admin.service.user.dao.UserOrgRelDao;
+import com.daofen.admin.service.user.model.DayStatisticsPO;
 import com.daofen.admin.service.user.model.HandOutUserPO;
 import com.daofen.admin.service.user.model.HandOutUserPO;
 import com.daofen.admin.service.user.model.LinkOrgVO;
+import com.daofen.admin.service.user.model.TimeStatisticsPO;
 import com.daofen.admin.service.user.model.UserBO;
 import com.daofen.admin.service.user.model.UserOrgRelPO;
 import com.daofen.admin.service.user.model.UserPO;
@@ -118,6 +120,16 @@ public class UserServiceImpl implements UserService {
         Integer count = userDao.getHandOutUserListCountByPage(page);
         page.setData(userDao.getHandOutUserList(page));
         page.setTotalCount(count);
+    }
+
+    @Override
+    public List<DayStatisticsPO> getDayStatisticsList() {
+        return userDao.getDayStatisticsList();
+    }
+
+    @Override
+    public List<TimeStatisticsPO> getTimeStatisticsList() {
+        return userDao.getTimeStatisticsList();
     }
 
 }

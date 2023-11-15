@@ -190,4 +190,16 @@
 			</if>
 		</where>
 	</select>
+	<!-- getDayStatisticsList -->
+	<select id="getDayStatisticsList" resultType="com.daofen.admin.service.user.model.DayStatisticsPO">
+		SELECT LEFT(create_date,10) AS `day`,count(1) AS num FROM user_aptitude
+		WHERE LEFT(create_date,10) >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
+		group by LEFT(create_date,10);
+	</select>
+	<!-- getTimeStatisticsList -->
+	<select id="getTimeStatisticsList" resultType="com.daofen.admin.service.user.model.TimeStatisticsPO">
+		SELECT DATE_FORMAT(create_date,'%H') AS hour, count(1) AS num
+		FROM user_aptitude WHERE LEFT(create_date,10) = LEFT(sysdate() ,10)
+		group by DATE_FORMAT(create_date,'%H');
+	</select>
 </mapper>

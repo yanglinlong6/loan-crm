@@ -5,9 +5,11 @@ import com.daofen.admin.basic.PageVO;
 import com.daofen.admin.basic.ResultCode;
 import com.daofen.admin.basic.ResultVO;
 import com.daofen.admin.service.user.UserService;
+import com.daofen.admin.service.user.model.DayStatisticsPO;
 import com.daofen.admin.service.user.model.HandOutUserPO;
 import com.daofen.admin.service.user.model.HandOutUserPO;
 import com.daofen.admin.service.user.model.LinkOrgVO;
+import com.daofen.admin.service.user.model.TimeStatisticsPO;
 import com.daofen.admin.service.user.model.UserPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,5 +92,19 @@ public class UserController extends AbstractController {
     public ResultVO getHandOutUserList(@RequestBody() PageVO<HandOutUserPO> pageVO) {
         userService.getHandOutUserList(pageVO);
         return this.success(ResultCode.SUC, pageVO);
+    }
+
+    @PostMapping("/user/getDayStatisticsList")
+    @ResponseBody
+    public ResultVO getDayStatisticsList() {
+        List<DayStatisticsPO> dayStatisticsPOList = userService.getDayStatisticsList();
+        return this.success(ResultCode.SUC, dayStatisticsPOList);
+    }
+
+    @PostMapping("/user/getTimeStatisticsList")
+    @ResponseBody
+    public ResultVO getTimeStatisticsList() {
+        List<TimeStatisticsPO> timeStatisticsPOList = userService.getTimeStatisticsList();
+        return this.success(ResultCode.SUC, timeStatisticsPOList);
     }
 }

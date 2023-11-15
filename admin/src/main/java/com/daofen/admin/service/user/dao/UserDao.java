@@ -1,7 +1,9 @@
 package com.daofen.admin.service.user.dao;
 
 import com.daofen.admin.basic.PageVO;
+import com.daofen.admin.service.user.model.DayStatisticsPO;
 import com.daofen.admin.service.user.model.HandOutUserPO;
+import com.daofen.admin.service.user.model.TimeStatisticsPO;
 import com.daofen.admin.service.user.model.HandOutUserPO;
 import com.daofen.admin.service.user.model.UserPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -43,4 +45,8 @@ public interface UserDao {
     List<HandOutUserPO> getHandOutUserList(PageVO<HandOutUserPO> handOutUserPO);
 
     Integer getHandOutUserListCountByPage(PageVO<HandOutUserPO> page);
+
+    List<DayStatisticsPO> getDayStatisticsList();
+
+    List<TimeStatisticsPO> getTimeStatisticsList();
 }
