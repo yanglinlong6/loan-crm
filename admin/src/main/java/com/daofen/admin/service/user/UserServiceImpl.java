@@ -132,4 +132,14 @@ public class UserServiceImpl implements UserService {
         return userDao.getTimeStatisticsList();
     }
 
+    @Override
+    public List<DayStatisticsPO> getDayHandOutStatisticsList() {
+        return userDao.getDayHandOutStatisticsList();
+    }
+
+    @Override
+    public List<TimeStatisticsPO> getTimeHandOutStatisticsList() {
+        return userDao.getTimeHandOutStatisticsList();
+    }
+
 }

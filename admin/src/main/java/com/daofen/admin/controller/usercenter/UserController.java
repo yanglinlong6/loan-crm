@@ -107,4 +107,18 @@ public class UserController extends AbstractController {
         List<TimeStatisticsPO> timeStatisticsPOList = userService.getTimeStatisticsList();
         return this.success(ResultCode.SUC, timeStatisticsPOList);
     }
+
+    @PostMapping("/user/getDayHandOutStatisticsList")
+    @ResponseBody
+    public ResultVO getDayHandOutStatisticsList() {
+        List<DayStatisticsPO> dayStatisticsPOList = userService.getDayHandOutStatisticsList();
+        return this.success(ResultCode.SUC, dayStatisticsPOList);
+    }
+
+    @PostMapping("/user/getTimeHandOutStatisticsList")
+    @ResponseBody
+    public ResultVO getTimeHandOutStatisticsList() {
+        List<TimeStatisticsPO> timeStatisticsPOList = userService.getTimeHandOutStatisticsList();
+        return this.success(ResultCode.SUC, timeStatisticsPOList);
+    }
 }

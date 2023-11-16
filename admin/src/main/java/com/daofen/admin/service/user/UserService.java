@@ -45,4 +45,8 @@ public interface UserService {
     List<DayStatisticsPO> getDayStatisticsList();
 
     List<TimeStatisticsPO> getTimeStatisticsList();
+
+    List<DayStatisticsPO> getDayHandOutStatisticsList();
+
+    List<TimeStatisticsPO> getTimeHandOutStatisticsList();
 }
