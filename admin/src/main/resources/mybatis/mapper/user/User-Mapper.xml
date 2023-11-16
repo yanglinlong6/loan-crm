@@ -161,6 +161,9 @@
 				<if test="param.dispatchStatus !=null">
 					and odr.dispatch_status = #{param.dispatchStatus}
 				</if>
+				<if test="param.orgName !=null and param.orgName!=''">
+					and o.org_name like concat('%', #{param.orgName},'%')
+				</if>
 			</if>
 		</where>
 		order by odr.id desc
@@ -186,6 +189,9 @@
 				</if>
 				<if test="param.dispatchStatus !=null">
 					and odr.dispatch_status = #{param.dispatchStatus}
+				</if>
+				<if test="param.orgName !=null and param.orgName!=''">
+					and o.org_name like concat('%', #{param.orgName},'%')
 				</if>
 			</if>
 		</where>
