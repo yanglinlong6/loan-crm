@@ -179,4 +179,14 @@ public class OrgServiceImpl implements OrgService {
     public void changeUseLegacyFlag(OrgAptitudePO orgAptitudePO) {
         orgDao.changeUseLegacyFlag(orgAptitudePO.getId(), orgAptitudePO.getUseLegacyFlag());
     }
+
+    @Override
+    public void deleteOrgAptitude(OrgAptitudePO orgAptitudePO) {
+        orgDao.deleteOrgAptitude(orgAptitudePO.getId());
+    }
+
+    @Override
+    public void deleteOrg(OrgPO orgPO) {
+        orgDao.deleteOrg(orgPO.getId());
+    }
 }

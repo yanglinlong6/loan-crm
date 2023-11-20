@@ -64,6 +64,19 @@ public class OrgController extends AbstractController {
         return this.success();
     }
 
+    /**
+     * 删除组织
+     *
+     * @param orgPO
+     * @return
+     */
+    @PostMapping("/org/delete")
+    @ResponseBody
+    public ResultVO deleteOrg(@RequestBody() OrgPO orgPO) {
+        orgService.deleteOrg(orgPO);
+        return this.success(ResultCode.SUC, "删除组织成功");
+    }
+
 
     /**
      * 当日机构需求汇总
@@ -114,5 +127,12 @@ public class OrgController extends AbstractController {
     public ResultVO changeUseLegacyFlag(@RequestBody() OrgAptitudePO orgAptitudePO) {
         orgService.changeUseLegacyFlag(orgAptitudePO);
         return this.success(ResultCode.SUC, "修改是否使用昨日遗留单标识成功");
+    }
+
+    @PostMapping("/org/aptitude/delete")
+    @ResponseBody
+    public ResultVO deleteOrgAptitude(@RequestBody() OrgAptitudePO orgAptitudePO) {
+        orgService.deleteOrgAptitude(orgAptitudePO);
+        return this.success(ResultCode.SUC, "删除组织规则成功");
     }
 }

@@ -20,6 +20,12 @@
         , org_id, org_name, org_nickname, linkman, linkman_mobile, address,state, create_by,create_date, update_by
     </sql>
 
+    <delete id="deleteOrg">
+        delete
+        from org
+        where id = #{id}
+    </delete>
+
     <select id="selectOrgListByPage" parameterType="com.daofen.admin.basic.PageVO" resultMap="Org_BaseResultMap">
         select
         <include refid="Org_Base_Column_List"/>
@@ -223,6 +229,13 @@
         weight,amount_rate,loan_amount,status,create_by, create_date,
         update_by, update_date,use_legacy_flag
     </sql>
+
+
+    <delete id="deleteOrgAptitude">
+        delete
+        from org_aptitude
+        where id = #{id}
+    </delete>
 
     <select id="selectOrgAptitudePage" parameterType="com.daofen.admin.basic.PageVO"
             resultMap="OrgAptitudePO_BaseResultMap">

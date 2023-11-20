@@ -59,4 +59,8 @@ public interface OrgDao {
     void changeStatus(@Param("id") Long id, @Param("status") Integer status);
 
     void changeUseLegacyFlag(@Param("id") Long id, @Param("useLegacyFlag") Integer useLegacyFlag);
+
+    void deleteOrgAptitude(Long id);
+
+    void deleteOrg(Long id);
 }

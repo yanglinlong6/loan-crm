@@ -68,4 +68,13 @@ public interface OrgService {
      * @param orgAptitudePO
      */
     void changeUseLegacyFlag(OrgAptitudePO orgAptitudePO);
+
+    /**
+     * 删除组织规则
+     *
+     * @param orgAptitudePO
+     */
+    void deleteOrgAptitude(OrgAptitudePO orgAptitudePO);
+
+    void deleteOrg(OrgPO orgPO);
 }
