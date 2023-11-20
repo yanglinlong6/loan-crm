@@ -241,6 +241,7 @@ public class OrgServiceImpl implements OrgService {
                         .checkChannel2(userAptitude)
                         .checkCity(userAptitude)
                         .checkDistributeTime(userAptitude)
+                        .checkUseLegacyFlag(userAptitude)
                         .checkDistributeCount(orgDao)
                         .checkName(userAptitude, userAptitudeDao)
                         .checkScoreRate(cityAptitudeRatePOMapper, userAptitude);
@@ -444,6 +445,7 @@ public class OrgServiceImpl implements OrgService {
             }
             orgBO.checkCity(userAptitude)
                     .checkDistributeTime(userAptitude)
+                    .checkUseLegacyFlag(userAptitude)
                     .checkDistributeCount(orgDao);
             if (!orgBO.getCheckPass())
                 continue;

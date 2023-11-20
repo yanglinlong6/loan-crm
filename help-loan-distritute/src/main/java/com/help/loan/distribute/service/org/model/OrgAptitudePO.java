@@ -40,6 +40,11 @@ public class OrgAptitudePO extends BasePO {
 
     private Byte type;
 
+    /**
+     * 使用是否昨日遗留单标识 0: 使用 -1: 不使用
+     */
+    private Integer useLegacyFlag;
+
     @Override
     public String toString() {
         return JSONObject.toJSONString(this);

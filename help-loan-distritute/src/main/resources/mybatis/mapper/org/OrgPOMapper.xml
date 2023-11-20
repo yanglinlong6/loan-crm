@@ -147,11 +147,12 @@
         <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
         <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
         <result column="type" property="type" />
+        <result column="use_legacy_flag" property="useLegacyFlag"/>
     </resultMap>
     <sql id="OrgAptitudePO_Base_Column_List">
         id, org_id, province, city,week, limit_time, limit_count, single_income,wechat,api,
         weight,channel,amount_rate,loan_amount,repeat_rate,create_by, create_date,
-        update_by, update_date,`type`
+        update_by, update_date,`type`,use_legacy_flag
     </sql>
 
     <select id="selectOrgAptitude" parameterType="java.lang.Long" resultMap="OrgAptitudePO_BaseResultMap">

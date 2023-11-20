@@ -53,7 +53,7 @@ public class OrgAptitudePO extends BasePO {
     private Integer status;
 
     /**
-     * 使用是否昨日遗留单标识 0: 使用 1: 不使用
+     * 使用是否昨日遗留单标识 0: 使用 -1: 不使用
      */
     private Integer useLegacyFlag;
 
