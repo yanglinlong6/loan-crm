@@ -214,13 +214,14 @@
         <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
         <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
         <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="use_legacy_flag" property="useLegacyFlag"/>
     </resultMap>
 
     <sql id="OrgAptitudePO_Base_Column_List">
         id
         , org_id,org_name, province, city,week, limit_time, limit_count, single_income,wechat,channel,api,
         weight,amount_rate,loan_amount,status,create_by, create_date,
-        update_by, update_date
+        update_by, update_date,use_legacy_flag
     </sql>
 
     <select id="selectOrgAptitudePage" parameterType="com.daofen.admin.basic.PageVO"
