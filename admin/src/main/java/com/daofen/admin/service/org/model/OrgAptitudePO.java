@@ -52,6 +52,11 @@ public class OrgAptitudePO extends BasePO {
      */
     private Integer status;
 
+    /**
+     * 使用是否昨日遗留单标识 0: 使用 1: 不使用
+     */
+    private Integer useLegacyFlag;
+
     public OrgAptitudePO checkSingleIncome() {
         if (null == singleIncome || singleIncome.intValue() <= 0)
             throw new AdminException(ResultCode.FAID, "新增机构配量参数错误:单价参数不合法");
@@ -93,7 +98,7 @@ public class OrgAptitudePO extends BasePO {
             int end_minute = Integer.valueOf(array[1].split("[:：]")[1]);
             endMinutes = DateUtil.convertToMinutes(end_hour, end_minute);
         }
-      
+
         // int start = Integer.valueOf(array[0]);
         // int end = Integer.valueOf(array[1]);
         // if (start >= end)

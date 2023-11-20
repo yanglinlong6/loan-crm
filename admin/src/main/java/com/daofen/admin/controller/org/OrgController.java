@@ -108,4 +108,11 @@ public class OrgController extends AbstractController {
         orgService.changeStatus(orgAptitudePO);
         return this.success(ResultCode.SUC, "修改规则状态成功");
     }
+
+    @PostMapping("/org/aptitude/changeUseLegacyFlag")
+    @ResponseBody
+    public ResultVO changeUseLegacyFlag(@RequestBody() OrgAptitudePO orgAptitudePO) {
+        orgService.changeUseLegacyFlag(orgAptitudePO);
+        return this.success(ResultCode.SUC, "修改是否使用昨日遗留单标识成功");
+    }
 }

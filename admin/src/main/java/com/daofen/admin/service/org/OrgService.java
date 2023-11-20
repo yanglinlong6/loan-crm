@@ -14,6 +14,7 @@ public interface OrgService {
 
     /**
      * 机构分页列表
+     *
      * @param page PageVO<OrgPO>
      */
     void orgPage(PageVO<OrgPO> page);
@@ -22,12 +23,14 @@ public interface OrgService {
 
     /**
      * 新增机构
+     *
      * @param orgPO OrgPO
      */
     void addOrg(OrgPO orgPO);
 
     /**
      * 更新机构
+     *
      * @param orgPO OrgPO
      */
     void updateOrg(OrgPO orgPO);
@@ -38,21 +41,31 @@ public interface OrgService {
 
     /**
      * 机构配量分页列表
-     * @param page  PageVO<OrgAptitudePO>
+     *
+     * @param page PageVO<OrgAptitudePO>
      */
     void orgAptitudePage(PageVO<OrgAptitudePO> page);
 
     /**
      * 新增机构配量信息
+     *
      * @param orgAptitudePO
      */
     void addOrgAptitude(OrgAptitudePO orgAptitudePO);
 
     /**
      * 修改机构配量信息
+     *
      * @param orgAptitudePO
      */
     void updateOrgAptitude(OrgAptitudePO orgAptitudePO);
 
     void changeStatus(OrgAptitudePO orgAptitudePO);
+
+    /**
+     * 是否使用昨日遗留标志
+     *
+     * @param orgAptitudePO
+     */
+    void changeUseLegacyFlag(OrgAptitudePO orgAptitudePO);
 }

@@ -16,7 +16,8 @@
     </resultMap>
 
     <sql id="Org_Base_Column_List">
-        id, org_id, org_name, org_nickname, linkman, linkman_mobile, address,state, create_by,create_date, update_by
+        id
+        , org_id, org_name, org_nickname, linkman, linkman_mobile, address,state, create_by,create_date, update_by
     </sql>
 
     <select id="selectOrgListByPage" parameterType="com.daofen.admin.basic.PageVO" resultMap="Org_BaseResultMap">
@@ -25,9 +26,11 @@
         from org
         <where>
             <if test="param != null">
-                <if test="param.orgName !=null and param.orgName!=''"> and org_name like concat('%', #{param.orgName},'%') </if>
-                <if test="param.state != null"> and `state`=#{param.state}</if>
-                <if test="param.orgId != null"> and org_id = #{param.orgId}</if>
+                <if test="param.orgName !=null and param.orgName!=''">and org_name like concat('%',
+                    #{param.orgName},'%')
+                </if>
+                <if test="param.state != null">and `state`=#{param.state}</if>
+                <if test="param.orgId != null">and org_id = #{param.orgId}</if>
             </if>
         </where>
         limit #{startIndex},#{size}
@@ -38,9 +41,11 @@
         from org
         <where>
             <if test="param != null">
-                <if test="param.orgName !=null and param.orgName!=''"> and org_name like concat('%', #{param.orgName},'%') </if>
-                <if test="param.state != null"> and `state`=#{param.state}</if>
-                <if test="param.orgId != null"> and org_id = #{param.orgId}</if>
+                <if test="param.orgName !=null and param.orgName!=''">and org_name like concat('%',
+                    #{param.orgName},'%')
+                </if>
+                <if test="param.state != null">and `state`=#{param.state}</if>
+                <if test="param.orgId != null">and org_id = #{param.orgId}</if>
             </if>
         </where>
     </select>
@@ -63,8 +68,7 @@
     <select id="selectMaxOrg" resultType="java.lang.Long">
         select org_id
         from org
-        order by org_id desc
-        limit 1
+        order by org_id desc limit 1
     </select>
 
     <select id="selectAllOrg" parameterType="java.lang.String" resultMap="Org_BaseResultMap">
@@ -138,24 +142,26 @@
     </insert>
 
     <select id="selectCityNeed" resultType="com.daofen.admin.service.org.model.CityNeedPO">
-        SELECT
-            CONCAT(orgApt.city,'-',
-                CASE
-                    WHEN orgApt.type = 0 THEN '信贷'
-                    WHEN orgApt.type = 2 THEN '车底'
-                    WHEN orgApt.type = 1 THEN '房抵'
-                END
-            ) city,
-            orgApt.limit_count limitCount,
-            (
-                SELECT count(1)
+        SELECT CONCAT(orgApt.city, '-',
+                      CASE
+                          WHEN orgApt.type = 0 THEN '信贷'
+                          WHEN orgApt.type = 2 THEN '车底'
+                          WHEN orgApt.type = 1 THEN '房抵'
+                          END
+                   )                            city,
+               orgApt.limit_count               limitCount,
+               (SELECT count(1)
                 FROM org_dispatche_rec rec2
-                    JOIN user_aptitude aptitude ON rec2.customer_id = aptitude.id
-                    WHERE rec2.org_id = org.org_id and aptitude.city = orgApt.city and orgApt.type = aptitude.type  AND rec2.create_date BETWEEN #{startDate} and #{endDate} AND rec2.dispatch_status = 1
-            ) sendCount
+                         JOIN user_aptitude aptitude ON rec2.customer_id = aptitude.id
+                WHERE rec2.org_id = org.org_id
+                  and aptitude.city = orgApt.city
+                  and orgApt.type = aptitude.type
+                  AND rec2.create_date BETWEEN #{startDate} and #{endDate}
+                  AND rec2.dispatch_status = 1) sendCount
         FROM org org
-            LEFT JOIN org_aptitude orgApt ON org.org_id = orgApt.org_id
-        WHERE org.state = 1 AND orgApt.limit_count > 0
+                 LEFT JOIN org_aptitude orgApt ON org.org_id = orgApt.org_id
+        WHERE org.state = 1
+          AND orgApt.limit_count > 0
         ORDER BY orgApt.type ASC
     </select>
 
@@ -200,7 +206,7 @@
         <result column="wechat" jdbcType="VARCHAR" property="wechat"/>
         <result column="api" jdbcType="VARCHAR" property="api"/>
         <result column="weight" property="weight"/>
-        <result column="channel" property="channel" />
+        <result column="channel" property="channel"/>
         <result column="amount_rate" property="amountRate"/>
         <result column="loan_amount" property="loanAmount"/>
         <result column="status" property="status"/>
@@ -211,35 +217,39 @@
     </resultMap>
 
     <sql id="OrgAptitudePO_Base_Column_List">
-        id, org_id,org_name, province, city,week, limit_time, limit_count, single_income,wechat,channel,api,
+        id
+        , org_id,org_name, province, city,week, limit_time, limit_count, single_income,wechat,channel,api,
         weight,amount_rate,loan_amount,status,create_by, create_date,
         update_by, update_date
     </sql>
 
-    <select id="selectOrgAptitudePage" parameterType="com.daofen.admin.basic.PageVO" resultMap="OrgAptitudePO_BaseResultMap">
-        select <include refid="OrgAptitudePO_Base_Column_List" />
+    <select id="selectOrgAptitudePage" parameterType="com.daofen.admin.basic.PageVO"
+            resultMap="OrgAptitudePO_BaseResultMap">
+        select
+        <include refid="OrgAptitudePO_Base_Column_List"/>
         from org_aptitude
         <if test="param != null">
             <where>
-                <if test="param.city != null"> and city like CONCAT('%',#{param.city},'%') </if>
-                <if test="param.orgName != null"> and org_name like CONCAT('%',#{param.orgName},'%') </if>
-                <if test="param.orgId != null"> and org_id=#{param.orgId} </if>
-                <if test="param.status != null"> and status=#{param.status} </if>
+                <if test="param.city != null">and city like CONCAT('%',#{param.city},'%')</if>
+                <if test="param.orgName != null">and org_name like CONCAT('%',#{param.orgName},'%')</if>
+                <if test="param.orgId != null">and org_id=#{param.orgId}</if>
+                <if test="param.status != null">and status=#{param.status}</if>
             </where>
         </if>
         order by org_id asc
         limit #{startIndex},#{size}
     </select>
 
-    <select id="selectOrgAptitudePageCount" parameterType="com.daofen.admin.basic.PageVO" resultType="java.lang.Integer">
+    <select id="selectOrgAptitudePageCount" parameterType="com.daofen.admin.basic.PageVO"
+            resultType="java.lang.Integer">
         select count(1)
         from org_aptitude
         <if test="param != null">
             <where>
-                <if test="param.city != null"> and city like CONCAT('%',#{param.city},'%') </if>
-                <if test="param.orgName != null"> and org_name like CONCAT('%',#{param.orgName},'%') </if>
-                <if test="param.orgId != null"> and org_id=#{param.orgId} </if>
-                <if test="param.status != null"> and status=#{param.status} </if>
+                <if test="param.city != null">and city like CONCAT('%',#{param.city},'%')</if>
+                <if test="param.orgName != null">and org_name like CONCAT('%',#{param.orgName},'%')</if>
+                <if test="param.orgId != null">and org_id=#{param.orgId}</if>
+                <if test="param.status != null">and status=#{param.status}</if>
             </where>
         </if>
     </select>
@@ -378,16 +388,22 @@
         where id = #{id}
     </update>
 
+    <update id="changeUseLegacyFlag">
+        update org_aptitude
+        set use_legacy_flag = #{useLegacyFlag}
+        where id = #{id}
+    </update>
+
     <select id="getOrgCityList" resultType="java.lang.String">
-        select  oapt.city
+        select oapt.city
         from org org
-            left join org_aptitude oapt on org.org_id = oapt.org_id
-        where org.state=1 and oapt.org_id not in(${excludeOrgIds})
-                and  oapt.limit_count >0
-                and oapt.`week` like concat('%',#{week},'%')
+                 left join org_aptitude oapt on org.org_id = oapt.org_id
+        where org.state = 1
+          and oapt.org_id not in (${excludeOrgIds})
+          and oapt.limit_count > 0
+          and oapt.`week` like concat('%', #{week}, '%')
         GROUP BY oapt.city
     </select>
-
 
 
 </mapper>

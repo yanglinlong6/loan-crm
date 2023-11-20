@@ -174,4 +174,9 @@ public class OrgServiceImpl implements OrgService {
     public void changeStatus(OrgAptitudePO orgAptitudePO) {
         orgDao.changeStatus(orgAptitudePO.getId(), orgAptitudePO.getStatus());
     }
+
+    @Override
+    public void changeUseLegacyFlag(OrgAptitudePO orgAptitudePO) {
+        orgDao.changeUseLegacyFlag(orgAptitudePO.getId(), orgAptitudePO.getUseLegacyFlag());
+    }
 }
