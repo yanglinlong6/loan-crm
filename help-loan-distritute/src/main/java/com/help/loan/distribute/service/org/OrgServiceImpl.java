@@ -74,7 +74,7 @@ public class OrgServiceImpl implements OrgService {
         Object value = stringRedisTemplate.opsForValue().get(key);
         List<OrgBO> orgBOList = new ArrayList<>();
         String distributeDate = DateUtil.formatToString(new Date(), "yyyy-MM-dd");
-        if (null != value && value.toString().length() > 6) {
+        if (null != value && value.toString().length() > 6 && Boolean.FALSE) {
             orgBOList.addAll(JSONUtil.toJavaBeanList(value.toString(), OrgBO.class));
             if (distributeDate.equals(orgBOList.get(0).getDistributeDate().trim())) {
                 return orgBOList;
