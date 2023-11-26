@@ -39,7 +39,7 @@ public class HttpUtil {
 
     private static HttpHeaders formData;
 
-    private static  final HttpClient client = HttpClients.createDefault();
+    private static final HttpClient client = HttpClients.createDefault();
 
 
     static {
@@ -65,14 +65,15 @@ public class HttpUtil {
 
     /**
      * post请求:默认请求内容是application/json;charset=UTF-8
-     * @param url 请求url地址
+     *
+     * @param url       请求url地址
      * @param parameter JSONObject
      * @return 返回请求响应结果:String
      */
     public static String postForJSON(String url, JSONObject parameter) {
         HttpEntity<String> requestEntity = new HttpEntity<>(parameter.toJSONString(), headersJson);
         String result = restTemplate.postForObject(url, requestEntity, String.class);
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("url <" + url + "> 参数<" + parameter + "> 结果<" + result + ">");
         }
         return result;
@@ -80,26 +81,28 @@ public class HttpUtil {
 
     /**
      * post请求:默认请求内容是application/json;charset=UTF-8
-     * @param url 请求url地址
+     *
+     * @param url       请求url地址
      * @param parameter JSONObject
      * @return 返回请求响应结果:String
      */
     public static String postForObject(String url, JSONObject parameter) {
-        try{
+        try {
             HttpEntity<String> requestEntity = new HttpEntity<>(parameter.toJSONString(), headersJson);
             String result = restTemplate.postForObject(url, requestEntity, String.class);
-            if(logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("url <" + url + "> 结果<" + result + ">");
             }
             return result;
-        }catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
 
     /**
      * post请求:默认请求内容是application/json;charset=UTF-8
-     * @param url 请求url地址
+     *
+     * @param url       请求url地址
      * @param jsonSting
      * @return 返回请求响应结果:String
      */
@@ -110,17 +113,16 @@ public class HttpUtil {
             Map<String, Object> resultMap = JSON.parseObject(result, new TypeReference<Map<String, Object>>() {
             });
             result = JSON.toJSONString(resultMap);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("url <" + url + "> 参数<" + jsonSting + "> 结果<" + result + ">");
         }
         return result;
     }
 
     /**
-     *
      * @param url
      * @param parameter
      * @param headers
@@ -129,12 +131,11 @@ public class HttpUtil {
     public static String postForJSON(String url, JSONObject parameter, HttpHeaders headers) {
         HttpEntity<String> requestEntity = new HttpEntity<>(parameter.toJSONString(), headers);
         String result = restTemplate.postForObject(url, requestEntity, String.class);
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("url <" + url + "> 参数<" + parameter + "> 结果<" + result + ">");
         }
         return result;
     }
-
 
 
     public static String postForFormUrlencoded(String Url, LinkedMultiValueMap<String, Object> parameter) {
@@ -144,10 +145,10 @@ public class HttpUtil {
             Map<String, Object> resultMap = JSON.parseObject(result, new TypeReference<Map<String, Object>>() {
             });
             result = JSON.toJSONString(resultMap);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("url <" + Url + "> 参数<" + parameter + "> 结果<" + result + ">");
         }
         return result;
@@ -156,20 +157,20 @@ public class HttpUtil {
     public static String postFormForObject(String url, JSONObject parameter) {
 
         LinkedMultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<>();
-        if(null != parameter && !parameter.isEmpty()){
+        if (null != parameter && !parameter.isEmpty()) {
             Iterator<String> it = parameter.keySet().iterator();
-            while (it.hasNext()){
+            while (it.hasNext()) {
                 String key = it.next();
-                paramMap.add(key,parameter.get(key));
+                paramMap.add(key, parameter.get(key));
             }
         }
-        return postFormForObject(url,paramMap);
+        return postFormForObject(url, paramMap);
     }
 
     public static String postFormForObject(String url, LinkedMultiValueMap<String, Object> parameter) {
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parameter);
         String result = restTemplate.postForObject(url, requestEntity, String.class);
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("url <" + url + "> 参数<" + parameter + "> 结果<" + result + ">");
         }
         return result;
@@ -177,63 +178,89 @@ public class HttpUtil {
 
 
     public static String getForObject(String url) {
-        try{
+        try {
             String result = restTemplate.getForObject(url, String.class).trim();
-            if(logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
                 logger.debug("url <" + url + "> 结果<" + result + ">");
             }
             return result;
-        }catch (Exception e){
-            logger.error("{}--->请求异常:{}",url,e.getMessage(),e);
+        } catch (Exception e) {
+            logger.error("{}--->请求异常:{}", url, e.getMessage(), e);
             return null;
         }
 
     }
 
-    public static String postFormData(String url,Object data){
-        try{
+    public static String postFormData(String url, Object data) {
+        try {
             MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
             JSONObject jsonObject = JSONUtil.toJSON(data);
             Iterator<String> iterator = jsonObject.keySet().iterator();
             ContentType contentType = ContentType.MULTIPART_FORM_DATA;
             contentType = contentType.withCharset("UTF-8");
-            while(iterator.hasNext()){
+            while (iterator.hasNext()) {
                 String key = iterator.next();
                 Object value = jsonObject.get(key);
-                if(null == value){
+                if (null == value) {
                     value = "";
                 }
-                entityBuilder.addTextBody(key, value.toString(),contentType);
+                entityBuilder.addTextBody(key, value.toString(), contentType);
             }
             org.apache.http.HttpEntity entity = entityBuilder.setCharset(Charset.forName("UTF-8")).build();
             HttpPost post = new HttpPost(url);
             post.setEntity(entity);
             String response = EntityUtils.toString(client.execute(post).getEntity());
             return response;
-        }catch (Exception e){
-            logger.error("form-data异常：{}",e.getMessage(),e);
-            return new JSONObject().put("form-data异常",e.getMessage()).toString();
+        } catch (Exception e) {
+            logger.error("form-data异常：{}", e.getMessage(), e);
+            return new JSONObject().put("form-data异常", e.getMessage()).toString();
         }
     }
 
-    public static String postFormData(String url,LinkedMultiValueMap<String, Object> parameter){
+    public static String postFormUrlEncodedData(String url, Object data) {
+        try {
+            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+            JSONObject jsonObject = JSONUtil.toJSON(data);
+            Iterator<String> iterator = jsonObject.keySet().iterator();
+            ContentType contentType = ContentType.APPLICATION_FORM_URLENCODED;
+            contentType = contentType.withCharset("UTF-8");
+            while (iterator.hasNext()) {
+                String key = iterator.next();
+                Object value = jsonObject.get(key);
+                if (null == value) {
+                    value = "";
+                }
+                entityBuilder.addTextBody(key, value.toString(), contentType);
+            }
+            org.apache.http.HttpEntity entity = entityBuilder.setCharset(Charset.forName("UTF-8")).build();
+            HttpPost post = new HttpPost(url);
+            post.setEntity(entity);
+            String response = EntityUtils.toString(client.execute(post).getEntity());
+            return response;
+        } catch (Exception e) {
+            logger.error("form-data异常：{}", e.getMessage(), e);
+            return new JSONObject().put("form-data异常", e.getMessage()).toString();
+        }
+    }
+
+    public static String postFormData(String url, LinkedMultiValueMap<String, Object> parameter) {
         HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parameter, formData);
         String result = restTemplate.postForObject(url, requestEntity, String.class);
         try {
             Map<String, Object> resultMap = JSON.parseObject(result, new TypeReference<Map<String, Object>>() {
             });
             result = JSON.toJSONString(resultMap);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("url <" + url + "> 参数<" + parameter + "> 结果<" + result + ">");
         }
         return result;
     }
 
     public static void getWithNotResult(String url) {
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("url <" + url + ">");
         }
         restTemplate.getForObject(url, Object.class);
