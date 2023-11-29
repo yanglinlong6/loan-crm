@@ -112,6 +112,7 @@ public class CustomerApplyController {
             }
             user.setLoanAmount(customer.getLoanAmount());
             user.setAge(customer.getAge());
+            user.setGender("男".equals(customer.getSex()) ? 1 : 2);
 
             UserAptitudePO byMD5 = dao.getByMobileMD5(user.getMd5());
             if (null != byMD5) {
