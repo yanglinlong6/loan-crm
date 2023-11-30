@@ -318,7 +318,9 @@ public class OrgServiceImpl implements OrgService {
         Integer weight3 = dispatcheRecDao.countReDispatcheNum(org.getOrgId());
         log.info("orgId==" + org.getOrgId() + ";weight3==" + weight3);
         if (Objects.nonNull(weight3) && !weight3.equals(0)) {
-            value = value.divide(BigDecimal.valueOf(weight3), 3, RoundingMode.HALF_UP);
+//            value = value.divide(BigDecimal.valueOf(weight3), 3, RoundingMode.HALF_UP);
+            // 优化权重算法 除法变为减法
+            value = value.subtract(BigDecimal.valueOf(100L * weight3));
             log.info("机构验证通过：{}-{}，用户:{}-{},第三次根据发送客户重复率计算权重:{}",
                     org.getOrgId(), org.getOrgName(),
                     userAptitude.getName(), userAptitude.getMobile(),
