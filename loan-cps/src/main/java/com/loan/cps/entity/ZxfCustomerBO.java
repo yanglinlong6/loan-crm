@@ -43,4 +43,6 @@ public class ZxfCustomerBO {
     private String sign;
 
     private int age;
+
+    private String sex;
 }
