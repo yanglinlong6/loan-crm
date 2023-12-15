@@ -91,7 +91,7 @@ public class ZhengXingYiDaiInformationForBeijingApi implements ApiSender {
         UserAptitudePO po = new UserAptitudePO();
         po.setUserId(null);
         po.setName("测试请忽略");
-        po.setMobile("13632965521");
+        po.setMobile("13632965522");
         po.setCity("北京市");
         po.setLoanAmount("500000");
         po.setCompany(1);
