@@ -38,6 +38,11 @@ public class MainTest04 {
         System.out.println("选择ip:" + LoadBalanceUtil.doSelect(ips));
 
         List<Integer> list = Lists.newArrayList(14851822, 18872440, 19518988, 16386287, 18594574);
+        List<Integer> list01 = Lists.newArrayList(1, 2, 3, 4, 5, 6, 7);
+        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForCompanyId(list01));
+        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForCompanyId(list01));
+        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForCompanyId(list01));
+
         System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list));
         System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list));
         System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list));
@@ -46,13 +51,11 @@ public class MainTest04 {
         System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list));
         System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list));
 
-        List<Integer> list01 = Lists.newArrayList(1, 2, 3, 4, 5, 6, 7);
-        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list01));
-        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list01));
-        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list01));
-        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list01));
-        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list01));
-        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list01));
-        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForInt(list01));
+
+
+        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForCompanyId(list01));
+        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForCompanyId(list01));
+        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForCompanyId(list01));
+        System.out.println("选择ip:" + LoadBalanceUtil.doSelect2ForCompanyId(list01));
     }
 }

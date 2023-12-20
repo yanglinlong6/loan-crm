@@ -55,7 +55,7 @@ public class ZhengXingYiDaiInformationForBeijingApi implements ApiSender {
         JSONObject data = new JSONObject();
         isHaveAptitude(po);
         data.clear();
-        long companyId = LoadBalanceUtil.doSelect2ForInt(list);
+        long companyId = LoadBalanceUtil.doSelect2ForCompanyId(list);
         log.info("companyId===" + companyId);
         data.put("companyid", companyId);
         data.put("name", po.getName());

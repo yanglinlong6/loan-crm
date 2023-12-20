@@ -63,4 +63,22 @@ public class LoadBalanceUtil {
         index_.incrementAndGet();
         return ip;
     }
+
+    private static AtomicInteger companyIdIndex_ = new AtomicInteger(0);
+
+    /**
+     * 原子类实现线程安全的轮询负载均衡算法
+     *
+     * @param numList 轮询集合
+     * @return
+     */
+    public static Integer doSelect2ForCompanyId(List<Integer> numList) {
+
+        if (companyIdIndex_.get() >= numList.size()) {
+            companyIdIndex_ = new AtomicInteger(0);
+        }
+        Integer ip = numList.get(companyIdIndex_.get());
+        companyIdIndex_.incrementAndGet();
+        return ip;
+    }
 }
