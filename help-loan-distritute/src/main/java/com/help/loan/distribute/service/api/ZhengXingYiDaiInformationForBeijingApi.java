@@ -1,6 +1,7 @@
 package com.help.loan.distribute.service.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.help.loan.distribute.common.utils.DateUtil;
 import com.help.loan.distribute.common.utils.HttpUtil;
 import com.help.loan.distribute.service.api.dao.DispatcheRecDao;
@@ -8,6 +9,7 @@ import com.help.loan.distribute.service.api.utils.JudgeUtil;
 import com.help.loan.distribute.service.api.utils.LoanAmountUtil;
 import com.help.loan.distribute.service.user.model.UserAptitudePO;
 import com.help.loan.distribute.service.user.model.UserDTO;
+import com.help.loan.distribute.util.LoadBalanceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.List;
 
 /*
  * 	北京正行易代信息科技有限公司 20150
@@ -26,6 +29,9 @@ public class ZhengXingYiDaiInformationForBeijingApi implements ApiSender {
     private static final String sendUrl = "https://api.miaodaizhongxin.com/sem/loan_do_bjzz.html";
 
     private static final String meiti = "YFU";
+
+    // 参数添加companyid 字段 类型为字符串，等于1的时候是【北京京贷中心】等于2的时候是【京贷二分】
+    private List<Integer> list = Lists.newArrayList(1, 2);
 
     @Autowired
     DispatcheRecDao dispatcheRecDao;
@@ -49,6 +55,9 @@ public class ZhengXingYiDaiInformationForBeijingApi implements ApiSender {
         JSONObject data = new JSONObject();
         isHaveAptitude(po);
         data.clear();
+        long companyId = LoadBalanceUtil.doSelect2ForInt(list);
+        log.info("companyId===" + companyId);
+        data.put("companyid", companyId);
         data.put("name", po.getName());
         data.put("mobile", po.getMobile());
         data.put("city", po.getCity().endsWith("市") ? po.getCity().substring(0, po.getCity().length() - 1) : po.getCity());
@@ -91,7 +100,7 @@ public class ZhengXingYiDaiInformationForBeijingApi implements ApiSender {
         UserAptitudePO po = new UserAptitudePO();
         po.setUserId(null);
         po.setName("测试请忽略");
-        po.setMobile("13632965522");
+        po.setMobile("13632965523");
         po.setCity("北京市");
         po.setLoanAmount("500000");
         po.setCompany(1);
