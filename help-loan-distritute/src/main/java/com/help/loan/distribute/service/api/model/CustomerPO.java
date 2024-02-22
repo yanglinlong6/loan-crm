@@ -65,6 +65,8 @@ public class CustomerPO extends BasePO {
 
     private String field11;
 
+    private String field12;
+
     private Long employeeId; // 首次分配给谁
 
     private Date distributeDate; // 分配日期
