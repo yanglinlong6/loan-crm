@@ -26,9 +26,7 @@ import java.util.Date;
 public class NewXinShengYinTongInformationForBeijingApi implements ApiSender {
     private static final Logger LOG = LoggerFactory.getLogger(NewXinShengYinTongInformationForBeijingApi.class);
 
-    private static final String URL = "https://crm.sykj888.cn/crm/import/customer";
-
-    private static String KEY = "b06c0022b12b49dd921d39ab797a3591";
+    private static final String URL = "http://111.229.170.64:1280/api/customer/Baiduleads";
 
     private static Long CHENNEL = 195L;
 
@@ -52,41 +50,27 @@ public class NewXinShengYinTongInformationForBeijingApi implements ApiSender {
     }
 
     private SendResult sendResult(UserAptitudePO po, UserDTO select) {
-        CustomerPO customerPO = new CustomerPO();
-        customerPO.setName(po.getName() + (JudgeUtil.in(po.getType(), DistributeConstant.LoanType.HOUSE) ? Heng + "房抵" : ""));
-        customerPO.setMobile(po.getMobile());
-        customerPO.setChannel(CHENNEL);
-        customerPO.setMedia(getMedia(po.getChannel()));
-        customerPO.setCity(po.getCity());
-        customerPO.setAge(po.getAge());
-        customerPO.setSex(po.getGender().byteValue());
-        customerPO.setNeed(LoanAmountUtil.transform(po.getLoanAmount()).toString());
-        customerPO.setField2(JudgeUtil.contain(po.getPublicFund(), "有，") ? "有" : "无");
-        customerPO.setField3(JudgeUtil.in(po.getHouse(), 1, 2) ? "有" : "无");
-        customerPO.setField4(JudgeUtil.in(po.getCar(), 1, 2) ? "有" : "无");
-        customerPO.setField5(JudgeUtil.in(po.getInsurance(), 1, 2) ? "有" : "无");
-        customerPO.setField6(JudgeUtil.in(po.getGetwayIncome(), 1, 2) ? "有" : "无");
-        customerPO.setField7(JudgeUtil.in(po.getCompany(), 1) ? "有" : "无");
-        customerPO.setField8("有");
-        customerPO.setField9(JudgeUtil.in(po.getGetwayIncome(), 1, 2) ? "有" : "无");
-        customerPO.setField10("无");
-        customerPO.setField11("无");
-        customerPO.setField12("无");
-        customerPO.setRemark(getContent5(po, customerPO.getMedia(), cacheService));
         JSONObject data = new JSONObject();
-        data.put("channelId", CHENNEL);
-        data.put("data", DESUtil.encrypt(KEY, customerPO.toString()));
+        data.put("ucid", "52623658");
+        data.put("clueId", po.getId() + "");
+        data.put("name", po.getName());
+        data.put("mobile", po.getMobile());
+        data.put("city", po.getCity());
+        data.put("need", LoanAmountUtil.transform(po.getLoanAmount()).toString());
+        data.put("remark", getContent5(po, getMedia(po.getChannel()), cacheService));
+        data.put("media", getMedia(po.getChannel()));
+        data.put("channel", CHENNEL + "");
+        data.put("age", po.getAge() + "");
+        data.put("sex", po.getGender() + "");
+        data.put("ip", "127.0.0.1");
         System.out.println(data.toJSONString());
         String result = HttpUtil.postForObject(URL, data);
         JSONObject json = JSONUtil.toJSON(result);
         LOG.info("[新北京鑫晟银通信息咨询有限公司]推送结果：{}", result);
         int code = json.getIntValue("code");
-        if (200 == code) {
+        if (0 == code) {
             dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 1, "[新北京鑫晟银通信息咨询有限公司]推送成功：" + result));
             return new SendResult(true, "[新北京鑫晟银通信息咨询有限公司]推送成功：" + result);
-        } else if (601 == code) {
-            dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 0, "[新北京鑫晟银通信息咨询有限公司]推送重复：" + result));
-            return new SendResult(false, "[新北京鑫晟银通信息咨询有限公司]推送重复：" + result);
         }
         dispatcheRecDao.add(getDispatcheRecPO(po.getOrgId(), po.getId(), 2, "[新北京鑫晟银通信息咨询有限公司]推送失败：" + result));
         return new SendResult(false, "[新北京鑫晟银通信息咨询有限公司]推送失败：" + result);
@@ -116,7 +100,7 @@ public class NewXinShengYinTongInformationForBeijingApi implements ApiSender {
         po.setUserId(null);
         po.setName("张测试请忽略");
         po.setMobile("13410567155");
-        po.setCity("长沙市");
+        po.setCity("北京市");
         po.setAge(32);
         po.setGender(2);
         po.setLoanAmount("30000");
