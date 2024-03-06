@@ -51,6 +51,7 @@ public class NewXinShengYinTongInformationForBeijingApi implements ApiSender {
 
     private SendResult sendResult(UserAptitudePO po, UserDTO select) {
         JSONObject data = new JSONObject();
+        data.put("fileid", "60");
         data.put("ucid", "52623658");
         data.put("clueId", po.getId() + "");
         data.put("name", po.getName());
@@ -58,7 +59,7 @@ public class NewXinShengYinTongInformationForBeijingApi implements ApiSender {
         data.put("city", po.getCity());
         data.put("need", LoanAmountUtil.transform(po.getLoanAmount()).toString());
         data.put("remark", getContent5(po, getMedia(po.getChannel()), cacheService));
-        data.put("media", getMedia(po.getChannel()));
+        data.put("media", "广州粤富");
         data.put("channel", CHENNEL + "");
         data.put("age", po.getAge() + "");
         data.put("sex", po.getGender() + "");
@@ -97,9 +98,10 @@ public class NewXinShengYinTongInformationForBeijingApi implements ApiSender {
 
     public static void main(String[] args) {
         UserAptitudePO po = new UserAptitudePO();
+        po.setId(1L);
         po.setUserId(null);
         po.setName("张测试请忽略");
-        po.setMobile("13410567155");
+        po.setMobile("13410567156");
         po.setCity("北京市");
         po.setAge(32);
         po.setGender(2);
