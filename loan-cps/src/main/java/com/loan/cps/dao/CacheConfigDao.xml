@@ -30,6 +30,6 @@
         select
         <include refid="Base_Column_List"/>
         from cache_config
-        where `key` = #{key} limit 1
+        where `key` = #{enCity} limit 1
     </select>
 </mapper>
