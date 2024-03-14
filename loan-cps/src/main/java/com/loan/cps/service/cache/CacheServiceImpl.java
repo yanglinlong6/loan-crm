@@ -11,10 +11,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class CacheServiceImpl implements  CacheService{
+public class CacheServiceImpl implements CacheService {
 
     private static final Logger log = LoggerFactory.getLogger(CacheServiceImpl.class);
     @Autowired
@@ -22,46 +23,54 @@ public class CacheServiceImpl implements  CacheService{
     @Autowired
     RedisTemplate redisTemplate;
 
-    private static final String SEPARATOR ="_";
+    private static final String SEPARATOR = "_";
 
 
     @Override
     public List<CacheConfigPO> getAll() {
         List<CacheConfigPO> list = cacheConfigDao.selectAllCacheConfig();
-        if(CollectionUtil.isEmpty(list)){
+        if (CollectionUtil.isEmpty(list)) {
             return list;
         }
-        for(CacheConfigPO cacheConfig : list){
-            log.info("缓存：field-{},key={},value={}",cacheConfig.getField(),cacheConfig.getKey(),cacheConfig.getValue());
-            redisTemplate.opsForHash().put(cacheConfig.getField(),cacheConfig.getKey(),cacheConfig.getValue());
+        for (CacheConfigPO cacheConfig : list) {
+            log.info("缓存：field-{},key={},value={}", cacheConfig.getField(), cacheConfig.getKey(), cacheConfig.getValue());
+            redisTemplate.opsForHash().put(cacheConfig.getField(), cacheConfig.getKey(), cacheConfig.getValue());
         }
         return list;
     }
 
     @Override
     public String getValue(String field, String key) {
-        if(StringUtils.isBlank(field) || StringUtils.isBlank(key))
-            return null;
-        String key2 = field+SEPARATOR+key;
-        if(redisTemplate.hasKey(key2)){
+        if (StringUtils.isBlank(field) || StringUtils.isBlank(key)) return null;
+        String key2 = field + SEPARATOR + key;
+        if (redisTemplate.hasKey(key2)) {
             Object value = redisTemplate.opsForValue().get(key2);
-            if(null == value || StringUtils.isBlank(value.toString())){
-                return getDatabaseValue(field,key);
+            if (null == value || StringUtils.isBlank(value.toString())) {
+                return getDatabaseValue(field, key);
             }
             return value.toString();
-        }else{
-            return getDatabaseValue(field,key);
+        } else {
+            return getDatabaseValue(field, key);
         }
 
     }
 
-    public String getDatabaseValue(String field, String key){
-        CacheConfigPO configPO = cacheConfigDao.selectCacheCofing(field,key);
-        if(null == configPO){
+    @Override
+    public String getValueByEnCity(String enCity) {
+        CacheConfigPO valueByEnCity = cacheConfigDao.getValueByEnCity(enCity);
+        if (Objects.isNull(valueByEnCity)) {
+            return "";
+        }
+        return valueByEnCity.getValue();
+    }
+
+    public String getDatabaseValue(String field, String key) {
+        CacheConfigPO configPO = cacheConfigDao.selectCacheCofing(field, key);
+        if (null == configPO) {
             return null;
         }
-        String key2 = field+SEPARATOR+key;
-        redisTemplate.opsForValue().set(key2,configPO.getValue(),10,TimeUnit.MINUTES);
+        String key2 = field + SEPARATOR + key;
+        redisTemplate.opsForValue().set(key2, configPO.getValue(), 10, TimeUnit.MINUTES);
         return configPO.getValue();
     }
 

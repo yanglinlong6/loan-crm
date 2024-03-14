@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.loan.cps.dao.CacheConfigDao">
-  <resultMap id="BaseResultMap" type="com.loan.cps.service.cache.model.CacheConfigPO">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="field" jdbcType="VARCHAR" property="field" />
-    <result column="key" jdbcType="VARCHAR" property="key" />
-    <result column="value" jdbcType="VARCHAR" property="value" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.loan.cps.service.cache.model.CacheConfigPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="field" jdbcType="VARCHAR" property="field"/>
+        <result column="key" jdbcType="VARCHAR" property="key"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
+    </resultMap>
 
-  <sql id="Base_Column_List">
-    id, `field`, `key`, `value`
-  </sql>
+    <sql id="Base_Column_List">
+        id
+        , `field`, `key`, `value`
+    </sql>
 
-  <select id="selectAllCacheConfig" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List" />
-    from cache_config
-  </select>
-  
-  <select id="selectCacheCofing" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List" />
-    from cache_config
-    where `field`=#{field} and `key` = #{key}
-  </select>
+    <select id="selectAllCacheConfig" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cache_config
+    </select>
+
+    <select id="selectCacheCofing" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cache_config
+        where `field`=#{field} and `key` = #{key}
+    </select>
+
+    <select id="getValueByEnCity" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cache_config
+        where `key` = #{key} limit 1
+    </select>
 </mapper>

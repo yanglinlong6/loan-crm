@@ -14,7 +14,13 @@ public interface CacheConfigDao {
 
     List<CacheConfigPO> selectAllCacheConfig();
 
-    CacheConfigPO selectCacheCofing(@Param("field") String field, @Param("key")String key);
+    CacheConfigPO selectCacheCofing(@Param("field") String field, @Param("key") String key);
 
-
+    /**
+     * 通过英文城市名转中文城市名
+     *
+     * @param enCity 英文城市名
+     * @return 中文城市名
+     */
+    CacheConfigPO getValueByEnCity(@Param("enCity") String enCity);
 }
