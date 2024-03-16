@@ -354,9 +354,10 @@ public class CustController {
         count = count + 1;
         template.opsForValue().set(MOBILE_CODE_COUNT_REDIS_KEY_PREFIX + mobile, count, 1, TimeUnit.HOURS);
         String randomCode = getRandomCode();
-        SmsApi api = new YunSMS();
+//        SmsApi api = new YunSMS();
 //		SmsApi api = new WDSms();
-        if (api.sendCode2(mobile, randomCode, domain2)) {
+        AliyunSms api = new AliyunSms();
+        if (api.sendCode(mobile, randomCode)) {
             template.opsForValue().set(MOBILE_CODE_REDIS_KEY_PREFIX + mobile, randomCode, 1, TimeUnit.HOURS);
         } else {
             return R.fail();
