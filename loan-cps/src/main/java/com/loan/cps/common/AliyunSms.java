@@ -29,7 +29,7 @@ public class AliyunSms implements SmsApi {
         request.setAction("SendSms");
         request.putQueryParameter("RegionId", "cn-hangzhou");
         request.putQueryParameter("PhoneNumbers", mobile);
-        request.putQueryParameter("SignName", "");
+        request.putQueryParameter("SignName", "宁波伟业");
         request.putQueryParameter("TemplateCode", "SMS_213855161");
         JSONObject data = new JSONObject();
         data.put("code", code);
