@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 
-public class AliyunSms implements  SmsApi{
+public class AliyunSms implements SmsApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(AliyunSms.class);
 
     @Override
-    public boolean sendCode(String mobile,String code) {
+    public boolean sendCode(String mobile, String code) {
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI5tEH5YWQhKMsqmEgyfD6", "DA5IKZYPDSKT2dDccbKaqGz3xJWM8Z");
         IAcsClient client = new DefaultAcsClient(profile);
 
@@ -34,25 +34,25 @@ public class AliyunSms implements  SmsApi{
         request.putQueryParameter("SignName", "宁波伟业");
         request.putQueryParameter("TemplateCode", "SMS_213855158");
         JSONObject data = new JSONObject();
-        data.put("code",code);
+        data.put("code", code);
         request.putQueryParameter("TemplateParam", data.toJSONString());
         try {
             //{"Message":"OK","RequestId":"4D611167-3D75-4F34-827B-5643C4555E48","BizId":"993211879166052682^0","Code":"OK"}
             CommonResponse response = client.getCommonResponse(request);
-            LOG.info("阿里云短信服务发送:{}-{},发送结果:{}",mobile,code, JSONUtil.toJsonString(response.getData()));
+            LOG.info("阿里云短信服务发送:{}-{},发送结果:{}", mobile, code, JSONUtil.toJsonString(response.getData()));
             JSONObject responseJson = JSONUtil.toJSON(response.getData());
-            if("OK".endsWith(responseJson.getString("Code"))){
+            if ("OK".endsWith(responseJson.getString("Code"))) {
                 return true;
             }
             return false;
         } catch (ServerException e) {
-            LOG.error(e.getErrMsg(),e);
+            LOG.error(e.getErrMsg(), e);
             return false;
         } catch (ClientException e) {
-            LOG.error(e.getErrMsg(),e);
+            LOG.error(e.getErrMsg(), e);
             return false;
-        } catch(Exception e){
-            LOG.error(e.getMessage(),e);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             return false;
         }
     }
@@ -72,33 +72,33 @@ public class AliyunSms implements  SmsApi{
         request.putQueryParameter("SignName", "宁波伟业");
         request.putQueryParameter("TemplateCode", "SMS_213855158");
         JSONObject data = new JSONObject();
-        data.put("code",code);
+        data.put("code", code);
         request.putQueryParameter("TemplateParam", data.toJSONString());
         try {
             //{"Message":"OK","RequestId":"4D611167-3D75-4F34-827B-5643C4555E48","BizId":"993211879166052682^0","Code":"OK"}
             CommonResponse response = client.getCommonResponse(request);
-            LOG.info("阿里云短信服务发送:{}-{},发送结果:{}",mobile,code,JSONUtil.toJsonString(response.getData()));
+            LOG.info("阿里云短信服务发送:{}-{},发送结果:{}", mobile, code, JSONUtil.toJsonString(response.getData()));
             JSONObject responseJson = JSONUtil.toJSON(response.getData());
-            if("OK".endsWith(responseJson.getString("Code"))){
+            if ("OK".endsWith(responseJson.getString("Code"))) {
                 return true;
             }
             return false;
         } catch (ServerException e) {
-            LOG.error(e.getErrMsg(),e);
+            LOG.error(e.getErrMsg(), e);
             return false;
         } catch (ClientException e) {
-            LOG.error(e.getErrMsg(),e);
+            LOG.error(e.getErrMsg(), e);
             return false;
-        } catch(Exception e){
-            LOG.error(e.getMessage(),e);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             return false;
         }
     }
 
 
     @Override
-    public boolean sendMessage(String mobile, String date, BigDecimal amount,String remark) {
-    	DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI5tEH5YWQhKMsqmEgyfD6", "DA5IKZYPDSKT2dDccbKaqGz3xJWM8Z");
+    public boolean sendMessage(String mobile, String date, BigDecimal amount, String remark) {
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI5tEH5YWQhKMsqmEgyfD6", "DA5IKZYPDSKT2dDccbKaqGz3xJWM8Z");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
@@ -111,34 +111,34 @@ public class AliyunSms implements  SmsApi{
         request.putQueryParameter("SignName", "宁波伟业");
         request.putQueryParameter("TemplateCode", "SMS_213855158");
         JSONObject data = new JSONObject();
-        data.put("date",date);
-        data.put("amount",amount);
-        data.put("order",remark);
+        data.put("date", date);
+        data.put("amount", amount);
+        data.put("order", remark);
         request.putQueryParameter("TemplateParam", data.toJSONString());
         try {
             //{"Message":"OK","RequestId":"4D611167-3D75-4F34-827B-5643C4555E48","BizId":"993211879166052682^0","Code":"OK"}
             CommonResponse response = client.getCommonResponse(request);
-            LOG.debug("阿里云短信服务发送:{}-{},发送结果:{}",mobile,data,JSONUtil.toJsonString(response.getData()));
+            LOG.debug("阿里云短信服务发送:{}-{},发送结果:{}", mobile, data, JSONUtil.toJsonString(response.getData()));
             JSONObject responseJson = JSONUtil.toJSON(response.getData());
-            if("OK".endsWith(responseJson.getString("Code"))){
+            if ("OK".endsWith(responseJson.getString("Code"))) {
                 return true;
             }
             return false;
         } catch (ServerException e) {
-            LOG.error(e.getErrMsg(),e);
+            LOG.error(e.getErrMsg(), e);
             return false;
         } catch (ClientException e) {
-            LOG.error(e.getErrMsg(),e);
+            LOG.error(e.getErrMsg(), e);
             return false;
-        } catch(Exception e){
-            LOG.error(e.getMessage(),e);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             return false;
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         SmsApi smsApi = new AliyunSms();
-        smsApi.sendCode("13632965527","1245");
+        smsApi.sendCode("13086716076", "1245");
     }
 
 }

@@ -16,14 +16,13 @@ import com.daofen.crm.utils.JSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AliyunSms implements  SmsApi{
+public class AliyunSms implements SmsApi {
 
     private static final Logger LOG = LoggerFactory.getLogger(AliyunSms.class);
 
     @Override
-    public boolean sendCode(String mobile,String code) {
-
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4G36FQT6fcdJtZUWffPh", "sKu5BN81GjLSlnulXm5jF0rvUejp1K");
+    public boolean sendCode(String mobile, String code) {
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI5tEH5YWQhKMsqmEgyfD6", "DA5IKZYPDSKT2dDccbKaqGz3xJWM8Z");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
@@ -33,37 +32,37 @@ public class AliyunSms implements  SmsApi{
         request.setAction("SendSms");
         request.putQueryParameter("RegionId", "cn-hangzhou");
         request.putQueryParameter("PhoneNumbers", mobile);
-        request.putQueryParameter("SignName", "繁鑫数科");
-        request.putQueryParameter("TemplateCode", "SMS_213087508");
+        request.putQueryParameter("SignName", "宁波伟业");
+        request.putQueryParameter("TemplateCode", "SMS_213855158");
         JSONObject data = new JSONObject();
-        data.put("code",code);
+        data.put("code", code);
         request.putQueryParameter("TemplateParam", data.toJSONString());
         try {
             //{"Message":"OK","RequestId":"4D611167-3D75-4F34-827B-5643C4555E48","BizId":"993211879166052682^0","Code":"OK"}
             CommonResponse response = client.getCommonResponse(request);
-            LOG.info("阿里云短信服务发送:{}-{},发送结果:{}",mobile,code,JSONUtil.toString(response.getData()));
+            LOG.info("阿里云短信服务发送:{}-{},发送结果:{}", mobile, code, JSONUtil.toString(response.getData()));
             JSONObject responseJson = JSONUtil.toJSON(response.getData());
-            if("OK".endsWith(responseJson.getString("Code"))){
-                SmsSendRecordPO record = new SmsSendRecordPO(mobile,code);
+            if ("OK".endsWith(responseJson.getString("Code"))) {
+                SmsSendRecordPO record = new SmsSendRecordPO(mobile, code);
                 AppContextUtil.getBean(SmsSendRecordMapper.class).insertSmsSendRecord(record);
                 return true;
             }
             return false;
         } catch (ServerException e) {
-            LOG.error("阿里云短信服务发送异常:ServerException:{}",e.getErrMsg(),e);
+            LOG.error("阿里云短信服务发送异常:ServerException:{}", e.getErrMsg(), e);
             return false;
         } catch (ClientException e) {
-            LOG.error("阿里云短信服务发送异常:ClientException:{}",e.getErrMsg(),e);
+            LOG.error("阿里云短信服务发送异常:ClientException:{}", e.getErrMsg(), e);
             return false;
-        } catch(Exception e){
-            LOG.error("阿里云短信服务发送异常:Exception:{}",e.getMessage(),e);
+        } catch (Exception e) {
+            LOG.error("阿里云短信服务发送异常:Exception:{}", e.getMessage(), e);
             return false;
         }
     }
 
     @Override
     public boolean sendCode(String mobile, String code, String templateCode) {
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4G36FQT6fcdJtZUWffPh", "sKu5BN81GjLSlnulXm5jF0rvUejp1K");
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI5tEH5YWQhKMsqmEgyfD6", "DA5IKZYPDSKT2dDccbKaqGz3xJWM8Z");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
@@ -76,35 +75,35 @@ public class AliyunSms implements  SmsApi{
         request.putQueryParameter("SignName", "繁鑫数科");
         request.putQueryParameter("TemplateCode", "SMS_213087508");
         JSONObject data = new JSONObject();
-        data.put("code",code);
+        data.put("code", code);
         request.putQueryParameter("TemplateParam", data.toJSONString());
         try {
             //{"Message":"OK","RequestId":"4D611167-3D75-4F34-827B-5643C4555E48","BizId":"993211879166052682^0","Code":"OK"}
             CommonResponse response = client.getCommonResponse(request);
-            LOG.info("阿里云短信服务发送:{}-{},发送结果:{}",mobile,code,JSONUtil.toString(response.getData()));
+            LOG.info("阿里云短信服务发送:{}-{},发送结果:{}", mobile, code, JSONUtil.toString(response.getData()));
             JSONObject responseJson = JSONUtil.toJSON(response.getData());
-            if("OK".endsWith(responseJson.getString("Code"))){
-                SmsSendRecordPO record = new SmsSendRecordPO(mobile,code);
+            if ("OK".endsWith(responseJson.getString("Code"))) {
+                SmsSendRecordPO record = new SmsSendRecordPO(mobile, code);
                 AppContextUtil.getBean(SmsSendRecordMapper.class).insertSmsSendRecord(record);
                 return true;
             }
             return false;
         } catch (ServerException e) {
-            LOG.error(e.getErrMsg(),e);
+            LOG.error(e.getErrMsg(), e);
             return false;
         } catch (ClientException e) {
-            LOG.error(e.getErrMsg(),e);
+            LOG.error(e.getErrMsg(), e);
             return false;
-        } catch(Exception e){
-            LOG.error(e.getMessage(),e);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             return false;
         }
     }
 
 
     @Override
-    public boolean sendMessage(String mobile,String message) {
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4G36FQT6fcdJtZUWffPh", "sKu5BN81GjLSlnulXm5jF0rvUejp1K");
+    public boolean sendMessage(String mobile, String message) {
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI5tEH5YWQhKMsqmEgyfD6", "DA5IKZYPDSKT2dDccbKaqGz3xJWM8Z");
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
@@ -117,34 +116,34 @@ public class AliyunSms implements  SmsApi{
         request.putQueryParameter("SignName", "繁鑫数科");
         request.putQueryParameter("TemplateCode", "SMS_213087508");
         JSONObject data = new JSONObject();
-        data.put("name",message);
+        data.put("name", message);
         request.putQueryParameter("TemplateParam", data.toJSONString());
         try {
             //{"Message":"OK","RequestId":"4D611167-3D75-4F34-827B-5643C4555E48","BizId":"993211879166052682^0","Code":"OK"}
             CommonResponse response = client.getCommonResponse(request);
-            LOG.info("阿里云短信服务发送:{}-{},发送结果:{}",mobile,message,JSONUtil.toString(response.getData()));
+            LOG.info("阿里云短信服务发送:{}-{},发送结果:{}", mobile, message, JSONUtil.toString(response.getData()));
             JSONObject responseJson = JSONUtil.toJSON(response.getData());
-            if("OK".endsWith(responseJson.getString("Code"))){
-                SmsSendRecordPO record = new SmsSendRecordPO(mobile,message);
+            if ("OK".endsWith(responseJson.getString("Code"))) {
+                SmsSendRecordPO record = new SmsSendRecordPO(mobile, message);
                 AppContextUtil.getBean(SmsSendRecordMapper.class).insertSmsSendRecord(record);
                 return true;
             }
             return false;
         } catch (ServerException e) {
-            LOG.error(e.getErrMsg(),e);
+            LOG.error(e.getErrMsg(), e);
             return false;
         } catch (ClientException e) {
-            LOG.error(e.getErrMsg(),e);
+            LOG.error(e.getErrMsg(), e);
             return false;
-        } catch(Exception e){
-            LOG.error(e.getMessage(),e);
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             return false;
         }
     }
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         AliyunSms sms = new AliyunSms();
-        sms.sendCode("13632965527","123456");
+        sms.sendCode("13086716076", "1234");
     }
 }
