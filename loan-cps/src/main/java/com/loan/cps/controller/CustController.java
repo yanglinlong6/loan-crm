@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -81,6 +82,19 @@ public class CustController {
         String cnCity = cacheService.getValueByEnCity(city);
         if (StringUtils.isBlank(cnCity)) return ok;
         ok.setData(cnCity);
+        return ok;
+    }
+
+    /**
+     * 获取常用城市列表
+     */
+    @RequestMapping(value = "/customer/three/city/list")
+    @ResponseBody
+    public R getCityList() {
+        String value = cacheService.getValue(CPSConstant.Redis.Advertising.CONFIGURABLE, CPSConstant.Redis.Advertising.CITY);
+        R ok = R.ok();
+        if (StringUtils.isBlank(value)) return ok;
+        ok.setData(Arrays.stream(value.split(",")).collect(Collectors.toList()));
         return ok;
     }
 
@@ -153,7 +167,6 @@ public class CustController {
         }
         return R.ok("suc", hotCity.toArray(new String[hotCity.size()]));
     }
-
 
     @RequestMapping(value = "/customer/apply")
     public R apply(@RequestBody UserAptitudePO po, @RequestParam String code, HttpServletRequest req, HttpServletResponse res) {
